@@ -1,0 +1,5 @@
+###
+POST http://localhost:8082/project/webhooks/push
+Content-Type: application/json
+
+{ "dummy": "yes" }

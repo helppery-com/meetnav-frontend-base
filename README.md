@@ -43,14 +43,16 @@ Build the image for the github webhooks and app
       --build-arg GIT_WEBHOOKS_SECRET="SECRET_HERE" \
       -t meetnav-frontend-base:demo \
       https://github.com/helppery-com/meetnav-frontend-base.git#main:docker)
-Run
+Run Demo
 
     docker run -d --name demo -p $APP_PORT:8080 -p $CICD_PORT:8081 -it meetnav-frontend-base:demo
 
-Run DEV
+Run DEV. First time will clone and build run project at `meetnav-frontend-base` folder under current directory
 
     docker run --name demo -p $APP_PORT:8080 -p $CICD_PORT:8081 \
-    -v $PWD:/github/meetnav-frontend-base  meetnav-frontend-base:demo 
+    -v $PWD:/github meetnav-frontend-base:demo 
+ 
+Now you can access the app at http://localhost:$APP_PORT test github webhooks at  http://localhost:$CICD_PORT 
 
 ## quasar
 Quasar.dev app

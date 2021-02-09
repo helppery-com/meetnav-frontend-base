@@ -2,7 +2,7 @@ const NodeRestServer = require("node-rest-server");
 const CICDControllers = require('./controllers');
  
 const secret = process.env.GIT_WEBHOOKS_SECRET
-const port = process.env.GIT_WEBHOOKS_WEBHOOKS_PORT || 8082
+const port = parseInt(process.env.GIT_WEBHOOKS_WEBHOOKS_PORT || 8082)
 const urlPrefix = process.env.GIT_WEBHOOKS_WEBHOOKS_PREFIX || 'project'
 
 function getAllMethodNames(obj) {
@@ -19,6 +19,12 @@ const routeConfig = getAllMethodNames(controllers).reduce((acc, m) => {
   }
   return acc
 }, {});
+
+routeConfig[`/${urlPrefix}/webhooks/test`] = {
+    method: 'GET',
+    status: 200,
+    controller: () => ({ ok: true })
+}
 
 const serverConfig = {
   port,

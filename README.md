@@ -38,6 +38,7 @@ github webhooks and project demo
 
 ### Build
 Build the image for the github webhooks and app
+
     (docker build \
       --build-arg GIT_WEBHOOKS_SECRET="SECRET_HERE" \
       -t meetnav-frontend-base:demo \
@@ -48,7 +49,8 @@ Run
 
 Run DEV
 
-    docker run --name demo -p $APP_PORT:8080 -p $CICD_PORT:8081 -v $PWD:/github/meetnav-frontend-base  meetnav-frontend-base:demo 
+    docker run --name demo -p $APP_PORT:8080 -p $CICD_PORT:8081 \
+    -v $PWD:/github/meetnav-frontend-base  meetnav-frontend-base:demo 
 
 ## quasar
 Quasar.dev app

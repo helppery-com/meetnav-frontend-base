@@ -5,4 +5,4 @@ Content-Type: application/json
 { "dummy": "yes" }
 
 ###
-GET http://localhost:32002/meetnav-frontend-base/webhooks/test
+GET http://localhost:9002/meetnav-frontend-base/webhooks/test

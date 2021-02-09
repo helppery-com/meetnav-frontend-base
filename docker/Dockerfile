@@ -14,6 +14,8 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && npm install -g npm@7.5.2 \
     && git --version && bash --version && ssh -V && npm -v && node -v && yarn -v && npx --version
+# New patch version of npm available! 7.5.2 -> 7.5.3
+RUN npm install -g npm@latest
 
 RUN mkdir /github
 WORKDIR /github

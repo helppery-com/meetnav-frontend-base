@@ -1,4 +1,4 @@
-FROM node
+FROM node AS BASE
 
 ARG GIT_WEBHOOKS_SECRET
 ENV GIT_WEBHOOKS_SECRET=$GIT_WEBHOOKS_SECRET
@@ -17,17 +17,9 @@ RUN set -x \
 
 RUN mkdir /github
 WORKDIR /github
-RUN git clone https://github.com/helppery-com/meetnav-frontend-base.git
 
-WORKDIR /github/meetnav-frontend-base/cicd
-RUN npm install && npm install --only=dev
-
-WORKDIR /github/meetnav-frontend-base/quasar
-RUN npm install && npm install --only=dev
-
-WORKDIR /github/meetnav-frontend-base
-
-CMD (cd cicd && node server.js &) && \
-    (cd quasar && npx quasar dev)
+CMD ([ -d "/github/meetnav-frontend-base" ] && echo "Project already exists" || git clone https://github.com/helppery-com/meetnav-frontend-base.git) && \
+    (cd /github/meetnav-frontend-base/cicd && npm install && node server.js &) && \
+    (cd /github/meetnav-frontend-base/quasar && npm install && npm install --only=dev && npx quasar dev)
 
 EXPOSE 8080 8081

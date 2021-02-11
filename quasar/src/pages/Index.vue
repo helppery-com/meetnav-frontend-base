@@ -13,9 +13,10 @@
           <input type="text" v-bind:placeholder="$t('welcomePage.searchPlaceholder')" class="search-input q-pl-md">
           <div class="full-width flex q-pt-sm">
             <q-btn color="grey-4" no-caps  text-color="#5a5a5a" size="10px" rounded="rounded" unelevated class="q-ma-xs" icon="local_fire_department" v-bind:label="$t('welcomePage.tags.a')" />
-            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="movie" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.b')" />
-            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="shopping_cart" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.c')" />
-            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="airplanemode_active" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.d')" />
+            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="fas fa-headset" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.b')" />
+            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="movie" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.c')" />
+            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="shopping_cart" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.d')" />
+            <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="airplanemode_active" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.e')" />
           </div>
         </div>
       </div>

@@ -11,9 +11,10 @@ export const translations = {
         tags:
           {
             a: 'trending now',
-            b: 'watch videos',
-            c: 'go shopping',
-            d: 'plan a trip'
+            b: 'Help others',
+            c: 'Watch videos',
+            d: 'Go shopping',
+            e: 'Plan a trip'
           },
         searchInternet: 'Search internet',
         searchTogether: 'Search Internet together'
@@ -32,9 +33,10 @@ export const translations = {
         tags:
           {
             a: 'tendencias nuevas',
-            b: 'ver videos',
-            c: 'ir de compras',
-            d: 'planea un viaje'
+            b: 'Ayudar a otras',
+            c: 'ver videos',
+            d: 'ir de compras',
+            e: 'planea un viaje'
           },
         searchInternet: 'Buscar en internet',
         searchTogether: 'Buscar juntos en Internet'
@@ -52,9 +54,10 @@ export const translations = {
         tags:
           {
             a: 'अभी का दौर',
-            b: 'वीडियोज़ देखें',
-            c: 'खरीदारी के लिए जाओ',
-            d: 'एक यात्रा की योजना बनाओ'
+            b: 'दूसरों की मदद करो',
+            c: 'वीडियोज़ देखें',
+            d: 'खरीदारी के लिए जाओ',
+            e: 'एक यात्रा की योजना बनाओ'
           },
         searchInternet: 'इंटरनेट पर सर्च करें',
         searchTogether: 'साथ में इंटरनेट सर्च करें'

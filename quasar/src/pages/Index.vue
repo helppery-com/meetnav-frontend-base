@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     myTweaks (offset, height) {
-      return { height: '85vh' }
+      return { height: '791px' }
     }
   }
 }
@@ -92,23 +92,18 @@ export default {
   width: 49%;
 }
 .give-outer-space{
-  height: 150px;
+  height: 160px;
 }
 .top-end{
   height: 75%;
 }
 
 @media screen and (max-width: 500px){
-
   .internet-buttons {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-end !important;
   }
-  .top-end{
-    height: 85%;
-  }
-
   .search-width{
     width: 90%;
   }

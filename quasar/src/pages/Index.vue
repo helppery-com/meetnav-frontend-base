@@ -10,7 +10,7 @@
       <!--   input with pills    -->
       <div class="give-outer-space flex items-center justify-center">
         <div class="full-width">
-          <input type="text" v-bind:placeholder="$t('welcomePage.searchPlaceholder')" class="search-input q-pl-md">
+          <input type="text" v-on:keypress.enter="initSearch" v-bind:placeholder="$t('welcomePage.searchPlaceholder')" class="search-input q-pl-md">
           <div class="full-width flex q-pt-sm">
             <q-btn color="grey-4" no-caps  text-color="#5a5a5a" size="10px" rounded="rounded" unelevated class="q-ma-xs" icon="local_fire_department" v-bind:label="$t('welcomePage.tags.a')" />
             <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="fas fa-headset" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.b')" />
@@ -68,6 +68,9 @@ export default {
   methods: {
     myTweaks (offset, height) {
       return { height: '791px' }
+    },
+    initSearch () {
+      this.$router.push('/search')
     }
   }
 }

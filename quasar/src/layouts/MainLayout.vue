@@ -30,34 +30,10 @@
       </q-btn>
       </div>
       <div v-else>
-      <q-btn
-        type="submit"
-        v-bind:label="$t('welcomePage.login')"
-        class="q-mt-md nav-button"
-        color="indigo-10"
-        @click="openLoginDialog = true"
-      >
-        <template v-slot:loading>
-          <q-spinner
-            color='primary'
-            size="3em"
-          />
-        </template>
-      </q-btn>
-      <q-btn
-        type="submit"
-        v-bind:label="$t('welcomePage.signup')"
-        class="q-mt-md nav-button"
-        color="blue-grey-7"
-        @click="openRegisterDialog = true"
-      >
-        <template v-slot:loading>
-          <q-spinner
-            color="primary"
-            size="3em"
-          />
-        </template>
-      </q-btn>
+        <!-- Login button -->
+        <login-btn />
+        <!-- Registration button -->
+        <register-btn />
       </div>
     </q-header>
 
@@ -91,96 +67,26 @@
         </div>
       </div>
     </q-footer>
-    <!-- Login Dialog -->
-    <q-dialog v-model="openLoginDialog" persistent transition-show="scale" transition-hide="scale">
-      <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
-        <form method="post" @submit.prevent="login">
-          <q-card-section><div class="text-h6 text-blue-grey-8">{{$t('welcomePage.moreLogin.login')}}</div></q-card-section>
-          <q-card-section>
-              <q-input color="blue-grey-6" name='username' v-model="user.username" :label="$t('welcomePage.moreLogin.username')" required>
-                <template v-slot:prepend><q-icon name="mail" /></template>
-              </q-input>
-              <q-input color="blue-grey-6" name='password' type="password" v-model="user.password" :label="$t('welcomePage.moreLogin.password')" required>
-                <template v-slot:prepend><q-icon name="lock" /></template>
-              </q-input>
-          </q-card-section>
-          <q-card-section style="text-align: right">
-            <router-link class="form-link" to="#">{{ $t('welcomePage.moreLogin.forgotPassword') }}</router-link>
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn type="submit" :loading="loading" :label="$t('welcomePage.login')" class="q-mt-md nav-button" color="blue-grey-6"></q-btn>
-            <q-btn v-bind:label="$t('welcomePage.moreLogin.cancel')" class="q-mt-md nav-button" color="red" v-close-popup></q-btn>
-          </q-card-actions>
-        </form>
-      </q-card>
-    </q-dialog>
-
-    <!-- Registration Dialog -->
-    <q-dialog v-model="openRegisterDialog" persistent transition-show="scale" transition-hide="scale">
-      <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
-        <form v-if="!createSuccessfull" method="post" @submit.prevent="register">
-          <q-card-section><div class="text-h6 text-blue-grey-8">{{$t('welcomePage.moreSignup.register')}}</div></q-card-section>
-          <q-card-section>
-              <q-input name="email" type="text" color="blue-grey-6" v-model="newUser.email" :label="$t('welcomePage.moreSignup.email')" required>
-                <template v-slot:prepend><q-icon name="mail" /></template>
-              </q-input>
-              <q-input name="password" type="password" color="blue-grey-6" v-model="newUser.password" :label="$t('welcomePage.moreSignup.password')" required>
-                <template v-slot:prepend><q-icon name="lock" /></template>
-              </q-input>
-              <q-input name="rePassword" type="password" color="blue-grey-6" v-model="newUser.rePassword" :label="$t('welcomePage.moreSignup.repeatPassword')" required>
-                <template v-slot:prepend><q-icon name="lock" /></template>
-              </q-input>
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn type="submit" :loading="loading" :label="$t('welcomePage.moreSignup.register')" class="q-mt-md nav-button" color="blue-grey-6"></q-btn>
-            <q-btn :label="$t('welcomePage.moreSignup.cancel')" class="q-mt-md nav-button" color="red" v-close-popup></q-btn>
-          </q-card-actions>
-        </form>
-        <div v-else>
-          <q-card-section><div class="text-h6 text-blue-grey-8">{{$t('welcomePage.moreSignup.successMessage')}}</div></q-card-section>
-          <q-card-actions align="right">
-            <q-btn @click="openRegisterDialog = false" :label="$t('welcomePage.moreSignup.ok')" class="q-mt-md nav-button w-100" color="blue-grey-6"></q-btn>
-          </q-card-actions>
-        </div>
-      </q-card>
-    </q-dialog>
   </q-layout>
 </template>
 
 <script>
+import Login from '../components/Login.vue'
+import Registration from '../components/Registration.vue'
 export default {
+  components: {
+    LoginBtn: Login,
+    RegisterBtn: Registration
+  },
   data () {
     return {
-      selectedLanguage: 'English',
-      openLoginDialog: false,
-      openRegisterDialog: false,
-      user: { username: '', password: '' },
-      newUser: { email: '', password: '', rePassword: '' },
-      loading: false,
-      createSuccessfull: false
+      selectedLanguage: 'English'
     }
   },
   methods: {
     changeLanguage (lang) {
       this.$i18n.locale = lang
       this.selectedLanguage = this.$t('name')
-    },
-    login (credentials) {
-      const username = credentials.target.username.value
-      const password = credentials.target.password.value
-      this.loading = true
-      setTimeout(() => {
-        this.$store.dispatch('user/login', { username, password }).then(({ ok, user, message }) => {
-          if (ok) {
-            this.$store.commit('user/SET_USER', user)
-            console.log(message)
-            this.openLoginDialog = false
-          } else {
-            console.log(message)
-          }
-          this.loading = false
-        })
-      }, 3000)
     },
     async register (credentials) {
       const email = credentials.target.email.value

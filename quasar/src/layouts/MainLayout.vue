@@ -88,23 +88,6 @@ export default {
       this.$i18n.locale = lang
       this.selectedLanguage = this.$t('name')
     },
-    async register (credentials) {
-      const email = credentials.target.email.value
-      const password = credentials.target.password.value
-      const rePassword = credentials.target.rePassword.value
-      this.loading = true
-      setTimeout(() => {
-        this.$store.dispatch('user/registration', { email, password, rePassword }).then(({ ok, message }) => {
-          if (ok) {
-            console.log(message)
-            this.createSuccessfull = true
-          } else {
-            console.log(message)
-          }
-          this.loading = false
-        })
-      }, 3000)
-    },
     logout () {
       this.$store.commit('user/SET_USER', {})
     }

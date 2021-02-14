@@ -69,4 +69,11 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+.form-link{
+  color:#3a5e83;
+  text-decoration: none;
+}
+.form-link:hover{
+  text-decoration: underline;
+}
 </style>

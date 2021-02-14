@@ -13,11 +13,17 @@
           :offset="[-15, 10]"
         >
           <q-list style="min-width: 100px">
-            <q-item clickable v-ripple>
+            <q-item clickable v-ripple to="/" exact>
               <q-item-section avatar>
                 <q-icon name="home" />
               </q-item-section>
               <q-item-section>Home</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple to="/profile" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Profile</q-item-section>
             </q-item>
             <q-item class="text-red" clickable v-ripple @click="logout">
               <q-item-section avatar>
@@ -127,13 +133,7 @@ export default {
   font-size: 12px;
   margin-bottom: 0;
 }
-.form-link{
-  color:#3a5e83;
-  text-decoration: none;
-}
-.form-link:hover{
-  text-decoration: underline;
-}
+
 @media screen and (max-width: 500px){
   .footer-area{
     width: 100%;

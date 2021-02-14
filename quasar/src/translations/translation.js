@@ -1,6 +1,7 @@
 export const translations = {
   en: {
     name: 'English',
+    searchPlaceholder: 'Start searching Internet together',
     welcomePage:
       {
         login: 'LOGIN',
@@ -19,10 +20,23 @@ export const translations = {
         searchInternet: 'Search internet',
         searchTogether: 'Search Internet together'
 
-      }
+      },
+    searchPage: {
+      tabs: {
+        search: 'Search',
+        navRoom: 'Navroom',
+        navList: 'Navlist',
+        myPeople: 'My people',
+        me: 'Me',
+        more: 'More'
+      },
+      connect: 'CONNECT',
+      peopleConnect: 'People you can connect for '
+    }
   },
   es: {
     name: 'español',
+    searchPlaceholder: 'Empiecen a buscar en Internet juntos',
     welcomePage:
       {
         login: 'INICIAR SESIÓN',
@@ -40,10 +54,23 @@ export const translations = {
           },
         searchInternet: 'Buscar en internet',
         searchTogether: 'Buscar juntos en Internet'
-      }
+      },
+    searchPage: {
+      tabs: {
+        search: 'Buscar',
+        navRoom: 'Navroom',
+        navList: 'Navlist',
+        myPeople: 'Mi gente',
+        me: 'Me',
+        more: 'Más'
+      },
+      connect: 'CONECTAR',
+      peopleConnect: 'Personas con las que puede conectarse: '
+    }
   },
   in: {
     name: 'हिन्दी',
+    searchPlaceholder: 'साथ में इंटरनेट सर्च करना शुरू करें',
     welcomePage:
       {
         login: 'लॉग इन करें',
@@ -61,7 +88,18 @@ export const translations = {
           },
         searchInternet: 'इंटरनेट पर सर्च करें',
         searchTogether: 'साथ में इंटरनेट सर्च करें'
-
-      }
+      },
+    searchPage: {
+      tabs: {
+        search: 'खोज',
+        navRoom: 'नेवरूम',
+        myPeople: 'मेरे लोग',
+        navList: 'नवगीतकार',
+        me: 'मुझे',
+        more: 'अधिक'
+      },
+      connect: 'जुडिये',
+      peopleConnect: 'जिन लोगों से आप जुड़ सकते हैं '
+    }
   }
 }

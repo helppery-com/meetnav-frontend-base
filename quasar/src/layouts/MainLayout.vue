@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" >
 
-    <q-header class="main-header bg-primary">
+    <q-header class="main-header bg-white">
       <q-btn
         type="submit"
         v-bind:label="$t('welcomePage.login')"
@@ -33,7 +33,7 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-   <Footer @languageChange = "changeLanguage"></Footer>
+   <Footer></Footer>
   </q-layout>
 </template>
 

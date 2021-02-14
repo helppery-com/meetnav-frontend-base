@@ -22,15 +22,19 @@
         </q-btn-dropdown>
       </div>
       <div class=" flex items-center justify-end" style="height: 45%">
-        <span style="color: #17416c">Credits:</span> <a class="q-ml-md" style="color: #80a8b8;text-decoration: none" href="https://www.freepik.com">www.freepik.com</a>
+        <site-link-component href="https://www.freepik.com" link="www.freepik.com" addPadding="true" credits="true"></site-link-component>
       </div>
     </div>
   </q-footer>
 </template>
 
 <script>
+import SiteLinkComponent from 'components/SiteLinkComponent'
 export default {
   name: 'footer',
+  components: {
+    SiteLinkComponent
+  },
   data () {
     return {
       selectedLanguage: 'English'

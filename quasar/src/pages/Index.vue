@@ -10,7 +10,7 @@
       <!--   input with pills    -->
       <div class="give-outer-space flex items-center justify-center">
         <div class="full-width">
-          <input type="text" v-on:keypress.enter="initSearch" v-bind:placeholder="$t('welcomePage.searchPlaceholder')" class="search-input q-pl-md">
+          <q-input @keypress.enter="initSearch" v-bind:label="$t('searchPlaceholder')" v-model="query" :rules="[val => !!val || 'Field is required']" outlined rounded standout="text-black" dense></q-input>
           <div class="full-width flex q-pt-sm">
             <q-btn color="grey-4" no-caps  text-color="#5a5a5a" size="10px" rounded="rounded" unelevated class="q-ma-xs" icon="local_fire_department" v-bind:label="$t('welcomePage.tags.a')" />
             <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="fas fa-headset" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.b')" />
@@ -57,35 +57,31 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name: 'PageIndex',
   data () {
     return {
       rounded: true,
-      url: 'https://placeimg.com/500/300/nature'
+      url: 'https://placeimg.com/500/300/nature',
+      query: null
     }
   },
   methods: {
+    ...mapMutations({
+      userQuery: 'search/updateUserQuery'
+    }),
     myTweaks (offset, height) {
       return { height: '791px' }
     },
     initSearch () {
+      this.userQuery(this.query)
       this.$router.push('/search')
     }
   }
 }
 </script>
 <style scoped lang="css">
-.search-input{
-  width: 100%;
-  height: 50px;
-  border-color: darkgray;
-  border-width: 1px;
-  border-style: solid;
-  outline: none;
-  font-size: 20px;
-  border-radius: 25px;
-}
 .main-heading{
   color: #6b7e8d;
   font-weight: 900;

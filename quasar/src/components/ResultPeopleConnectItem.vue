@@ -19,6 +19,7 @@
             color="yellow"
             icon="star_border"
             icon-selected="star"
+            readonly
             no-dimming
           />
         </div>

@@ -33,12 +33,12 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-   <Footer></Footer>
+   <shared-footer></shared-footer>
   </q-layout>
 </template>
 
 <script>
-import Footer from 'components/Footer'
+import SharedFooter from 'components/SharedFooter'
 export default {
   data () {
     return {
@@ -46,7 +46,7 @@ export default {
     }
   },
   components: {
-    Footer
+    SharedFooter
   }
 }
 </script>

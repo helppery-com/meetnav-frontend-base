@@ -46,11 +46,11 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-    <Footer></Footer>
+    <shared-footer></shared-footer>
   </q-layout>
 </template>
 <script>
-import Footer from 'components/Footer'
+import SharedFooter from 'components/SharedFooter'
 import SearchInputComponent from 'components/SearchInputComponent'
 export default {
   name: 'SearchLayout',
@@ -60,7 +60,7 @@ export default {
     }
   },
   components: {
-    Footer,
+    SharedFooter,
     SearchInputComponent
   },
   methods: {

@@ -4,6 +4,7 @@
   <div class="col-xs-12 col-sm-11 col-md-12 col-lg-11 col-xl-11 flex row" style="flex-shrink: 1;flex-grow: 0">
   <div class="full-height ellipsis parent-results" v-if="getLoadState" style="flex-basis: 920px">
     <div class="bg-yellow search-result">
+      <!--  helper component will be displayed in smaller screen size    -->
       <helper-connection-component v-bind:helpers="searchHelpers"></helper-connection-component>
     </div>
     <search-result-item-component

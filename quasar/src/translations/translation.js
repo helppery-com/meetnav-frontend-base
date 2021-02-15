@@ -5,7 +5,23 @@ export const translations = {
     welcomePage:
       {
         login: 'LOGIN',
+        moreLogin: {
+          username: 'Username or Email',
+          password: 'Password',
+          forgotPassword: 'Forgot password',
+          login: 'login',
+          cancel: 'Cancel'
+        },
         signup: 'NEW ACCOUNT',
+        moreSignup: {
+          register: 'register',
+          email: 'Email',
+          password: 'Password',
+          repeatPassword: 'Reapeat password',
+          cancel: 'Cancel',
+          successMessage: 'Please check your email to confirm your account',
+          ok: 'Ok'
+        },
         message: 'Welcome to meetnav,the web made easy and powered by people',
         searchPlaceholder: 'Start Searching internet together',
         endCaption: 'Connect with thousand online helpers and start navigating together',
@@ -40,7 +56,23 @@ export const translations = {
     welcomePage:
       {
         login: 'INICIAR SESIÓN',
+        moreLogin: {
+          username: 'Username or Email',
+          password: 'Password',
+          forgotPassword: 'Forgot password',
+          login: 'login',
+          cancel: 'Cancel'
+        },
         signup: 'NUEVA CUENTA',
+        moreSignup: {
+          register: 'Register',
+          email: 'Email',
+          password: 'Password',
+          repeatPassword: 'Reapeat password',
+          cencel: 'Cancel',
+          successMessage: 'Please check your email to confirm your account',
+          ok: 'Ok'
+        },
         message: 'Bienvenido a meetnav, la web facilitada y desarrollada por personas',
         searchPlaceholder: 'Empiecen a buscar en Internet juntos',
         endCaption: 'Conéctese con miles de ayudantes en línea y comience a navegar juntos',
@@ -74,7 +106,23 @@ export const translations = {
     welcomePage:
       {
         login: 'लॉग इन करें',
+        moreLogin: {
+          username: 'Username or Email',
+          password: 'Password',
+          forgotPassword: 'Forgot password',
+          login: 'login',
+          cancel: 'Cancel'
+        },
         signup: 'नया खाता',
+        moreSignup: {
+          register: 'Register',
+          email: 'Email',
+          password: 'Password',
+          repeatPassword: 'Reapeat password',
+          cencel: 'Cancel',
+          successMessage: 'Please check your email to confirm your account',
+          ok: 'Ok'
+        },
         message: 'वेबन में आपका स्वागत है, वेब लोगों द्वारा आसान और संचालित किया गया है',
         searchPlaceholder: 'एक साथ इंटरनेट सर्च करना शुरू करें',
         endCaption: 'हजार ऑनलाइन सहायकों के साथ जुड़ें और एक साथ नेविगेट करना शुरू करें',

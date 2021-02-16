@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fff">
+  <q-layout view="hHh lpR fff" class="search-layout">
     <q-header  class="bg-white header text-black q-pt-md" height-hint="98">
       <q-toolbar >
         <q-toolbar-title>
@@ -138,50 +138,47 @@ export default {
   }
 }
 </script>
-<style scoped>
-.main-heading {
-  color: #3d7094;
-  font-weight: 900;
-}
-.main-heading:hover {
-  cursor: pointer;
-}
-.header {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #d2d4d6;
-}
-.controller{
-  justify-content: flex-start;
-}
-.controller > * {
-width: 100%;
-}
-@media screen and (max-width: 422px) {
-.controller {
-  justify-content: center;
+<style lang="sass">
+.search-layout
+  .main-heading
+    color: #3d7094
+    font-weight: 900
 
-}
-  .controller > * {
-    width: 190px;
-  }
-}
-@media screen and (max-width: 400px) {
-  .controller {
-    justify-content: center;
+  .main-heading:hover
+    cursor: pointer
 
-  }
-  .controller > * {
-    width: 150px;
-  }
-}
-@media screen and (max-width: 350px) {
-  .controller {
-    justify-content: flex-end;
+  .header
+    border-bottom-style: solid
+    border-bottom-width: 2px
+    border-bottom-color: #d2d4d6
 
-  }
-  .controller > * {
-    width: 110px;
-  }
-}
+  .controller
+    justify-content: flex-start
+
+  .controller > *
+  width: 100%
+
+@media screen and (max-width: 422px)
+  .search-layout
+    .controller
+      justify-content: center
+
+    .controller > *
+      width: 190px
+
+@media screen and (max-width: 400px)
+  .search-layout
+    .controller
+      justify-content: center
+
+    .controller > *
+      width: 150px
+
+@media screen and (max-width: 350px)
+  .search-layout
+    .controller
+      justify-content: flex-end
+
+    .controller > *
+      width: 110px
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fff" >
+  <q-layout view="hHh lpR fff" class="main-layout">
 
     <q-header class="main-header">
       <div v-if="getUser.avatar">
@@ -76,42 +76,41 @@ export default {
   }
 }
 </script>
-<style scoped>
-.main-header{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  background-color: transparent;
-}
-.nav-button{
-  margin-right: 10px;
-}
-.language-section > p{
-  font-size: 12px;
-  margin-bottom: 0;
-}
+<style lang="sass">
+.main-layout
+  .main-header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    background-color: transparent
 
-.form-link{
-  color:#3a5e83;
-  text-decoration: none;
-}
-.form-link:hover{
-  text-decoration: underline;
-}
-@media screen and (max-width: 500px){
-  .footer-area{
-    width: 100%;
-    height: 80px;
-    background-color: #edeff1;
-  }
-  .language-section{
-    width: 100%;
-    height: 60%;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: dimgray;
-    color: black;
-  }
-}
+  .nav-button
+    margin-right: 10px
+
+  .language-section > p
+    font-size: 12px
+    margin-bottom: 0
+
+  .form-link
+    color:#3a5e83
+    text-decoration: none
+
+  .form-link:hover
+    text-decoration: underline
+
+  @media screen and (max-width: 500px)
+    .main-layout
+      .footer-area
+        width: 100%
+        height: 80px
+        background-color: #edeff1
+
+      .language-section
+        width: 100%
+        height: 60%
+        border-bottom-style: solid
+        border-bottom-width: 2px
+        border-bottom-color: dimgray
+        color: black
 </style>

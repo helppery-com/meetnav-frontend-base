@@ -2,14 +2,16 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
-import application from './application/index'
+import application from './application'
 import user from './user'
+const store = new Vuex.Store({
+  modules: {
+    application,
+    user
+  }
+})
 export default function () {
-  const store = new Vuex.Store({
-    modules: {
-      application,
-      user
-    }
-  })
   return store
 }
+
+export { store }

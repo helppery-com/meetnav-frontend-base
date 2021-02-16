@@ -19,7 +19,7 @@
               </q-item-section>
               <q-item-section>Home</q-item-section>
             </q-item>
-            <q-item clickable v-ripple to="/profile" exact>
+            <q-item clickable v-ripple to="/user/profile" exact>
               <q-item-section avatar>
                 <q-icon name="home" />
               </q-item-section>
@@ -96,6 +96,7 @@ export default {
     },
     logout () {
       this.$store.commit('user/SET_USER', {})
+      location.reload()
     }
   },
   computed: {

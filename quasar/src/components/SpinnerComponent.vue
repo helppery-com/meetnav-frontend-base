@@ -11,7 +11,3 @@ export default {
   props: ['size']
 }
 </script>
-
-<style scoped>
-
-</style>

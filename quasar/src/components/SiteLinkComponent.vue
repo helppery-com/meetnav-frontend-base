@@ -10,7 +10,3 @@ export default {
   props: ['href', 'link', 'credits', 'addPadding']
 }
 </script>
-
-<style scoped>
-
-</style>

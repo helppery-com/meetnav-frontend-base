@@ -1,5 +1,5 @@
 <template>
-<q-page class="full-width row q-mt-xs">
+<q-page class="search full-width row q-mt-xs">
   <div class="col-1 xs-hide sm-hide"></div>
   <div class="col-xs-12 col-sm-11 col-md-11 col-lg-11 col-xl-11 flex row" style="flex-shrink: 1;flex-grow: 0">
   <div class="full-height ellipsis parent-results" v-if="getLoadState" style="flex-basis: 920px">
@@ -57,27 +57,27 @@ export default {
 }
 </script>
 
-<style scoped>
-.search-result-people{
-  flex-basis: 500px;
-  flex-shrink: 1;
-}
-.search-result {
-  flex-basis: 500px;
-  flex-shrink: 0;
-}
-.search-result{
-  display: none;
-}
-.parent-results {
-  flex-basis: 1000px;
-}
-@media screen and (max-width:1643px){
-  .search-result-people{
-    display: none;
-  }
-  .search-result{
-    display: block;
-  }
-}
+<style lang="sass">
+.search
+  .search-result-people
+    flex-basis: 500px
+    flex-shrink: 1
+
+  .search-result
+    flex-basis: 500px
+    flex-shrink: 0
+
+  .search-result
+    display: none
+
+  .parent-results
+    flex-basis: 1000px
+
+@media screen and (max-width:1643px)
+  .index
+    .search-result-people
+      display: none
+
+    .search-result
+      display: block
 </style>

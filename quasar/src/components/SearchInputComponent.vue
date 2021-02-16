@@ -1,5 +1,5 @@
 <template>
-<div class="search q-ml-lg ">
+<div class="search-input q-ml-lg ">
   <q-input v-bind:label="$t('searchPlaceholder')" v-model = "query" outlined rounded standout="text-black" dense>
     <template v-slot:append>
       <q-icon name="cancel" />
@@ -29,8 +29,7 @@ export default {
 }
 </script>
 
-<style scoped>
-.search {
-  height: 100%;
-}
+<style lang="sass">
+  .search-input
+    height: 100%
 </style>

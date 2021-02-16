@@ -1,5 +1,5 @@
 <template>
-<div class="q-ma-sm q-mb-lg" style="height: fit-content;">
+<div class="search-result q-ma-sm q-mb-lg" style="height: fit-content;">
   <!-- link -->
   <site-link-component class="adjust-link" v-bind:link="getDisplayLink" credis="false" v-bind:href="link"></site-link-component>
   <!-- main description -->
@@ -36,19 +36,19 @@ export default {
 }
 </script>
 
-<style scoped>
-.adjust-link {
-  transform: translatey(13px);
-}
-.main-heading {
-  color: #3d7094;
-  font-weight: 900;
-}
-.main-heading:hover {
-  cursor: pointer;
-}
-.search-description {
-  color: #3d7094;
-  font-weight: 400;
-}
+<style lang="sass">
+.search-result
+  .adjust-link
+    transform: translatey(13px)
+
+  .main-heading
+    color: #3d7094
+    font-weight: 900
+
+  .main-heading:hover
+    cursor: pointer
+
+  .search-description
+    color: #3d7094
+    font-weight: 400
 </style>

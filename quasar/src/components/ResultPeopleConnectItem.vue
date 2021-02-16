@@ -1,5 +1,5 @@
 <template>
-  <div class="flex full-width q-pa-sm">
+  <div class="result-helpper-connect flex full-width q-pa-sm">
     <div class="flex full-width justify-around items-center">
       <q-img
         :src="getAvatar"
@@ -53,21 +53,20 @@ export default {
 }
 </script>
 
-<style scoped>
-.main-heading {
-  color: #3d7094;
-  font-weight: 700;
-}
-.rating-username{
-  width: 60%;
-  height: 50px;
-  flex-wrap: nowrap;
-}
-@media screen and (max-width: 450px){
-  .rating-username{
-    width: 50%;
-    height: 70px
-  }
-}
+<style lang="sass">
+.result-helpper-connect
+  .main-heading
+    color: #3d7094
+    font-weight: 700
 
+  .rating-username
+    width: 60%
+    height: 50px
+    flex-wrap: nowrap
+
+@media screen and (max-width: 450px)
+  .result-helpper-connect
+    .rating-username
+      width: 50%
+      height: 70px
 </style>

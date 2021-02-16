@@ -1,5 +1,5 @@
 <template>
-  <q-btn type="submit" v-bind:label="$t('welcomePage.login')" class="q-mt-md nav-button" color="indigo-10" @click="openLoginDialog = true" >
+  <q-btn type="submit" v-bind:label="$t('welcomePage.login')" class="login q-mt-md nav-button" color="primary" @click="openLoginDialog = true" >
     <q-dialog v-model="openLoginDialog" persistent transition-show="scale" transition-hide="scale">
       <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
         <form method="post" @submit.prevent="login">
@@ -60,13 +60,12 @@ export default {
 }
 </script>
 
-<style scoped>
-.error{
-  color: #f00;
-}
-.message__panel{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+<style lang="sass">
+.login
+  .error
+    color: #f00
+  .message__panel
+    display: flex
+    justify-content: space-between
+    align-items: center
 </style>

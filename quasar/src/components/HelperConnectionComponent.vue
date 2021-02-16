@@ -1,5 +1,5 @@
 <template>
-  <q-card >
+  <q-card class="helpper-connection">
     <q-card-section>
       <!--  user searched term    -->
       <span class="text-h6 main-heading" style="overflow-wrap: break-word;">{{$t('searchPage.peopleConnect')+' : '}}<em>{{this.query}}</em></span>
@@ -43,14 +43,14 @@ export default {
 }
 </script>
 
-<style scoped>
-.main-heading {
-  color: #3d7094;
-  font-weight: 900;
-}
-@media screen and (max-width: 450px){
-  .my-section{
-    padding: 10px 0px 10px 0px !important;
-  }
-}
+<style lang="sass">
+.helpper-connection
+  .main-heading
+    color: #3d7094
+    font-weight: 900
+
+@media screen and (max-width: 450px)
+  .helpper-connection
+    .my-section
+      padding: 10px 0px 10px 0px !important
 </style>

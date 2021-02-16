@@ -1,5 +1,5 @@
 <template>
-  <q-page :style-fn="myTweaks" class="flex items-center column justify-start" style="flex-wrap: nowrap">
+  <q-page :style-fn="myTweaks" class="index flex items-center column justify-start" style="flex-wrap: nowrap">
     <div class="q-px-md top-end">
       <div class="full-width">
         <h3 class="text-h3 main-heading">meetnav</h3>
@@ -81,35 +81,34 @@ export default {
   }
 }
 </script>
-<style scoped lang="css">
-.main-heading{
-  color: #6b7e8d;
-  font-weight: 900;
-  text-align: center;
-}
-.search-width{
-  width: 49%;
-}
-.give-outer-space{
-  height: 160px;
-}
-.top-end{
-  height: 75%;
-}
+<style lang="sass">
+.index
+  .main-heading
+    color: #6b7e8d
+    font-weight: 900
+    text-align: center
 
-@media screen and (max-width: 500px){
-  .internet-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-  }
-  .search-width{
-    width: 90%;
-  }
-  .internet-buttons > button{
-    margin-right: 0px;
-    margin-left: 0px;
-    margin: 10px;
-  }
-}
+  .search-width
+    width: 49%
+
+  .give-outer-space
+    height: 160px
+
+  .top-end
+    height: 75%
+
+@media screen and (max-width: 500px)
+  .index
+    .internet-buttons
+      flex-direction: column !important
+      align-items: center !important
+      justify-content: flex-end !important
+
+    .search-width
+      width: 90%
+
+    .internet-buttons > button
+      margin-right: 0px
+      margin-left: 0px
+      margin: 10px
 </style>

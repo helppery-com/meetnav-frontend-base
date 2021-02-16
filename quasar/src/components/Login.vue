@@ -60,12 +60,20 @@ export default {
 }
 </script>
 
-<style lang="sass">
-.login
-  .error
-    color: #f00
-  .message__panel
-    display: flex
-    justify-content: space-between
-    align-items: center
+<style scoped>
+.error{
+  color: #f00;
+}
+.message__panel{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-link{
+  color:#3a5e83;
+  text-decoration: none;
+}
+.form-link:hover{
+  text-decoration: underline;
+}
 </style>

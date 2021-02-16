@@ -7,27 +7,33 @@
           <q-avatar size="42px">
             <img :src="getUser.avatar">
           </q-avatar>
-          <q-menu
-            transition-show="scale"
-            transition-hide="scale"
-            :offset="[-15, 10]"
-          >
-            <q-list style="min-width: 100px">
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-icon name="home" />
-                </q-item-section>
-                <q-item-section>Home</q-item-section>
-              </q-item>
-              <q-item class="text-red" clickable v-ripple @click="logout">
-                <q-item-section avatar>
-                  <q-icon name="logout" />
-                </q-item-section>
-                <q-item-section>Logout</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
+        <q-menu
+          transition-show="scale"
+          transition-hide="scale"
+          :offset="[-15, 10]"
+        >
+          <q-list style="min-width: 100px">
+            <q-item clickable v-ripple to="/" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Home</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple to="/user/profile" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Profile</q-item-section>
+            </q-item>
+            <q-item class="text-red" clickable v-ripple @click="logout">
+              <q-item-section avatar>
+                <q-icon name="logout" />
+              </q-item-section>
+              <q-item-section>Logout</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
       </div>
       <div v-else>
         <!-- Login button -->
@@ -67,6 +73,7 @@ export default {
     },
     logout () {
       this.$store.commit('user/SET_USER', {})
+      location.reload()
     }
   },
   computed: {

@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
-import application from './application/index'
 
-import search from './search/index'
+import application from './application'
+
+import search from './search'
 import user from './user'
 
 export default function () {
@@ -17,3 +18,5 @@ export default function () {
   })
   return store
 }
+
+export { store }

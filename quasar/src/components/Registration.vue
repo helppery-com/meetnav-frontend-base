@@ -1,5 +1,5 @@
 <template>
-  <q-btn type="submit" :label="$t('welcomePage.signup')" class="q-mt-md nav-button" color="indigo-10" @click="openDialog" >
+  <q-btn type="submit" :label="$t('welcomePage.signup')" class="register q-mt-md nav-button" color="accent" @click="openDialog" >
     <q-dialog v-model="openRegisterDialog" persistent transition-show="scale" transition-hide="scale">
       <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
         <form v-if="!createSuccessfull" method="post" @submit.prevent="register">
@@ -82,13 +82,13 @@ export default {
 }
 </script>
 
-<style scoped>
-.error{
-  color: #f00;
-}
-.message__panel{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+<style lang="sass">
+.register
+  .error
+    color: #f00
+
+  .message__panel
+    display: flex
+    justify-content: space-between
+    align-items: center
 </style>

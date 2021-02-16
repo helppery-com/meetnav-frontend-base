@@ -1,5 +1,5 @@
 <template>
-  <q-page :style-fn="myTweaks" class="flex items-center column justify-start" style="flex-wrap: nowrap">
+  <q-page :style-fn="myTweaks" class="index flex items-center column justify-start" style="flex-wrap: nowrap">
     <div class="q-px-md top-end">
       <div class="full-width">
         <h3 class="text-h3 main-heading">meetnav</h3>
@@ -10,7 +10,7 @@
       <!--   input with pills    -->
       <div class="give-outer-space flex items-center justify-center">
         <div class="full-width">
-          <input type="text" v-bind:placeholder="$t('welcomePage.searchPlaceholder')" class="search-input q-pl-md">
+          <q-input @keypress.enter="initSearch" v-bind:label="$t('searchPlaceholder')" v-model="query" :rules="[val => !!val || 'Field is required']" outlined rounded standout="text-black" dense></q-input>
           <div class="full-width flex q-pt-sm">
             <q-btn color="grey-4" no-caps  text-color="#5a5a5a" size="10px" rounded="rounded" unelevated class="q-ma-xs" icon="local_fire_department" v-bind:label="$t('welcomePage.tags.a')" />
             <q-btn color="grey-4" no-caps text-color="#5a5a5a" size="10px" rounded="rounded" unelevated icon="fas fa-headset" class="q-ma-xs" v-bind:label="$t('welcomePage.tags.b')" />
@@ -57,60 +57,58 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name: 'PageIndex',
   data () {
     return {
       rounded: true,
-      url: 'https://placeimg.com/500/300/nature'
+      url: 'https://placeimg.com/500/300/nature',
+      query: null
     }
   },
   methods: {
+    ...mapMutations({
+      userQuery: 'search/updateUserQuery'
+    }),
     myTweaks (offset, height) {
       return { height: '791px' }
+    },
+    initSearch () {
+      this.userQuery(this.query)
+      this.$router.push('/search')
     }
   }
 }
 </script>
-<style scoped lang="css">
-.search-input{
-  width: 100%;
-  height: 50px;
-  border-color: darkgray;
-  border-width: 1px;
-  border-style: solid;
-  outline: none;
-  font-size: 20px;
-  border-radius: 25px;
-}
-.main-heading{
-  color: #6b7e8d;
-  font-weight: 900;
-  text-align: center;
-}
-.search-width{
-  width: 49%;
-}
-.give-outer-space{
-  height: 160px;
-}
-.top-end{
-  height: 75%;
-}
+<style lang="sass">
+.index
+  .main-heading
+    color: #6b7e8d
+    font-weight: 900
+    text-align: center
 
-@media screen and (max-width: 500px){
-  .internet-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-  }
-  .search-width{
-    width: 90%;
-  }
-  .internet-buttons > button{
-    margin-right: 0px;
-    margin-left: 0px;
-    margin: 10px;
-  }
-}
+  .search-width
+    width: 49%
+
+  .give-outer-space
+    height: 160px
+
+  .top-end
+    height: 75%
+
+@media screen and (max-width: 500px)
+  .index
+    .internet-buttons
+      flex-direction: column !important
+      align-items: center !important
+      justify-content: flex-end !important
+
+    .search-width
+      width: 90%
+
+    .internet-buttons > button
+      margin-right: 0px
+      margin-left: 0px
+      margin: 10px
 </style>

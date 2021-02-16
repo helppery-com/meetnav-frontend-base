@@ -1,5 +1,5 @@
 <template>
-  <q-footer  class="bg-grey-8 ">
+  <q-footer class="bg-grey-8 ">
     <div class="footer-area">
       <div class="language-section ">
         <p class="q-ml-md">Language</p>

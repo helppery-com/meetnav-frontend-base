@@ -1,5 +1,5 @@
 <template>
-<div class="search q-ml-md-lg q-ml-md-xl">
+<div class="search q-ml-lg ">
   <q-input v-bind:label="$t('searchPlaceholder')" v-model = "query" outlined rounded standout="text-black" dense>
     <template v-slot:append>
       <q-icon name="cancel" />

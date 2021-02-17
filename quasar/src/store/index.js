@@ -8,15 +8,15 @@ import application from './application'
 import search from './search'
 import user from './user'
 
+const store = new Vuex.Store({
+  modules: {
+    application,
+    user,
+    search
+  }
+})
+
 export default function () {
-  const store = new Vuex.Store({
-    modules: {
-      application,
-      user,
-      search
-    }
-  })
   return store
 }
-
 export { store }

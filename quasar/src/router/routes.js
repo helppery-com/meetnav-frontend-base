@@ -33,7 +33,15 @@ const routes = [
       }
     ]
   },
-
+  {
+    path: '/neko',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Neko.vue')
+      }
+    ]
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

@@ -31,7 +31,7 @@
 <script>
 import SiteLinkComponent from 'components/SiteLinkComponent'
 export default {
-  name: 'footer',
+  name: 'shared-footer',
   components: {
     SiteLinkComponent
   },

@@ -1,0 +1,653 @@
+{
+  "kind": "customsearch#search",
+  "url": {
+    "type": "application/json",
+    "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+  },
+  "queries": {
+    "request": [
+      {
+        "title": "Google Custom Search - dummy search",
+        "totalResults": "152000000",
+        "searchTerms": "dummy search",
+        "count": 10,
+        "startIndex": 1,
+        "inputEncoding": "utf8",
+        "outputEncoding": "utf8",
+        "safe": "off",
+        "cx": "84512591628f242e0"
+      }
+    ],
+    "nextPage": [
+      {
+        "title": "Google Custom Search - dummy search",
+        "totalResults": "152000000",
+        "searchTerms": "dummy search",
+        "count": 10,
+        "startIndex": 11,
+        "inputEncoding": "utf8",
+        "outputEncoding": "utf8",
+        "safe": "off",
+        "cx": "84512591628f242e0"
+      }
+    ]
+  },
+  "context": {
+    "title": "meetnav_en"
+  },
+  "searchInformation": {
+    "searchTime": 0.568416,
+    "formattedSearchTime": "0.57",
+    "totalResults": "152000000",
+    "formattedTotalResults": "152,000,000"
+  },
+  "items": [
+    {
+      "kind": "customsearch#result",
+      "title": "Solved: How do you add dummy events to a search result? - Splunk ...",
+      "htmlTitle": "Solved: How do you add <b>dummy</b> events to a <b>search</b> result? - Splunk ...",
+      "link": "https://community.splunk.com/t5/Splunk-Search/How-do-you-add-dummy-events-to-a-search-result/m-p/45760",
+      "displayLink": "community.splunk.com",
+      "snippet": "Solved: I'm currently producing a table from a search. There is some static data \nthat needs to be added which is not in the index and needs to be.",
+      "htmlSnippet": "Solved: I&#39;m currently producing a table from a <b>search</b>. There is some static data <br>\nthat needs to be added which is not in the index and needs to be.",
+      "cacheId": "0n70zYhaxNQJ",
+      "formattedUrl": "https://community.splunk.com/t5/...Search/How...dummy...search.../45760",
+      "htmlFormattedUrl": "https://community.splunk.com/t5/...<b>Search</b>/How...<b>dummy</b>...<b>search</b>.../45760",
+      "pagemap": {
+        "metatags": [
+          {
+            "og:type": "article",
+            "article:section": "Splunk Search",
+            "article:published_time": "2012-05-08T12:23:00.000Z",
+            "article:modified_time": "2018-02-01T00:33:56-08:00",
+            "viewport": "width=device-width, initial-scale=1.0, user-scalable=yes",
+            "og:title": "How do you add dummy events to a search result?",
+            "og:url": "https://community.splunk.com/t5/Splunk-Search/How-do-you-add-dummy-events-to-a-search-result/m-p/45760#M10894",
+            "og:description": "I'm currently producing a table from a search. There is some static data that needs to be added which is not in the index and needs to be added at search time. I'm toying with the idea to create a new search command to do this, is there an easier way? * | table name phone Let's assume I need to add ...",
+            "article:author": "https://community.splunk.com/t5/user/viewprofilepage/user-id/114",
+            "article:tag": "search"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Create a dummy data for search in templates - Stack Overflow",
+      "htmlTitle": "Create a <b>dummy</b> data for <b>search</b> in templates - Stack Overflow",
+      "link": "https://stackoverflow.com/questions/32475962/create-a-dummy-data-for-search-in-templates",
+      "displayLink": "stackoverflow.com",
+      "snippet": "Using find_if is a good idea. To do so, you need a function or e.g. struct with \noverloaded members. Add following struct to your class, like you did with \nmapNode:",
+      "htmlSnippet": "Using find_if is a good idea. To do so, you need a function or e.g. struct with <br>\noverloaded members. Add following struct to your class, like you did with <br>\nmapNode:",
+      "cacheId": "cfMO4mWDhnoJ",
+      "formattedUrl": "https://stackoverflow.com/.../create-a-dummy-data-for-search-in-templates",
+      "htmlFormattedUrl": "https://stackoverflow.com/.../create-a-<b>dummy</b>-data-for-<b>search</b>-in-templates",
+      "pagemap": {
+        "question": [
+          {
+            "image": "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a",
+            "upvotecount": "0",
+            "answercount": "1",
+            "name": "Create a dummy data for search in templates",
+            "text": "I am trying to implementing a map using vector. I am stuck in the find functionality since I am using a struct with key and value and while searching user will only provide the key and I have...",
+            "datecreated": "2015-09-09T09:32:38",
+            "url": "Share"
+          }
+        ],
+        "answer": [
+          {
+            "upvotecount": "0",
+            "text": "Using find_if is a good idea. To do so, you need a function or e.g. struct with overloaded members. Add following struct to your class, like you did with mapNode: struct HasKey { public: explicit...",
+            "datecreated": "2015-09-09T10:00:00",
+            "url": "https://stackoverflow.com/questions/32475962/create-a-dummy-data-for-search-in-templates/32476511#32476511"
+          }
+        ],
+        "person": [
+          {
+            "name": "tan"
+          },
+          {
+            "name": "Gombat"
+          }
+        ],
+        "metatags": [
+          {
+            "viewport": "width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Search Engine Optimization - dummies",
+      "htmlTitle": "<b>Search</b> Engine Optimization - <b>dummies</b>",
+      "link": "https://www.dummies.com/web-design-development/search-engine-optimization/",
+      "displayLink": "www.dummies.com",
+      "snippet": "Search Engine Optimization For Dummies. Search. Please fill out this field. \nSearch.",
+      "htmlSnippet": "<b>Search</b> Engine Optimization For <b>Dummies</b>. <b>Search</b>. Please fill out this field. <br>\n<b>Search</b>.",
+      "cacheId": "y1p5w0gB6UUJ",
+      "formattedUrl": "https://www.dummies.com/web-design.../search-engine-optimization/",
+      "htmlFormattedUrl": "https://www.<b>dummies</b>.com/web-design.../<b>search</b>-engine-optimization/",
+      "pagemap": {
+        "cse_thumbnail": [
+          {
+            "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTRPw92Ztivp4CEW0YUoOE8UtgcrXTt6sUPmaWIIeOKcrindRwCLYCKHsQ",
+            "width": "259",
+            "height": "194"
+          }
+        ],
+        "metatags": [
+          {
+            "og:type": "article",
+            "twitter:card": "summary",
+            "og:site_name": "dummies",
+            "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+            "og:title": "Search Engine Optimization - dummies",
+            "og:locale": "en_US",
+            "og:url": "https://www.dummies.com/web-design-development/search-engine-optimization/",
+            "msapplication-tileimage": "https://www.dummies.com/wp-content/uploads/cropped-favicon1-270x270.png"
+          }
+        ],
+        "cse_image": [
+          {
+            "src": "https://www.dummies.com/wp-content/uploads/seo-shopping-search.jpg"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Search API — Dataverse.org",
+      "htmlTitle": "<b>Search</b> API — Dataverse.org",
+      "link": "https://guides.dataverse.org/en/latest/api/search.html",
+      "displayLink": "guides.dataverse.org",
+      "snippet": "Parameters; Basic Search Example; Advanced Search Examples; Date Range \nSearch Example; Iteration. The Search API supports the same searching, sorting,\n ...",
+      "htmlSnippet": "Parameters; Basic <b>Search</b> Example; Advanced <b>Search</b> Examples; Date Range <br>\n<b>Search</b> Example; Iteration. The <b>Search</b> API supports the same <b>searching</b>, sorting,<br>\n&nbsp;...",
+      "cacheId": "GR29T3zgxtkJ",
+      "formattedUrl": "https://guides.dataverse.org/en/latest/api/search.html",
+      "htmlFormattedUrl": "https://guides.dataverse.org/en/latest/api/<b>search</b>.html",
+      "pagemap": {
+        "metatags": [
+          {
+            "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1",
+            "apple-mobile-web-app-capable": "yes"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "dummy - Search - IEEE Spectrum",
+      "htmlTitle": "<b>dummy</b> - <b>Search</b> - IEEE Spectrum",
+      "link": "https://spectrum.ieee.org/tag/dummy",
+      "displayLink": "spectrum.ieee.org",
+      "snippet": "OK, so crash test dummies are not robots; they are more like human-shaped \nsensor-packed devices. They can sense their \"environment\" (that would be a car\n ...",
+      "htmlSnippet": "OK, so crash test <b>dummies</b> are not robots; they are more like human-shaped <br>\nsensor-packed devices. They can sense their &quot;environment&quot; (that would be a car<br>\n&nbsp;...",
+      "formattedUrl": "https://spectrum.ieee.org/tag/dummy",
+      "htmlFormattedUrl": "https://spectrum.ieee.org/tag/<b>dummy</b>",
+      "pagemap": {
+        "metatags": [
+          {
+            "layout": "spectrum",
+            "twitter:card": "summary_large_image",
+            "twitter:site": "@IEEESpectrum",
+            "og:site_name": "IEEE Spectrum: Technology, Engineering, and Science News",
+            "viewport": "width=device-width, initial-scale=1"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Dummy data - Wikipedia",
+      "htmlTitle": "<b>Dummy</b> data - Wikipedia",
+      "link": "https://en.wikipedia.org/wiki/Dummy_data",
+      "displayLink": "en.wikipedia.org",
+      "snippet": "Find sources: \"Dummy data\" – news · newspapers · books · scholar · JSTOR (\nFebruary 2012) (Learn how and when to remove this template message). In \nInformatics, dummy data is benign information that does not contain any useful \ndata, but ...",
+      "htmlSnippet": "<b>Find</b> sources: &quot;<b>Dummy</b> data&quot; – news · newspapers · books · scholar · JSTOR (<br>\nFebruary 2012) (Learn how and when to remove this template message). In <br>\nInformatics, <b>dummy</b> data is benign information that does not contain any useful <br>\ndata, but&nbsp;...",
+      "cacheId": "Vd5Ja_cx_wwJ",
+      "formattedUrl": "https://en.wikipedia.org/wiki/Dummy_data",
+      "htmlFormattedUrl": "https://en.wikipedia.org/wiki/<b>Dummy</b>_data",
+      "pagemap": {
+        "metatags": [
+          {
+            "referrer": "origin"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Data Structures for Dummies: Binary Search Trees | by Ramy Zhang ...",
+      "htmlTitle": "Data Structures for <b>Dummies</b>: Binary <b>Search</b> Trees | by Ramy Zhang ...",
+      "link": "https://medium.com/@ramyjzh/data-structures-for-dummies-binary-search-trees-13f87a1313a2",
+      "displayLink": "medium.com",
+      "snippet": "Mar 28, 2018 ... A binary search tree is a binary tree in which all the children nodes on the left \nsubtree of a root node (which is the first node at the top of the tree) ...",
+      "htmlSnippet": "Mar 28, 2018 <b>...</b> A binary <b>search</b> tree is a binary tree in which all the children nodes on the left <br>\nsubtree of a root node (which is the first node at the top of the tree)&nbsp;...",
+      "cacheId": "lrXWyehgagMJ",
+      "formattedUrl": "https://medium.com/.../data-structures-for-dummies-binary-search-trees- 13f87a1313a2",
+      "htmlFormattedUrl": "https://medium.com/.../data-structures-for-<b>dummies</b>-binary-<b>search</b>-trees- 13f87a1313a2",
+      "pagemap": {
+        "cse_thumbnail": [
+          {
+            "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTgRNyg2qcOqhQ3es9VCLUF_FOYSR4zKfqiKVNhlZb_NfdDD2VtYJ8Fv37-",
+            "width": "274",
+            "height": "184"
+          }
+        ],
+        "metatags": [
+          {
+            "twitter:app:url:iphone": "medium://p/13f87a1313a2",
+            "og:image": "https://miro.medium.com/max/626/1*UHqhfn6OpznJma_tLr0y4g.jpeg",
+            "theme-color": "#000000",
+            "article:published_time": "2018-05-21T05:09:21.853Z",
+            "twitter:card": "summary_large_image",
+            "og:site_name": "Medium",
+            "al:android:package": "com.medium.reader",
+            "twitter:app:id:iphone": "828256236",
+            "title": "Data Structures for Dummies: Binary Search Trees | by Ramy Zhang | Medium",
+            "al:ios:url": "medium://p/13f87a1313a2",
+            "og:description": "Let’s say you were programming a database to hold the basic information of a country’s citizens — so about 100 million data entries. If you…",
+            "al:ios:app_store_id": "828256236",
+            "twitter:site": "@Medium",
+            "og:type": "article",
+            "twitter:title": "Data Structures for Dummies: Binary Search Trees",
+            "al:ios:app_name": "Medium",
+            "parsely-post-id": "13f87a1313a2",
+            "author": "Ramy Zhang",
+            "og:title": "Data Structures for Dummies: Binary Search Trees",
+            "al:web:url": "https://medium.com/@ramyjzh/data-structures-for-dummies-binary-search-trees-13f87a1313a2",
+            "article:author": "https://medium.com/@ramyjzh",
+            "twitter:image:src": "https://miro.medium.com/max/626/1*UHqhfn6OpznJma_tLr0y4g.jpeg",
+            "al:android:url": "medium://p/13f87a1313a2",
+            "referrer": "unsafe-url",
+            "fb:app_id": "542599432471018",
+            "viewport": "width=device-width,minimum-scale=1,initial-scale=1",
+            "twitter:description": "Let’s say you were programming a database to hold the basic information of a country’s citizens — so about 100 million data entries. If you…",
+            "og:url": "https://medium.com/@ramyjzh/data-structures-for-dummies-binary-search-trees-13f87a1313a2",
+            "twitter:app:name:iphone": "Medium",
+            "al:android:app_name": "Medium"
+          }
+        ],
+        "cse_image": [
+          {
+            "src": "https://miro.medium.com/max/626/1*UHqhfn6OpznJma_tLr0y4g.jpeg"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Search results for: 'dummy search term'",
+      "htmlTitle": "Search results for: &#39;<b>dummy search</b> term&#39;",
+      "link": "https://www.gtbicycles.com/usa_en/catalogsearch/result/?q=dummy+search+term",
+      "displayLink": "www.gtbicycles.com",
+      "snippet": "Search results for 'dummy search term'. Your search returns no results. Good \nTimes. Since 1972 GT Bicycles has proudly been developing bikes, for every \ntype ...",
+      "htmlSnippet": "Search results for &#39;<b>dummy search</b> term&#39;. Your search returns no results. Good <br>\nTimes. Since 1972 GT Bicycles has proudly been developing bikes, for every <br>\ntype&nbsp;...",
+      "cacheId": "FsRZh6MpRasJ",
+      "formattedUrl": "https://www.gtbicycles.com/usa_en/catalogsearch/result/?...dummy+search...",
+      "htmlFormattedUrl": "https://www.gtbicycles.com/usa_en/catalog<b>search</b>/result/?...<b>dummy</b>+<b>search</b>...",
+      "pagemap": {
+        "cse_thumbnail": [
+          {
+            "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTI_EUhkybmT5JpYpkoI_kHFErUqrVH0OgHF0ZRPSQ-D6OPruE5NS1W-uJW",
+            "width": "351",
+            "height": "143"
+          }
+        ],
+        "metatags": [
+          {
+            "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+            "apple-mobile-web-app-capable": "yes"
+          }
+        ],
+        "cse_image": [
+          {
+            "src": "https://d19o86bouc4ntb.cloudfront.net/media/wysiwyg/Home/Valle_Nevado.png"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "Julius-K9 28534-YM Yankee Map Dummy for Search ... - Amazon.com",
+      "htmlTitle": "Julius-K9 28534-YM Yankee Map Dummy for Search ... - Amazon.com",
+      "link": "https://www.amazon.com/Julius-K9-28534-YM-Yankee-Dummy-Search/dp/B006IM2U5C",
+      "displayLink": "www.amazon.com",
+      "snippet": "Find Julius-K9 28534-YM Yankee Map Dummy for Search Dogs, 20 cm and more \nat Amazon.com.",
+      "htmlSnippet": "<b>Find</b> Julius-K9 28534-YM Yankee Map <b>Dummy</b> for <b>Search</b> Dogs, 20 cm and more <br>\nat Amazon.com.",
+      "cacheId": "Lpbw7JgSUqAJ",
+      "formattedUrl": "https://www.amazon.com/Julius-K9...YM...Dummy-Search/.../B006IM2U5C",
+      "htmlFormattedUrl": "https://www.amazon.com/Julius-K9...YM...<b>Dummy</b>-<b>Search</b>/.../B006IM2U5C",
+      "pagemap": {
+        "scraped": [
+          {
+            "image_link": "https://images-na.ssl-images-amazon.com/images/I/713kZwu-lsL._AC_SX466_.jpg"
+          }
+        ],
+        "cse_thumbnail": [
+          {
+            "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPwHRgeWYff0i2CGpvboCgu-VdQq3Z5mqcsmOMO8wqfwClnovEbW4PZakZ",
+            "width": "160",
+            "height": "160"
+          }
+        ],
+        "metatags": [
+          {
+            "og:image": "https://images-na.ssl-images-amazon.com/images/I/31JGLhM2AcL._SR600%2c315_PIWhiteStrip%2cBottomLeft%2c0%2c35_PIStarRatingFOURANDHALF%2cBottomLeft%2c360%2c-6_SR600%2c315_ZA104%2c445%2c290%2c400%2c400%2cAmazonEmberBold%2c12%2c4%2c0%2c0%2c5_SCLZZZZZZZ_FMpng_BG255%2c255%2c255.jpg",
+            "og:title": "Julius-K9 28534-YM Yankee Map Dummy for Search Dogs, 20 cm",
+            "og:url": "https://www.amazon.com/dp/B006IM2U5C/ref=tsm_1_fb_lk",
+            "title": "Amazon.com : Julius-K9 28534-YM Yankee Map Dummy for Search Dogs, 20 cm : Julius-K9 : Pet Training And Behavioral Aids : Pet Supplies",
+            "og:description": "Julius-K9 28534-YM Yankee Map Dummy for Search Dogs, 20 cm"
+          }
+        ],
+        "cse_image": [
+          {
+            "src": "https://images-na.ssl-images-amazon.com/images/I/71Dz6WUxp0L._AC_UL160_SR160,160_.jpg"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    },
+    {
+      "kind": "customsearch#result",
+      "title": "CRM Records: Dummy Tricks for Smarter Searches | CIO",
+      "htmlTitle": "CRM Records: <b>Dummy</b> Tricks for Smarter <b>Searches</b> | CIO",
+      "link": "https://www.cio.com/article/2414737/crm-records--dummy-tricks-for-smarter-searches.html",
+      "displayLink": "www.cio.com",
+      "snippet": "Sep 28, 2010 ... Search is often a weak link in CRM systems, but users shouldn't have to write a \nspecial report just to find one piece of information. Dummy tricks ...",
+      "htmlSnippet": "Sep 28, 2010 <b>...</b> <b>Search</b> is often a weak link in CRM systems, but users shouldn&#39;t have to write a <br>\nspecial report just to <b>find</b> one piece of information. <b>Dummy</b> tricks&nbsp;...",
+      "cacheId": "N_2WiGGgbZAJ",
+      "formattedUrl": "https://www.cio.com/.../crm-records--dummy-tricks-for-smarter-searches. html",
+      "htmlFormattedUrl": "https://www.cio.com/.../crm-records--<b>dummy</b>-tricks-for-smarter-<b>searches</b>. html",
+      "pagemap": {
+        "hcard": [
+          {
+            "fn": "David Taber"
+          }
+        ],
+        "cse_thumbnail": [
+          {
+            "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRz-iOFVCJbuiRHgWl3qme260GzbaGph5xbDz8_VEcKkmwWTqT861-DztM",
+            "width": "225",
+            "height": "225"
+          }
+        ],
+        "person": [
+          {
+            "name": "David Taber"
+          }
+        ],
+        "organization": [
+          {
+            "name": "CIO",
+            "logo": "https://idge.staticworld.net/cio/CIO_logo_300x300.png",
+            "url": "https://www.cio.com"
+          },
+          {
+            "url": "http://www.cio.com/",
+            "sameas": "https://www.linkedin.com/company/cio-online"
+          }
+        ],
+        "metatags": [
+          {
+            "date": "2010-09-28",
+            "og:image": "https://idge.staticworld.net/cio/CIO_logo_300x300.png",
+            "og:type": "article",
+            "twitter:card": "summary_large_image",
+            "og:site_name": "CIO",
+            "msvalidate.01": "B6D65511A0CC5522E695818081C251B8",
+            "author": "David Taber",
+            "og:title": "CRM Records: Dummy Tricks for Smarter Searches",
+            "rating": "General",
+            "og:description": "Search is often a weak link in CRM systems, but users shouldn't have to write a special report just to find one piece of information. Dummy tricks can help fix the problem.",
+            "dc.date.issued": "2010-09-28T08:00-05:00",
+            "twitter:image": "https://idge.staticworld.net/cio/CIO_logo_300x300.png",
+            "fb:app_id": "129182073794488",
+            "twitter:site": "@CIOonline",
+            "viewport": "width=device-width, initial-scale=1.0",
+            "twitter:description": "Search is often a weak link in CRM systems, but users shouldn't have to write a special report just to find one piece of information. Dummy tricks can help fix the problem.",
+            "og:url": "https://www.cio.com/article/2414737/crm-records--dummy-tricks-for-smarter-searches.html"
+          }
+        ],
+        "cse_image": [
+          {
+            "src": "https://idge.staticworld.net/cio/CIO_logo_300x300.png"
+          }
+        ],
+        "article": [
+          {
+            "articlebody": "Earlier this month, I wrote about using a few Dummy records in tables to make CRM systems smarter. This time, we're looking at a different situation: Dummy fields that may be needed in all...",
+            "keywords": "crm, data centers",
+            "genre": "Opinion",
+            "description": "Search is often a weak link in CRM systems, but users shouldn't have to write a special report just to find one piece of information. Dummy tricks can help fix the problem.",
+            "headline": "CRM Records: Dummy Tricks for Smarter Searches",
+            "datepublished": "2010-09-28T08:00-0700"
+          }
+        ],
+        "listitem": [
+          {
+            "item": "Home",
+            "name": "Home",
+            "position": "1"
+          },
+          {
+            "item": "Software",
+            "name": "Software",
+            "position": "2"
+          },
+          {
+            "item": "CRM",
+            "name": "CRM",
+            "position": "1"
+          }
+        ]
+      },
+      "__tags": [
+        "dummy",
+        "search"
+      ]
+    }
+  ],
+  "helppers": [
+    {
+      "id": 52,
+      "username": "www.fashiononline.in",
+      "avatar": "https://www.fashiononline.in/images/home/logo.jpg",
+      "background": "https://www.fashiononline.in/slideshow/1602945079_dhoti%20dresses.jpg",
+      "tags": [
+        "fashion",
+        "shopping"
+      ],
+      "tagsScore": 100,
+      "certified": true,
+      "professional": {
+        "id": 2,
+        "name": "www.fashiononline.in",
+        "description": "Indian Bridal Dresses Online - Latest online shopping fashion trends in India and\nabroad for Indian clothing. Choose different patterns and styles like Designer ",
+        "settings": {
+          "domains": [
+            "www.fashiononline.in"
+          ]
+        },
+        "domain": "www.fashiononline.in",
+        "created_by": 1,
+        "updated_by": 1,
+        "created_at": "2021-01-26T13:24:04.522Z",
+        "updated_at": "2021-01-26T14:53:36.886Z",
+        "helppers": [
+          {
+            "id": 52,
+            "username": "www.fashiononline.in",
+            "email": "admin@fashiononline.fake",
+            "provider": "local",
+            "confirmed": true,
+            "blocked": false,
+            "role": 1,
+            "avatar": "https://www.fashiononline.in/images/home/logo.jpg",
+            "helpper": true,
+            "about": "Indian Bridal Dresses Online - Latest online shopping fashion trends in India and\nabroad for Indian clothing. Choose different patterns and styles like Designer ",
+            "tags": [
+              "fashion",
+              "shopping"
+            ],
+            "rating": null,
+            "showLocation": null,
+            "showOnline": null,
+            "background": "https://www.fashiononline.in/slideshow/1602945079_dhoti%20dresses.jpg",
+            "lastOnline": "2021-02-01T10:46:55.385Z",
+            "confirmId": null,
+            "lang": "hi-IN",
+            "certified": true,
+            "created_by": 1,
+            "updated_by": 1,
+            "created_at": "2021-01-26T13:21:04.565Z",
+            "updated_at": "2021-02-05T05:01:06.136Z"
+          }
+        ]
+      },
+      "rating": null,
+      "reviews": []
+    },
+    {
+      "id": 53,
+      "username": "www.coworker.com",
+      "avatar": "https://eu.ui-avatars.com/api/?name=coworkers",
+      "background": "https://www.coworker.com/mag/wp-content/themes/extra-child/images/new_logo.svg",
+      "tags": [
+        "social",
+        "media",
+        "meetnav"
+      ],
+      "tagsScore": 100,
+      "certified": true,
+      "professional": {
+        "id": 3,
+        "name": "www.coworker.com",
+        "description": "Meet Nav Aulakh, a London native who is set on soaking up as many ...\nCommunity and Social Media management for an ICO (CoinFi) ...",
+        "settings": null,
+        "domain": "www.coworker.com",
+        "created_by": 1,
+        "updated_by": 1,
+        "created_at": "2021-01-26T17:32:37.958Z",
+        "updated_at": "2021-01-26T17:32:38.012Z",
+        "helppers": [
+          {
+            "id": 53,
+            "username": "www.coworker.com",
+            "email": "admin@coworker.fake",
+            "provider": "local",
+            "confirmed": false,
+            "blocked": false,
+            "role": 1,
+            "avatar": "https://eu.ui-avatars.com/api/?name=coworkers",
+            "helpper": true,
+            "about": null,
+            "tags": [
+              "social",
+              "media",
+              "meetnav"
+            ],
+            "rating": null,
+            "showLocation": null,
+            "showOnline": null,
+            "background": "https://www.coworker.com/mag/wp-content/themes/extra-child/images/new_logo.svg",
+            "lastOnline": null,
+            "confirmId": null,
+            "lang": null,
+            "certified": true,
+            "created_by": 1,
+            "updated_by": 1,
+            "created_at": "2021-01-26T17:30:10.873Z",
+            "updated_at": "2021-02-05T05:00:59.437Z"
+          }
+        ]
+      },
+      "rating": null,
+      "reviews": []
+    },
+    {
+      "id": 54,
+      "username": "www.lonelyplanet.com",
+      "avatar": "https://www.pilotguides.com/wordpress/wp-content/uploads/2012/07/ian-wright-220x220.jpg",
+      "background": "https://i.ytimg.com/vi/VISjAe5Aw_E/maxresdefault.jpg",
+      "tags": null,
+      "tagsScore": 100,
+      "certified": true,
+      "professional": {
+        "id": 4,
+        "name": "www.lonelyplanet.com",
+        "description": "Love travel? Discover, plan and book your perfect trip with expert advice, travel\nguides, destination information and inspiration from Lonely Planet.",
+        "settings": null,
+        "domain": "www.lonelyplanet.com",
+        "created_by": 1,
+        "updated_by": 1,
+        "created_at": "2021-01-28T13:54:32.562Z",
+        "updated_at": "2021-01-28T13:57:56.299Z",
+        "helppers": [
+          {
+            "id": 54,
+            "username": "www.lonelyplanet.com",
+            "email": "lonelyplanet@fake.com",
+            "provider": "local",
+            "confirmed": true,
+            "blocked": false,
+            "role": 1,
+            "avatar": "https://www.pilotguides.com/wordpress/wp-content/uploads/2012/07/ian-wright-220x220.jpg",
+            "helpper": true,
+            "about": null,
+            "tags": null,
+            "rating": 5,
+            "showLocation": null,
+            "showOnline": null,
+            "background": "https://i.ytimg.com/vi/VISjAe5Aw_E/maxresdefault.jpg",
+            "lastOnline": "2021-02-01T10:42:25.952Z",
+            "confirmId": null,
+            "lang": null,
+            "certified": true,
+            "created_by": 1,
+            "updated_by": 1,
+            "created_at": "2021-01-28T13:56:42.604Z",
+            "updated_at": "2021-02-05T05:00:53.638Z"
+          }
+        ]
+      },
+      "rating": 5,
+      "reviews": []
+    }
+  ]
+}

@@ -1,107 +1,123 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
+  <q-layout view="hHh lpR fff" class="main-layout">
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
+    <q-header class="main-header">
+      <div v-if="getUser.avatar">
+        <q-btn round class="q-mt-md nav-button">
+          <q-avatar size="42px">
+            <img :src="getUser.avatar">
+          </q-avatar>
+        <q-menu
+          transition-show="scale"
+          transition-hide="scale"
+          :offset="[-15, 10]"
         >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+          <q-list style="min-width: 100px">
+            <q-item clickable v-ripple to="/" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Home</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple to="/user/profile" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Profile</q-item-section>
+            </q-item>
+            <q-item class="text-red" clickable v-ripple @click="logout">
+              <q-item-section avatar>
+                <q-icon name="logout" />
+              </q-item-section>
+              <q-item-section>Logout</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
+      </div>
+      <div v-else>
+        <!-- Login button -->
+        <login-btn />
+        <!-- Registration button -->
+        <register-btn />
+      </div>
+    </q-header>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+   <shared-footer></shared-footer>
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
 
-const linksData = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
+import SharedFooter from 'components/SharedFooter'
+import Login from '../components/Login.vue'
+import Registration from '../components/Registration.vue'
 export default {
-  name: 'MainLayout',
-  components: { EssentialLink },
+  components: {
+    LoginBtn: Login,
+    RegisterBtn: Registration,
+    SharedFooter: SharedFooter
+  },
   data () {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: linksData
+      selectedLanguage: 'English'
+    }
+  },
+  methods: {
+    changeLanguage (lang) {
+      this.$i18n.locale = lang
+      this.selectedLanguage = this.$t('name')
+    },
+    logout () {
+      this.$store.commit('user/SET_USER', {})
+      location.reload()
+    }
+  },
+  computed: {
+    getUser () {
+      return this.$store.getters['user/getUser']
     }
   }
 }
 </script>
+<style lang="sass">
+.main-layout
+  .main-header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    background-color: transparent
+
+  .nav-button
+    margin-right: 10px
+
+  .language-section > p
+    font-size: 12px
+    margin-bottom: 0
+
+  .form-link
+    color:#3a5e83
+    text-decoration: none
+
+  .form-link:hover
+    text-decoration: underline
+
+  @media screen and (max-width: 500px)
+    .main-layout
+      .footer-area
+        width: 100%
+        height: 80px
+        background-color: #edeff1
+
+      .language-section
+        width: 100%
+        height: 60%
+        border-bottom-style: solid
+        border-bottom-width: 2px
+        border-bottom-color: dimgray
+        color: black
+</style>

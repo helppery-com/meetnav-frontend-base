@@ -1,5 +1,11 @@
 ###
-POST http://localhost:8082/project/webhooks/push
+POST http://localhost:32002/meetnav-frontend-base/webhooks/push
 Content-Type: application/json
 
 { "dummy": "yes" }
+
+### Test webhooks
+GET http://localhost:9002/meetnav-frontend-base/webhooks/test
+
+### Test APP
+GET http://localhost:9001/

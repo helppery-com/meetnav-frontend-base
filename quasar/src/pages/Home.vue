@@ -111,49 +111,47 @@ export default {
 }
 </script>
 
-<style scoped>
-.adjusted-height {
-  height: calc(100vh - 80px);
-}
-.parent-sections {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-}
-.caption {
-  text-align: left;
-}
-.navigation-links {
-  max-width: 600px;
-}
-@media screen and (max-width: 1023px) {
-  .parent-sections {
-    height: fit-content;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-  }
-  .caption {
-    text-align: center;
-  }
-  .adjusted-height {
-    height: fit-content;
-    margin-top: 10px;
-  }
-  .navigation-links > * {
-    width: 100%;
-  }
-  .text-h3 {
-    font-size: 2.5rem;
-    font-weight: 400;
-    line-height: 3.125rem;
-    letter-spacing: normal;
-  }
-}
+<style scoped lang="sass">
+.adjusted-height
+  height: calc(100vh - 80px)
+
+.parent-sections
+  height: 100%
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: center
+  flex-grow: 1
+
+.caption
+  text-align: left
+
+.navigation-links
+  max-width: 600px
+
+@media screen and (max-width: 1023px)
+  .parent-sections
+    height: fit-content
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    flex-grow: 1
+
+  .caption
+    text-align: center
+
+  .adjusted-height
+    height: fit-content
+    margin-top: 10px
+
+  .navigation-links > *
+    width: 100%
+
+  .text-h3
+    font-size: 2.5rem
+    font-weight: 400
+    line-height: 3.125rem
+    letter-spacing: normal
 </style>

@@ -1,8 +1,11 @@
 <template>
   <q-layout view="hHh lpR fff" class="main-layout">
 
-    <q-header class="main-header">
-      <div v-if="getUser.avatar">
+    <q-header class="main-header full-width">
+      <div class="float-left">
+        <p class="text-h2 q-ml-md main-heading">meetnav</p>
+      </div>
+      <div v-if="getUser.avatar" class="float-right">
         <q-btn round class="q-mt-md nav-button">
           <q-avatar size="42px">
             <img :src="getUser.avatar">
@@ -35,7 +38,7 @@
         </q-menu>
       </q-btn>
       </div>
-      <div v-else>
+      <div v-else class="float-right">
         <!-- Login button -->
         <login-btn />
         <!-- Registration button -->
@@ -87,10 +90,7 @@ export default {
 .main-layout
   .main-header
     width: 100%
-    display: flex
-    align-items: center
-    justify-content: flex-end
-    background-color: transparent
+    background-color: white
 
   .nav-button
     margin-right: 10px

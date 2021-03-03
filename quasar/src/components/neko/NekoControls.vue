@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import neko from 'neko/dist/neko-lib.umd'
+import neko from 'neko-client/dist/neko-lib.umd'
 export default {
   data () {
     return {

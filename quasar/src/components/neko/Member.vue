@@ -13,7 +13,7 @@
 </template>
 <script>
 import UserVideo from './UserVideo'
-import neko from 'neko/dist/neko-lib.umd'
+import neko from 'neko-client/dist/neko-lib.umd'
 
 export default {
   props: ['member'],

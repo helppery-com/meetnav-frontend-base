@@ -38,10 +38,10 @@
   </q-page>
 </template>
 <script>
-import neko, { components } from 'neko/dist/neko-lib.umd'
+import neko, { components } from 'neko-client/dist/neko-lib.umd'
 import Member from '../components/neko/Member'
 
-import 'neko/dist/neko-lib.css'
+import 'neko-client/dist/neko-lib.css'
 
 console.log(components)
 export default {
@@ -91,6 +91,9 @@ export default {
     },
     me () {
       return neko.user.member
+    },
+    $accessor () {
+      return neko
     }
   },
   created () {
@@ -117,7 +120,7 @@ export default {
       const overlay = this.getOverlay()
       if (overlay) {
         // Not ready
-        return this.$nextTick(() => this.listenOverlayEvents())
+        return setTimeout(() => this.listenOverlayEvents(), 5000)
       }
       this.onOverlayMouseMove = this.onOverlayMouseMove.bind(this)
       overlay.addEventListener('mousemove', this.onOverlayMouseMove)

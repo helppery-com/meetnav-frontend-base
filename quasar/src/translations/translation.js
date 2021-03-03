@@ -48,6 +48,18 @@ export const translations = {
       },
       connect: 'CONNECT',
       peopleConnect: 'People you can connect for '
+    },
+    homePage: {
+      mainHeading: 'Navigate internet together.',
+      subHeading: 'Video-browsing for free.',
+      caption: 'The new way to meet and navigate internet together. Start video-browsing internet for free now!',
+      navigateTogether: 'Navigate together',
+      enterCode: 'Enter a code or link',
+      codeOrLink: 'Enter a code or link',
+      learnMore: 'learn more',
+      about: 'about',
+      carouselHeading: 'Your navigation is safe',
+      carouselHeadingCaption: 'No one can join a meeting unless invited or admitted by the host'
     }
   },
   es: {
@@ -98,6 +110,18 @@ export const translations = {
       },
       connect: 'CONECTAR',
       peopleConnect: 'Personas con las que puede conectarse: '
+    },
+    homePage: {
+      mainHeading: 'Naveguen por Internet juntos.',
+      subHeading: 'Navegación de videos gratis.',
+      caption: 'La nueva forma de conocer y navegar por Internet juntos. ¡Empiece a navegar por Internet de forma gratuita ahora!',
+      navigateTogether: 'Navegar juntos',
+      enterCode: 'Ingrese un código o enlace',
+      codeOrLink: 'Ingrese un código o enlace',
+      learnMore: 'aprende más',
+      about: 'sobre',
+      carouselHeading: 'Tu navegación es segura',
+      carouselHeadingCaption: 'Nadie puede unirse a una reunión a menos que sea invitado o admitido por el anfitrión.'
     }
   },
   in: {
@@ -148,6 +172,18 @@ export const translations = {
       },
       connect: 'जुडिये',
       peopleConnect: 'जिन लोगों से आप जुड़ सकते हैं '
+    },
+    homePage: {
+      mainHeading: 'एक साथ इंटरनेट नेविगेट करें।',
+      subHeading: 'मुफ्त के लिए वीडियो-ब्राउज़िंग।',
+      caption: 'एक साथ इंटरनेट से मिलने और नेविगेट करने का नया तरीका। अब मुफ्त में वीडियो-ब्राउज़िंग इंटरनेट शुरू करें!',
+      navigateTogether: 'साथ में नेविगेट करें',
+      enterCode: 'एक कोड या लिंक दर्ज करें',
+      codeOrLink: 'एक कोड या लिंक दर्ज करें',
+      learnMore: 'और अधिक जानें',
+      about: 'के बारे में',
+      carouselHeading: 'आपका नेविगेशन सुरक्षित है',
+      carouselHeadingCaption: 'जब तक मेजबान द्वारा आमंत्रित या भर्ती नहीं किया जाता कोई भी बैठक में शामिल नहीं हो सकता'
     }
   }
 }

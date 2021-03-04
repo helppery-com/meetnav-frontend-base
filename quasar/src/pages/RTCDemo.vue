@@ -13,6 +13,9 @@ export default {
     client.onGuestWaiting = this.onGuestWaiting.bind(this)
     client.connect()
   },
+  destroyed () {
+    client.leave()
+  },
   methods: {
     onUserConnected (stream) {
       const video = stream.mediaElement

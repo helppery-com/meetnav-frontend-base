@@ -1,4 +1,5 @@
-/*
-export function someMutation (state) {
+import '../../assets/RTCMultiConnectionClient'
+
+export const setMeetingId = (state) => {
+
 }
-*/

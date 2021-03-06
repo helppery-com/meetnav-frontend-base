@@ -60,6 +60,16 @@ export const translations = {
       about: 'about',
       carouselHeading: 'Your navigation is safe',
       carouselHeadingCaption: 'No one can join a meeting unless invited or admitted by the host'
+    },
+    coBrowsePage: {
+      invite: 'INVITE PEOPLE',
+      instructions: 'you have to be two or more to start navigating internet together'
+    },
+    connectionRequest: {
+      newRequest: 'New Request',
+      join: 'join',
+      cancel: 'cancel',
+      waiting: 'is waiting to join.'
     }
   },
   es: {
@@ -122,6 +132,16 @@ export const translations = {
       about: 'sobre',
       carouselHeading: 'Tu navegación es segura',
       carouselHeadingCaption: 'Nadie puede unirse a una reunión a menos que sea invitado o admitido por el anfitrión.'
+    },
+    coBrowsePage: {
+      invite: 'INVITAR A LA GENTE',
+      instructions: 'tienes que ser dos o más para empezar a navegar por Internet juntos'
+    },
+    connectionRequest: {
+      newRequest: 'Nueva solicitud',
+      join: 'unirse',
+      cancel: 'cancelar',
+      waiting: 'está esperando para unirse.'
     }
   },
   in: {
@@ -184,6 +204,16 @@ export const translations = {
       about: 'के बारे में',
       carouselHeading: 'आपका नेविगेशन सुरक्षित है',
       carouselHeadingCaption: 'जब तक मेजबान द्वारा आमंत्रित या भर्ती नहीं किया जाता कोई भी बैठक में शामिल नहीं हो सकता'
+    },
+    coBrowsePage: {
+      invite: 'लोगों को आमंत्रित करो',
+      instructions: 'आपको एक साथ इंटरनेट नेविगेट करने के लिए दो या अधिक होना चाहिए'
+    },
+    connectionRequest: {
+      newRequest: 'नया आवेदन',
+      join: 'में शामिल होने के',
+      cancel: 'रद्द करना',
+      waiting: 'शामिल होने का इंतजार है।'
     }
   }
 }

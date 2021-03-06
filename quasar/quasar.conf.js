@@ -69,6 +69,9 @@ module.exports = function (/* ctx */) {
           loader: 'eslint-loader',
           exclude: /node_modules/
         })
+      },
+      env: {
+        RTC_IO_SERVER: 'https://rtcmulticonnection.herokuapp.com/'
       }
     },
 

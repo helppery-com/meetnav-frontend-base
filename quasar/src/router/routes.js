@@ -42,6 +42,15 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/rtcdemo',
+    component: () => import('layouts/SearchLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/RTCDemo.vue')
+      }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it

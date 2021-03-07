@@ -1,0 +1,61 @@
+.addMarker
+  z-index: 10
+  width: 20px
+  top: 0
+  position: absolute
+.mobile-volume-slider
+  width: 50px
+  height: 180px
+  bottom: 80%
+  left: 50%
+  z-index: 30
+.ads
+  width: 500px
+  height: 150px
+  position: relative
+.close
+  position: absolute
+  top: 0
+  right: 0
+  width: 30px
+  height: 30px
+  .mobile-participant
+    height: 25%
+.curved-dark-shadow
+  -webkit-box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.75)
+  -moz-box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.75)
+  box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.75)
+  -webkit-border-radius: 12px
+  -moz-border-radius: 12px
+  border-radius: 12px
+.adjusted-height
+  height: calc(100vh - 3rem)
+.main-height
+  height: 90%
+.control-height
+  height: 10%
+.sidebar-width
+  width: 20%
+.co-browser
+  width: 80%
+.volume-control
+  width: 100%
+@media screen and (max-width: 1023px)
+@media screen and (max-width: 600px)
+  .co-browser
+    width: 100% !important
+  .adjusted-height
+    height: calc(100vh + 200px)
+  .main-height
+    height: 70%
+  .ads
+    width: 250px
+    height: 100px
+    position: relative
+@media screen and (max-width: 500px)
+  .main-height
+    height: 70%
+  .sidebar-width
+    width: 25%
+  .co-browser
+    width: 75%

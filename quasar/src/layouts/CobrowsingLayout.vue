@@ -1,37 +1,35 @@
 <template>
   <q-layout view="hHh lpR fff" class="main-layout">
     <q-header class="main-header row items-center justify-between full-width">
-      <div class="col-xl-2 col-lg-3 col-md-3 ">
-        <p class="text-h3 q-ml-md main-heading">meetnav</p>
-      </div>
-      <div class=" sm-hide xs-hide col-xl-7 col-lg-6 col-md-5 flex justify-start items-center">
-        <q-btn round color="primary" class="q-mx-md q-ml-xl" icon="facebook" />
-        <q-btn round color="primary" class="q-mx-md " icon="shopping_cart" />
-        <q-btn round color="primary" class="q-mx-md " icon="shopping_cart" />
-        <q-btn round color="primary" class="q-mx-md " icon="shopping_cart" />
-        <q-btn round color="primary" class="q-mx-md " icon="mail_outline" />
-      </div>
-      <div class="col-xl-3 col-lg-3 col-md-4 row justify-end">
+    <div class="nav-logo flex justify-center" >
+      <p class="text-h2 q-ml-md main-heading">meetnav</p>
+    </div>
+      <div class="flex full-height justify-between items-center nav-logo-counter">
+        <div class=" flex justify-between  social-link">
+        <q-btn round color="primary" icon="facebook" />
+        <q-btn round color="primary" icon="shopping_cart" />
+        <q-btn round color="primary" icon="shopping_cart" />
+        <q-btn round color="primary" icon="shopping_cart" />
+        <q-btn round color="primary" icon="shopping_cart" />
+        <q-btn round color="primary" icon="shopping_cart" />
+        <q-btn round color="primary" icon="mail_outline" />
+        </div>
+      <div class="flex justify-end user-share">
         <q-icon name="share" class="q-mx-sm nav-icon-size"></q-icon>
         <q-icon name="settings" class="q-mx-sm nav-icon-size"></q-icon>
         <q-icon name="chat" class="q-mx-sm nav-icon-size" ></q-icon>
         <q-btn style="background: #FF0080; color: white" class="q-mx-sm" label="Username" />
       </div>
+      </div>
     </q-header>
     <q-page-container>
       <router-view />
     </q-page-container>
-    <shared-footer></shared-footer>
   </q-layout>
 </template>
 
 <script>
-
-import SharedFooter from 'components/SharedFooter'
 export default {
-  components: {
-    SharedFooter: SharedFooter
-  },
   data () {
     return {
       selectedLanguage: 'English'
@@ -45,7 +43,20 @@ export default {
   }
 }
 </script>
-<style lang="sass">
+<style lang="sass" scoped>
+.main-heading
+  color: #3d7094
+  font-weight: 900
+.nav-logo
+  width: 20%
+.main-heading:hover
+  cursor: pointer
+.nav-logo-counter
+  width: 80%
+.social-link
+  width: 50%
+.user-share
+  width: 30%
 .nav-icon-size
   font-size: 50px
 .main-layout
@@ -67,7 +78,37 @@ export default {
   .form-link:hover
     text-decoration: underline
 
+@media screen and (max-width: 1336px)
+  .social-link
+    width: 50%
+  .user-share
+   width: 40%
+@media screen and (max-width: 1272px)
+  .text-h2
+    font-size: 50px
+@media screen and (max-width: 1100px)
+  .text-h2
+    font-size: 40px
+  .social-link
+    width: 50%
+  .user-share
+    width: 50%
+@media screen and (max-width: 880px)
+  .social-link
+    display: none
+  .text-h2
+    font-size: 30px
+  .user-share
+    width: 100%
+  .nav-logo
+    width: 30%
+  .nav-logo-counter
+    width: 70%
 @media screen and (max-width: 536px)
+  .nav-logo
+   width: 32%
+  .nav-logo-counter
+    width: 67%
     .main-layout
       .footer-area
         width: 100%
@@ -86,5 +127,8 @@ export default {
 @media screen and (max-width: 430px)
   .nav-icon-size
     display: none
-
+  .nav-logo
+    width: fit-content
+  .nav-logo-counter
+    width: fit-content
 </style>

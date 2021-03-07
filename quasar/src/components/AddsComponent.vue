@@ -2,7 +2,7 @@
   <div
        class="absolute flex items-center justify-end column full-width "
        style="bottom: 0; height: 170px;">
-    <div class="ads bg-yellow q-mb-sm">
+    <div class="ads bg-yellow q-mb-md">
       <q-img
         v-bind:src="getAddContent"
         style="width: 100%; height: 100%; object-fit: contain"
@@ -27,10 +27,29 @@ export default {
     getAddContent () {
       return this.addContent
     }
+  },
+  methods: {
+    closeAds () {
+      this.$emit('CloseAds')
+    }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="sass">
+.close
+  position: absolute
+  top: 0
+  right: 0
+  width: 30px
+  height: 30px
+.ads
+  width: 500px
+  height: 150px
+  position: relative
+@media screen and (max-width: 600px)
+  .ads
+    width: 250px
+    height: 100px
+    position: relative
 </style>

@@ -15,36 +15,37 @@
 </template>
 
 <script>
+import { mapMutations} from 'vuex'
 export default {
   name: 'VolumeControls',
   data () {
     return {
-      // user speaker muted
-      muteSpeaker: false,
-      // controls the display of user volume slider in mobile view
-      mobileSpeakerSlider: false,
-      // displayed sound level
-      soundVolume: 0
+    }
+  },
+  mounted () {
+    this.soundVolume = this.getCurrentVolume
+  },
+  computed: {
+    getCurrentVolume () {
+      return this.$store.state.application.soundVolume
     }
   },
   methods: {
-    showMobileSlider () {
-      this.mobileSpeakerSlider = !this.mobileSpeakerSlider
+    ...mapMutations({
+      updateVolume: 'application/updateSoundVolume'
+    }),
+
+  },
+  watch: {
+    soundVolume: function (newVal) {
+      this.updateVolume(newVal)
     }
   }
 }
 </script>
 
 <style scoped lang="sass">
-.mobile-volume-slider
-  display: none
+
 @media screen and (max-width: 600px)
-.mobile-volume-slider
-  display: flex
-  width: 100%
-  height: 180px
-  position: absolute
-  bottom: 100%
-  left: 50%
-  z-index: 8
+
 </style>

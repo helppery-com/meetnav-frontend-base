@@ -34,7 +34,7 @@
       <div class="co-browser curved-dark-shadow full-height" style="position: relative">
         <invite-people></invite-people>
         <!--  Add Container    -->
-      <adds-component v-bind:add-content="addContent" v-if="currentAdd"></adds-component>
+      <adds-component v-bind:add-content="addContent" v-if="currentAdd" @CloseAds = "closeAds"></adds-component>
       </div>
     </div>
     <!-- control layout -->
@@ -45,13 +45,40 @@
       <div class="row full-width justify-between items-center" style="height: calc( 100% - 5px); position: relative">
         <div class="full-height flex row justify-between items-center" style="width: fit-content">
           <!--     volume controls     -->
-          <volume-controls></volume-controls>
-          <div class="q-ml-md" style="width: 100px">
-          <q-slider
-            v-model="soundVolume"
-            :step="1"
-            class="text-white slider"
-          />
+          <div class="full-height flex items-center" style="position: relative;width: fit-content">
+            <q-icon name="volume_up" size="50px"  v-if="muteSpeaker" style="color: white" @click="showMobileSlider"></q-icon>
+            <q-icon name="volume_off" v-if="!muteSpeaker" size="50px" style="color: white" @click="showMobileSlider"></q-icon>
+            <div class="bg-black flex justify-center mobile-volume-slider" v-if="mobileSpeakerSlider">
+
+              <div class="full-width full-height q-pt-sm" style="position:relative;">
+                <div class="full-width full-height flex justify-center items-center" style="position:absolute; z-index: 3">
+                <q-slider
+                  v-model="soundVolume"
+                  :step="1"
+                  color="white"
+                  vertical
+                  reverse
+                />
+                </div>
+                <div class="full-height full-width flex justify-center items-center" style="position:absolute; z-index: 1">
+                  <div class="bg-white" style="height: 100%; width: 2px"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="q-ml-md " style="width: 100px; position: relative">
+            <div class="slider">
+                <q-slider
+                  v-model="soundVolume"
+                  :step="1"
+                  class="text-white"
+                  label-color="text-white"
+                />
+            </div>
+           <div class=" flex justify-center slider-line">
+             <div class="bg-white" style="width: 100%; height: 2px"></div>
+           </div>
           </div>
           <span class="text-h6 q-ml-md text-white" id="timer-count" ></span>
         </div>
@@ -73,7 +100,6 @@ import ConnectionDialogue from 'components/ConnectionDialogue'
 import UserAudioVideo from 'components/UserAudioVideo'
 import AddsComponent from 'components/AddsComponent'
 import SettingsKeyboardFullscreen from 'components/SettingsKeyboardFullscreen'
-import VolumeControls from 'components/VolumeControls'
 import SeekBar from 'components/SeekBar'
 import Timer from 'easytimer.js'
 export default {
@@ -94,7 +120,13 @@ export default {
       // the ads content being displayed
       addContent: '',
       secondHolder: 0,
-      easyTimer: null
+      easyTimer: null,
+      // user speaker muted
+      muteSpeaker: false,
+      // controls the display of user volume slider in mobile view
+      mobileSpeakerSlider: false,
+      // displayed sound level
+      soundVolume: 0
     }
   },
   components: {
@@ -104,15 +136,14 @@ export default {
     UserAudioVideo,
     AddsComponent,
     SettingsKeyboardFullscreen,
-    SeekBar,
-    VolumeControls
+    SeekBar
   },
   mounted () {
     this.easyTimer = new Timer()
   },
   methods: {
     increaseSeekBar () {
-      this.redSeekBarWidth += 0.01
+      this.redSeekBarWidth += 0.6
       const seekBar = document.getElementById('redseekBar')
       seekBar.style.width = `${this.redSeekBarWidth}%`
       const width = parseInt(seekBar.style.width[0] + seekBar.style.width[1])
@@ -133,12 +164,15 @@ export default {
       this.currentAdd = false
     },
     initMeeting () {
-      this.easyTimer.start({ precision: 'seconds', startValues: { seconds: 0 }, target: { hours: 3600 } })
+      this.easyTimer.start({ precision: 'seconds', startValues: { seconds: 0 }, target: { seconds: 3600 } })
       this.easyTimer.addEventListener('secondsUpdated', this.incrementTime)
     },
     incrementTime (e) {
       document.getElementById('timer-count').innerHTML = this.easyTimer.getTimeValues().toString() + '/ 01:00:00'
       this.increaseSeekBar()
+    },
+    showMobileSlider () {
+      this.mobileSpeakerSlider = !this.mobileSpeakerSlider
     }
   },
   watch: {
@@ -154,21 +188,13 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.mobile-volume-slider
+  display: none
 .audio-video-controls
   width: fit-content
   position: absolute
   left: calc(50% - 100px)
   right: calc(50% - 100px)
-.ads
-  width: 500px
-  height: 150px
-  position: relative
-.close
-  position: absolute
-  top: 0
-  right: 0
-  width: 30px
-  height: 30px
   .mobile-participant
     height: 25%
 .curved-dark-shadow
@@ -190,22 +216,41 @@ export default {
   width: 80%
 .volume-control
   width: 100px
+.slider
+  position: absolute
+  z-index: 3
+  width: 100%
+  height: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+.slider-line
+  position: absolute
+  z-index: 1
+  width: 100%
+  height: 100%
 @media screen and (max-width: 980px)
   #timer-count
     display: none
-@media screen and (max-width: 600px)
+@media screen and (max-width: 615px)
+  .mobile-volume-slider
+    display: flex
+    width: 100%
+    height: 180px
+    position: absolute
+    bottom: 100%
+    left: 50%
+    z-index: 8
   .co-browser
     width: 100% !important
   .adjusted-height
     height: calc(100vh + 200px)
   .slider
     display: none
+  .slider-line
+    display: none
   .main-height
     height: 80%
-  .ads
-    width: 250px
-    height: 100px
-    position: relative
 @media screen and (max-width: 500px)
   .sidebar-width
     width: 25%

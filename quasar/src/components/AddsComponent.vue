@@ -47,7 +47,7 @@ export default {
   width: 500px
   height: 150px
   position: relative
-@media screen and (max-width: 600px)
+@media screen and (max-width: 615px)
   .ads
     width: 250px
     height: 100px

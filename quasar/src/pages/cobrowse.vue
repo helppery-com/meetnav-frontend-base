@@ -1,9 +1,9 @@
 <template>
-  <q-page class="full-width column adjusted-height justify-between items-center overflow-hidden" style="display: flex">
+  <q-page class="full-width column adjusted-height justify-start items-center overflow-hidden" style="display: flex">
     <!-- the connection dialogue -->
     <connection-dialogue @continue="initMeeting"></connection-dialogue>
     <!-- mobile view participant -->
-    <div class=" items-center  sm-hide md-hide lg-hide mobile-participant xl-hide" style="display: flex; width: 100%; overflow-x: auto">
+    <div class=" items-center mobile-participant" >
       <div style="width: 120px;height: 120px;">
         <participant-component v-bind:show-icons="showIcons" v-bind:is-notification="isNotification" ></participant-component>
       </div>
@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     increaseSeekBar () {
-      this.redSeekBarWidth += 0.6
+      this.redSeekBarWidth += 0.027
       const seekBar = document.getElementById('redseekBar')
       seekBar.style.width = `${this.redSeekBarWidth}%`
       const width = parseInt(seekBar.style.width[0] + seekBar.style.width[1])
@@ -188,6 +188,8 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.mobile-participant
+  display: none
 .mobile-volume-slider
   display: none
 .audio-video-controls
@@ -195,8 +197,6 @@ export default {
   position: absolute
   left: calc(50% - 100px)
   right: calc(50% - 100px)
-  .mobile-participant
-    height: 25%
 .curved-dark-shadow
   -webkit-box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.75)
   -moz-box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.75)
@@ -205,7 +205,7 @@ export default {
   -moz-border-radius: 12px
   border-radius: 12px
 .adjusted-height
-  height: calc(100vh - 3rem)
+  height: calc(100vh - 100px)
 .main-height
   height: 90%
 .control-height
@@ -242,18 +242,21 @@ export default {
     left: 50%
     z-index: 8
   .co-browser
-    width: 100% !important
-  .adjusted-height
-    height: calc(100vh + 200px)
+    width: 100%
   .slider
     display: none
   .slider-line
     display: none
+  .sidebar-width
+    display: none
+  .mobile-participant
+    display: flex
+    height: 18%
+    width: 100%
+    overflow-x: auto
   .main-height
-    height: 80%
+    height: 72%
 @media screen and (max-width: 500px)
   .sidebar-width
-    width: 25%
-  .co-browser
-    width: 75%
+    display: none
 </style>

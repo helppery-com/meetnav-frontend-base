@@ -1,0 +1,1 @@
+(cd quasar && npm install)

@@ -138,7 +138,7 @@ export default {
   }
 }
 </script>
-<style lang="sass">
+<style lang="sass" scoped>
 .search-layout
   .main-heading
     color: #3d7094

@@ -34,6 +34,15 @@ const routes = [
     ]
   },
   {
+    path: '/cobrowse',
+    component: () => import('layouts/CobrowsingLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/cobrowse.vue')
+      }
+    ]
+  },
+  {
     path: '/home',
     component: () => import('layouts/MainLayout.vue'),
     children: [

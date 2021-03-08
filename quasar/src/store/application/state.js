@@ -1,5 +1,6 @@
 export default function () {
   return {
-    name: 'meetnav'
+    name: 'meetnav',
+    initMeeting: false
   }
 }

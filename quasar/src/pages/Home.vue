@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-width flex adjusted-height overflow-hidden">
+  <q-page class="home-page full-width flex adjusted-height overflow-hidden">
     <div class="parent-sections ">
       <!-- text section -->
       <div class="col wrap  full-height column justify-center items-center">
@@ -43,26 +43,24 @@
           navigation-position="bottom"
           navigation
           padding
-          height="650px"
-          class=" rounded-borders"
+          class="fit rounded-borders"
           control-color="grey-8"
           :autoplay="true"
           infinite
         >
           <q-carousel-slide name="style" class="column no-wrap flex-center">
-            <q-img
-              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            <img
+              src="/meetnav-browser.png"
               class="q-mt-md"
-              style="width: 500px; height: 650px"
             />
             <div class="text-center " style="margin-top: 50px; width: 350px">
               <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
               <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
             </div>
           </q-carousel-slide>
-          <q-carousel-slide name="tv" class="column no-wrap flex-center">
+          <!--q-carousel-slide name="tv" class="column no-wrap flex-center">
             <q-img
-              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+              src="/meetnav-browser.png"
               class="q-mt-md"
               style="width: 500px; height: 650px"
             />
@@ -73,7 +71,7 @@
           </q-carousel-slide>
           <q-carousel-slide name="pc" class="column no-wrap flex-center">
             <q-img
-              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+              src="/meetnav-browser.png"
               class="q-mt-md"
               style="width: 500px; height: 650px"
             />
@@ -84,7 +82,7 @@
           </q-carousel-slide>
           <q-carousel-slide name="linux" class="column no-wrap flex-center">
             <q-img
-              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+              src="/meetnav-browser.png"
               class="q-mt-md"
               style="width: 500px; height: 650px"
             />
@@ -92,7 +90,7 @@
               <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
               <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
             </div>
-          </q-carousel-slide>
+          </q-carousel-slide-->
         </q-carousel>
       </div>
     </div>
@@ -111,47 +109,57 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.adjusted-height
-  height: calc(100vh - 80px)
+<style lang="sass">
+.home-page
+  .adjusted-height
+    height: calc(100vh - 80px)
 
-.parent-sections
-  height: 100%
-  display: flex
-  flex-direction: row
-  align-items: center
-  justify-content: center
-  flex-grow: 1
-
-.caption
-  text-align: left
-
-.navigation-links
-  max-width: 600px
-
-@media screen and (max-width: 1023px)
   .parent-sections
-    height: fit-content
-    width: 100%
+    height: 100%
     display: flex
-    flex-direction: column
+    flex-direction: row
     align-items: center
     justify-content: center
     flex-grow: 1
 
   .caption
-    text-align: center
+    text-align: left
 
-  .adjusted-height
-    height: fit-content
-    margin-top: 10px
+  .navigation-links
+    max-width: 600px
 
-  .navigation-links > *
-    width: 100%
+  .q-carousel
+    img
+      width: 550px
 
-  .text-h3
-    font-size: 2.5rem
-    font-weight: 400
-    line-height: 3.125rem
-    letter-spacing: normal
+@media screen and (max-width: 1023px)
+  .home-page
+    .parent-sections
+      height: fit-content
+      width: 100%
+      display: flex
+      flex-direction: column
+      align-items: center
+      justify-content: center
+      flex-grow: 1
+
+    .caption
+      text-align: center
+
+    .adjusted-height
+      height: fit-content
+      margin-top: 10px
+
+    .navigation-links > *
+      width: 100%
+
+    .text-h3
+      font-size: 2.5rem
+      font-weight: 400
+      line-height: 3.125rem
+      letter-spacing: normal
+
+    .q-carousel
+      img
+        width: 350px
 </style>

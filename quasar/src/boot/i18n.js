@@ -5,6 +5,7 @@
 import VueI18n from 'vue-i18n'
 import { translations } from '../translations/translation'
 import Vue from 'vue'
+
 Vue.use(VueI18n)
 const i18n = new VueI18n(
   {
@@ -15,4 +16,7 @@ const i18n = new VueI18n(
 )
 export default ({ app }) => {
   app.i18n = i18n
+  app.dummy = true
 }
+
+export { i18n }

@@ -8,7 +8,6 @@
     <div class="col-10 q-pa-xs">
       <neko-video ref="nekoVideo" class="bg-black rounded-borders" />
     </div>
-    <neko-connect v-if="!connected" />
     <div :style="customCursor">
       <q-chip dense :icon="hasControl ? 'mouse' : 'visibility'"
         :color="hasControl ? 'accent' : me.color"
@@ -40,6 +39,12 @@
 <script>
 import neko, { components } from 'neko-client/dist/neko-lib.umd'
 import Member from '../components/neko/Member'
+import VTooltip from 'v-tooltip'
+import Vue from 'vue'
+
+Vue.use(VTooltip, {
+  defaultHtml: false
+})
 
 import 'neko-client/dist/neko-lib.css'
 
@@ -98,8 +103,9 @@ export default {
   },
   created () {
     window.neko = neko
-    const url = 'wss://neko_2.helppery.com:9443' // process.env.VUE_APP_SERVER
+    const url = 'wss://neko_2.helppery.com:9443/' // process.env.VUE_APP_SERVER
     window.$client.initWithSettings(this, url)
+    neko.login({ displayname: 'admin', password: 'admin1234!' })
     const click = () => {
       neko.setActive()
       if (neko.settings.autoplay && neko.video.playing) {

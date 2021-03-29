@@ -1,32 +1,38 @@
 <template>
   <q-page class="home-page full-width flex adjusted-height overflow-hidden">
-    <div class="parent-sections ">
+    <div class="parent-sections q-px-xl">
       <!-- text section -->
       <div class="col wrap  full-height column justify-center items-center">
         <!--  Heading section  -->
-        <div class="q-mx-lg caption" style="max-width: 600px;">
+        <div class="q-mx-lg caption">
           <p class="text-h3">{{ $t('homePage.mainHeading') }}</p>
-          <p class="text-h3">{{ $t('homePage.subHeading') }}</p>
+          <p class="text-h5">{{ $t('homePage.subHeading') }}</p>
           <!--  caption  -->
           <p class="text-h6 text-grey-6" >{{ $t('homePage.caption') }}</p>
           <!--   navigation links   -->
           <div class="row justify-between q-mt-xl navigation-links" >
             <q-btn
               color="purple-7"
-              class=" float-left q-ma-sm"
+              class="col float-left q-ma-xs ref-start-navroom"
               size="19px"
               icon="video_call"
               v-bind:label="$t('homePage.navigateTogether')"
               square
+              @click="newRoom"
             />
             <q-input
               v-bind:placeholder="$t('homePage.enterCode')"
-              class=" float-right q-ma-sm"
+              class="col float-right q-ma-xs ref-navroom-code"
               outlined
               size="24px"
+              v-model="code"
+              @keypress.enter="openNavroom"
             >
               <template v-slot:prepend>
                 <q-icon name="keyboard" />
+              </template>
+              <template v-slot:append>
+                <q-btn flat icon="cast" v-if="code" @click="openNavroom" class="ref-join-navroom"/>
               </template>
             </q-input>
           </div>
@@ -103,7 +109,22 @@ export default {
   name: 'Home',
   data () {
     return {
-      slide: 'style'
+      slide: 'style',
+      code: ''
+    }
+  },
+  methods: {
+    newRoom () {
+      if (!this.$storex.user.user) {
+        this.$root.$once('user-logged', () => this.newRoom())
+        return this.$root.$emit('login')
+      }
+      this.$router.push('/navroom')
+    },
+    openNavroom () {
+      if (this.code) {
+        this.$router.push(`/navroom/${this.code}`)
+      }
     }
   }
 }

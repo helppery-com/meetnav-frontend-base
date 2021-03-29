@@ -44,8 +44,8 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      vueRouterMode: 'history', // available values: 'hash', 'history'
+      vueCompiler: true,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
@@ -72,8 +72,7 @@ module.exports = function (ctx) {
         })
       },
       env: {
-        RTC_IO_SERVER: 'https://rtcmulticonnection.herokuapp.com/',
-        VUE_APP_SERVER: 'ws://localhost:3000/'
+        RTC_IO_SERVER: '/'
       }
     },
 
@@ -82,6 +81,23 @@ module.exports = function (ctx) {
       https: false,
       port: 8085,
       open: true, // opens browser window automatically
+      public: process.env.MEETNAV_WWW_INDEX,
+      proxy: {
+        // proxy all requests starting with /api to jsonplaceholder
+        '/api': {
+          target: 'http://localhost:1337',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          },
+          ws: true
+        },
+        '/socket.io': {
+          target: 'http://localhost:1337',
+          changeOrigin: true,
+          ws: true
+        }
+      }
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
@@ -104,7 +120,8 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Cookies'
       ]
     },
 

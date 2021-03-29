@@ -1,5 +1,5 @@
 <template>
-  <div class="q-gutter-xs">
+  <div class="q-gutter-xs" v-if="$storex.room.nekoConnected">
     <q-btn outline :icon="hasControl ? 'fas fa-mouse-pointer' : 'visibility'" @click="toggleControls" :color="hasControl ? 'accent' : 'grey'" :label="$t('room.takeControl')"/>
     <q-btn outline icon="speaker" :color="muted ? 'grey': 'dark'">
       <q-menu>
@@ -26,7 +26,7 @@
         </q-list>
       </q-menu>
     </q-btn>
-    <q-btn outline icon="fit_screen" color="black" v-if="me.admin">
+    <q-btn outline icon="fit_screen" color="black">
       <q-menu>
         <q-list style="min-width: 200px" class="q-pt-md">
           <q-item clickable v-close-popup>

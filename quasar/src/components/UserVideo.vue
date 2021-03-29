@@ -1,6 +1,9 @@
 <template>
   <div ref="v" class="user-video relative-position">
-    <div class="user-info" v-if="showUserInfo" :dummy="updatedAt">{{ stream.extra.username }} <q-icon name="mic_off" color="red" v-if="isAudioMuted" /></div>
+    <div class="user-info" v-if="showUserInfo" :dummy="updatedAt">
+      {{ stream.extra.username }}
+      <q-icon name="mic_off" color="red" v-if="isAudioMuted" />
+    </div>
   </div>
 </template>
 <script>
@@ -45,6 +48,7 @@ export default {
   .user-video
     video
       width: 100%
+      height: 100%
 
     .user-info
       position: absolute

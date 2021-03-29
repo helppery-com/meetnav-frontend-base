@@ -11,13 +11,16 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
     "easytimer.js": "^4.3.2",
+    "emoji-datasource": "^5.0.1",
     "neko-client": "file:../../neko/client",
     "quasar": "^1.0.0",
     "rtcmulticonnection": "^3.7.0",
     "socket.io-client": "^2.4.0",
+    "touch-events": "0.0.7",
     "typed-vuex": "^0.1.22",
     "v-tooltip": "^2.1.2",
     "vue-i18n": "^8.22.4",

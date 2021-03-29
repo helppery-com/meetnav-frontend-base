@@ -1,4 +1,4 @@
-import { store } from '../store'
+import { storex } from '../store'
 const routes = [
   {
     path: '/',
@@ -16,8 +16,8 @@ const routes = [
     ],
     beforeEnter (to, from, next) {
       if (to.matched.some(record => record.meta.userRequired)) {
-        const user = store.getters['user/getUser']
-        if (!user.length) {
+        const { user } = storex.user
+        if (!user) {
           next('/')
         }
       }
@@ -38,7 +38,7 @@ const routes = [
     component: () => import('layouts/CobrowsingLayout.vue'),
     children: [
       {
-        path: '', component: () => import('pages/cobrowse.vue')
+        path: '', component: () => import('pages/Cobrowse.vue')
       }
     ]
   },
@@ -66,6 +66,24 @@ const routes = [
     children: [
       {
         path: '', component: () => import('pages/Neko.vue')
+      }
+    ]
+  },
+  {
+    path: '/navroom/:roomId',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Navroom.vue')
+      }
+    ]
+  },
+  {
+    path: '/navroom',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Navroom.vue')
       }
     ]
   },

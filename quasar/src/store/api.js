@@ -2,8 +2,12 @@ import axios from 'axios'
 
 class Api {
   jwt = null
+  baseUrl = process.env.API_ROOT
 
   url (path) {
+    if (this.baseUrl) {
+      return this.baseUrl + path
+    }
     return path
   }
 
@@ -17,29 +21,29 @@ class Api {
   }
 
   async login (identifier, password) {
-    const res = await axios.post(this.url('/api/auth/local'), { identifier, password })
+    const res = await axios.post(this.url('/auth/local'), { identifier, password })
     return res.data
   }
 
   async register (username, email, password) {
-    await axios.post(this.url('/api/auth/local/register'), { username, email, password })
+    await axios.post(this.url('/auth/local/register'), { username, email, password })
   }
 
   async createRoom (roomId) {
     const headers = this.headers
-    const res = await axios.post(this.url('/api/nekos'), { roomId }, { headers })
+    const res = await axios.post(this.url('/nekos'), { roomId }, { headers })
     return res.data
   }
 
   async joinRoom (roomId) {
     const headers = this.headers
-    const res = await axios.put(this.url(`/api/nekos/${roomId}`), { }, { headers })
+    const res = await axios.put(this.url(`/nekos/${roomId}`), { }, { headers })
     return res.data
   }
 
   async closeRoom (roomId) {
     const headers = this.headers
-    const res = await axios.delete(this.url(`/api/nekos/${roomId}`), { headers })
+    const res = await axios.delete(this.url(`/nekos/${roomId}`), { headers })
     return res.data
   }
 }

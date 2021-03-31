@@ -44,7 +44,7 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'history', // available values: 'hash', 'history'
+      vueRouterMode: 'hash', // available values: 'hash', 'history'
       vueCompiler: true,
       // transpile: false,
 
@@ -72,7 +72,8 @@ module.exports = function (ctx) {
         })
       },
       env: {
-        RTC_IO_SERVER: '/'
+        RTC_IO_SERVER: process.env.RTC_IO_SERVER || '/',
+        API_ROOT: process.env.API_ROOT
       }
     },
 

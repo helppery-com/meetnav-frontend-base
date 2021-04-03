@@ -6,6 +6,9 @@
   "author": "gbrian <gustavo.brian@gmail.com>",
   "private": true,
   "scripts": {
+    "help": "quasar serve --help",
+    "start": "quasar serve ./dist/spa --history",
+    "build": "quasar build",
     "dev": "quasar dev",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"

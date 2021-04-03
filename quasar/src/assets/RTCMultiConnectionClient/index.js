@@ -41,7 +41,7 @@ export default class RTCNavroom {
     this.user = user
     this.connection = new RTCMultiConnection()
     // TODO: connection.password = this.room.roomPassword
-    this.connection.socketURL = process.env.RTC_IO_SERVER
+    this.connection.socketURL = (process.env.RTC_IO_SERVER + '') + '/'
     // STUN / TURN Servers
     /* this.connection.iceServers = []
     this.connection.iceServers.push({

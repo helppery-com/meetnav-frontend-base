@@ -44,7 +44,7 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       vueCompiler: true,
       // transpile: false,
 
@@ -72,8 +72,8 @@ module.exports = function (ctx) {
         })
       },
       env: {
-        RTC_IO_SERVER: process.env.RTC_IO_SERVER || '/',
-        API_ROOT: process.env.API_ROOT
+        RTC_IO_SERVER: process.env.RTC_IO_SERVER || 'https://api.meetnav.com/',
+        API_ROOT: process.env.API_ROOT || 'https://api.meetnav.com'
       }
     },
 

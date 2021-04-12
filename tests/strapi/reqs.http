@@ -1,0 +1,225 @@
+http://localhost:1337/languages/user
+
+###
+http://localhost:1337/content-manager/explorer/plugins::users-permissions.user?_limit=10&_sort=username:ASC&_start=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0OTg3MTg1LCJleHAiOjE1OTc1NzkxODV9.q3-m2JMW4-2nOeNj5T6YLzYihd7ggKkz3rmtHaSONdk
+
+###
+POST http://localhost:1337/accounts/email
+Content-Type: application/json
+
+{
+    "username": "gbrian7",
+    "email": "gustavo@acloudfrontier.com",
+    "password": "password"
+}
+
+####
+/**
+{
+    "id": 1,
+    "username": "dummy",
+    "email": "admin@email.com",
+    "provider": "local",
+    "password": "$2a$10$/u4iRbbrd1.JrKoCGdpv3uT2x59hHroa5bC63.BoJNnZYQmdgYZuy",
+    "resetPasswordToken": null,
+    "confirmed": false,
+    "blocked": false,
+    "role": {
+      "id": 1,
+      "name": "Authenticated",
+      "description": "Default role given to authenticated user.",
+      "type": "Authenticated"
+    },
+    "instagram": {
+      "login": {
+        "trusted_name": "dummy7"
+      },
+      "followers": []
+    },
+    "created_at": "2020-07-17T12:33:44.963Z",
+    "updated_at": "2020-07-17T12:33:44.973Z"
+  }
+*/
+
+###
+
+POST http://localhost:1337/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "gbrian7",
+    "email": "gustavo@acloudfrontier.com",
+    "password": "password"
+}
+
+###
+POST http://localhost:1337/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "test",
+    "email": "gustavo.brian@gmail.com",
+    "password": "09709707008"
+}
+
+### 
+http://localhost:1337/accounts/resend?email=gustavo.brian@gmail.com
+
+### 
+http://localhost:1337/accounts/confirm?code=hgv-vrz-pyl-pnm
+###
+POST http://localhost:1337/auth/local
+Content-Type: application/json
+
+{
+    "identifier": "gbrian",
+    "password": "gbrian"
+}
+
+###
+http://localhost:1337/navrooms?start=3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwOTA2MzY2NywiZXhwIjoxNjExNjU1NjY3fQ.IXO0poQS9dDOYxEu7themt04zCOg0yPa37N8VGq8J0I
+
+
+###
+http://localhost:1337/sessions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTU5NjMwMzExOSwiZXhwIjoxNTk4ODk1MTE5fQ.ftRnjGxKrXhKj_tn7DUkSOnOo3rQe_nmb_me0F-V5dY
+
+
+###
+POST http://localhost:1337/session-instances
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTU5NjMwMzExOSwiZXhwIjoxNTk4ODk1MTE5fQ.ftRnjGxKrXhKj_tn7DUkSOnOo3rQe_nmb_me0F-V5dY
+
+{
+  "session": {
+    "id": 1
+  }
+}
+
+###
+http://localhost:1337/sessions?_q=dino
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTU5Njc4OTA0MiwiZXhwIjoxNTk5MzgxMDQyfQ.2V2BfTpdsuktxzYfRJKa4DfRm4-PC1rHb_5y2W9hiqY
+
+###
+http://localhost:1337/users?username_gte=gb&username_contains=gb
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTU5NzkwNzI3OSwiZXhwIjoxNjAwNDk5Mjc5fQ.sDqb3qmSdtY84wm7-1eAwjMF23kZytQgpIqxH1OjFR4
+
+###
+http://localhost:1337/users?id=31
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwODkwMjExMCwiZXhwIjoxNjExNDk0MTEwfQ.WTRdg2sRhIjlb_5OqJV_L3cJUp46um_umRvBYASbRTA
+
+
+###
+GET http://localhost:1337/search?_q=holidays
+Content-Type: application/json
+
+###
+POST http://localhost:1337/logs
+Content-Type: application/json
+
+{
+  "event": "test"
+}
+
+
+
+###
+GET http://localhost:1337/search/google?q=fasion
+Content-Type: application/json
+
+
+### Translations
+POST http://localhost:1337/translations/bulk
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwOTQwNjc2OSwiZXhwIjoxNjExOTk4NzY5fQ.-KvMc4tPmmg14npE7WLLHwqrpXiVGBCPLaA5IBXVpWc
+
+{
+  "translations": [
+    { "lang": "en-GB", "key": "es-SP", "value": "Spanish"},
+    { "lang": "es-SP", "key": "es-SP", "value": "Español"},
+    { "lang": "hi-IN", "key": "es-SP", "value": "स्पेनिश"},
+    { "lang": "en-GB", "key": "en-GB", "value": "English"},
+    { "lang": "es-SP", "key": "en-GB", "value": "Inglés"},
+    { "lang": "hi-IN", "key": "en-GB", "value": "अंग्रेज़ी"},
+    { "lang": "en-GB", "key": "hi-IN", "value": "Hindi"},
+    { "lang": "es-SP", "key": "hi-IN", "value": "Hindi"},
+    { "lang": "hi-IN", "key": "hi-IN", "value": "हिंदी"}
+  ]
+}
+
+### Translations
+POST http://localhost:1337/translations/missing
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTEsImlhdCI6MTYxMjc2ODY2NywiZXhwIjoxNjE1MzYwNjY3fQ.zt1PyIfdvIc3ojcwUiYrORmcepj0h28uF0eXlktrppE
+
+{
+  "translations": [
+    { "lang": "es-SP", "key": "My key to be translated" },
+    { "lang": "es-SP", "key": "Wha if I have {tokens}" }
+  ]
+}
+
+### Chat
+
+POST http://localhost:1337/chats
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwOTc1NjMzNCwiZXhwIjoxNjEyMzQ4MzM0fQ.2-AScxCiSme7ZDP7Sxu_ct__h0GaSnNbjtuCEXiBZFU
+
+{ "roomId": "lzy-rzo-mum", "message": "<h1>mail@mail.com Some more text <b>test</b></h1>" }
+
+###
+http://localhost:1337/navrooms/?roomId=lzy-rzo-mum
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwOTc1NjMzNCwiZXhwIjoxNjEyMzQ4MzM0fQ.2-AScxCiSme7ZDP7Sxu_ct__h0GaSnNbjtuCEXiBZFU
+
+###
+GET http://localhost:1337/logs/delete/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwOTg0MDA2NiwiZXhwIjoxNjEyNDMyMDY2fQ.zD7zrwt5qwqxTATZC1T3V-W_RYDMJcVaRLuFbqdmD9E
+
+
+### navlists
+POST http://localhost:1337/navlists
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYwOTg0MDA2NiwiZXhwIjoxNjEyNDMyMDY2fQ.zD7zrwt5qwqxTATZC1T3V-W_RYDMJcVaRLuFbqdmD9E
+
+{ 
+  "name": "test", 
+  "result": {
+          "title": "Welcome to meetnav!",
+          "htmlTitle": "<b>Welcome</b> to meetnav",
+          "link": "https://www.meetnav.com",
+          "displayLink": "www.meetnav.com",
+          "htmlSnippet": "<span class=\"text-weight-thin\">Room created on the 2021-01-05T14:41:34.627Z</span><br/>Create a new navroom, invite people to join and start navigating internet together",
+          "htmlFormattedUrl": "https://www.meetnav.com/<b>welcome</b>"
+        }
+}
+
+
+### Bulk load users
+
+POST http://localhost:1337/admin/user/bulk
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTEsImlhdCI6MTYxMTE2NzE2NCwiZXhwIjoxNjEzNzU5MTY0fQ.FuVuFeU_d2uXN_Cwg676DsbkZ0-Ng4IhHs6v4fLcu9U
+
+[{"username":"Katherine House,Home,Makeup","email":"katherinehouse,home,makeup@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5809305f441ba504c40000e3/16465485_246612045787910_8885948230576111616_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5809305f441ba504c40000e3/card_bg_IMG_0854.JPG","tags":["Health and Wellness","Home Decorating","Makeup","Shopping","Beauty Blogger"],"helpper":true,"confirmed":true,"rating":3},{"username":"Rachel Newcombe","email":"rachelnewcombe@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/56660b6aad3409138f00d681/14716455_1243382239016225_1287343037394976768_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/56660b6aad3409138f00d681/card_bg_ukhomebloghop-alfresco-outdoor-garden-dining.jpg","tags":["Interior Design","Lifestyle","Shopping","Decor","Interiors"],"helpper":true,"confirmed":true,"rating":3},{"username":"Stacie Connerty","email":"stacieconnerty@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612f3691bfa211de50108b6/30592723_194417514505009_2702706637428228096_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612f3691bfa211de50108b6/card_bg_12728482_756900054409583_655840664_n.jpg","tags":["Beauty","DIY","Fashion","Lifestyle","Media","Shopping","Social Media","Blogger","Travel"],"helpper":true,"confirmed":true,"rating":1},{"username":"Costco Insider","email":"costcoinsider@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5c6eff4098f4507f8b000206/12530927_510102879190978_2080702728_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5c6eff4098f4507f8b000206/card_bg_51725724_1285570871581317_9167438307779864587_n.jpg","tags":["Food and Drink","Household Products","Home Entertainment","Shopping","Consumer Electronics"],"helpper":true,"confirmed":true,"rating":3},{"username":"Edith Tapia","email":"edithtapia@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5a0bb1f54a047d7b1b01122f/84019141_509495679937205_947079192581767168_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5a0bb1f54a047d7b1b01122f/card_bg_2C3E1284.jpg","tags":["Finance","Lifestyle","Shopping","Blogger","Financial Planning"],"helpper":true,"confirmed":true,"rating":1},{"username":"Jaime @ Coupons and Freebies Mom","email":"jaime@couponsandfreebiesmom@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5859adab441ba56dee0001a6/13694341_284016938633204_36059503_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5859adab441ba56dee0001a6/card_bg_cafm_logo.jpg","tags":["Children","Finance","Lifestyle","Recipes","Shopping"],"helpper":true,"confirmed":true,"rating":3},{"username":"Cristina Calzado","email":"cristinacalzado@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5667ff3d58cb880fad1896dc/52884015_2660170564009890_2528317685171748864_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5667ff3d58cb880fad1896dc/card_bg_13704290_1831845410369890_892681991_n.jpg","tags":["Cosmetics","Fashion","Shopping","Sports"],"helpper":true,"confirmed":true,"rating":1},{"username":"⠀⠀⠀ ⠀⠀⠀ ❥Nesrine نسرين❥","email":"⠀⠀⠀⠀⠀⠀❥nesrineنسرين❥@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5667baf1ad3409442309cd55/68838742_409467496369953_7640397269375647744_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5667baf1ad3409442309cd55/card_bg_13413266_610487565793297_513902843_n.jpg","tags":["Fashion","Lifestyle","Makeup","Shopping","Beauty Blogger"],"helpper":true,"confirmed":true,"rating":2},{"username":"SCARLETT HAO","email":"scarletthao@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5617e3d74a047d270c06e7ae/65159864_448825425952982_165686472341454848_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5617e3d74a047d270c06e7ae/card_bg_13320281_497023217172512_1687760255_n.jpg","tags":["Fashion","Shopping","Travel","beauty","lifestyle"],"helpper":true,"confirmed":true,"rating":3},{"username":"onlymattmartin","email":"onlymattmartin@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5617e34e4a047d285606980a/13725681_1747604025498814_397114323_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5617e34e4a047d285606980a/card_bg_logo.png","tags":["Celebrities","Entertainment","Music","Reality Television","Shopping"],"helpper":true,"confirmed":true,"rating":4},{"username":"Malucas & Piradas","email":"malucas&piradas@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612f6d01bfa211de504bb18/11350686_1493052897663483_1984713710_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612f6d01bfa211de504bb18/card_bg_65192972_2198754913512298_3128528764061552359_n.jpg","tags":["Lifestyle","Style","Travel","hospitality","Shopping"],"helpper":true,"confirmed":true,"rating":3},{"username":"Reichel Broussard","email":"reichelbroussard@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612f6b61bfa211de504964c/51442669_432008344235735_898903381941157888_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612f6b61bfa211de504964c/card_bg_12292884_1526487404342110_966092146_n.jpg","tags":["Home Decorating","Lifestyle","Shopping","Travel","Decor"],"helpper":true,"confirmed":true,"rating":4},{"username":"App Cushy","email":"appcushy@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5efb22f16a7c256b44c9dd53/58842643_2686073528076318_593477807867166720_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5efb22f16a7c256b44c9dd53/card_bg_58842643_2686073528076318_593477807867166720_n.jpg","tags":["Lifestyle","Adventure Travel","Shopping","Health and Wellness","Entertainment"],"helpper":true,"confirmed":true,"rating":3},{"username":"SalimosHoy","email":"salimoshoy@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5cbe130dafee4b79480010c8/79769089_2704505976270837_1108002022205947904_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5cbe130dafee4b79480010c8/card_bg_56764763_383426962500611_6856744023223183257_n.jpg","tags":["Food And Drinks","Blogger","Shopping","Shopify"],"helpper":true,"confirmed":true,"rating":1},{"username":"Saving Joyfully","email":"savingjoyfully@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5be48a63ad34092c0703f22c/79342765_624091721464734_5551455614758027264_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5be48a63ad34092c0703f22c/card_bg_75538133_411753782826031_1375944512196992596_n.jpg","tags":["Finance","Baby","Food and Drink","Travel","Shopping"],"helpper":true,"confirmed":true,"rating":2},{"username":"LJ.Everyday","email":"lj.everyday@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5bd7ace9ad34096e11052983/30900050_1590320181066242_2832723135793463296_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5bd7ace9ad34096e11052983/card_bg_60295132_646479492522100_3468949132195694245_n.jpg","tags":["Home Decorating","Home Decoration","Lifestyle Tips","Shopping","Decor"],"helpper":true,"confirmed":true,"rating":4},{"username":"Vi Ton Fessenden","email":"vitonfessenden@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5bb872acad3409613506332f/43118640_488167704998741_5099876246381133824_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5bb872acad3409613506332f/card_bg_vi_logo.jpg","tags":["Fitness","Health and Wellness","Shopping","Baby","Clothes, Food And Drink, Jewlery, Animals, Lifestyle"],"helpper":true,"confirmed":true,"rating":3},{"username":"Jeff & Crystal - KCBloggers","email":"jeff&crystal-kcbloggers@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5b5fd905ad34095f1d015c13/70263889_748331088920378_7163707078349946880_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5b5fd905ad34095f1d015c13/card_bg_54512050_298898211009665_8994697663629307145_n.jpg","tags":["Restaurants","Travel And Tourism","Shopping","Apparel","Hotels"],"helpper":true,"confirmed":true,"rating":4},{"username":"Haydeé  Hedderich","email":"haydeéhedderich@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5b33a806ad34095224028276/64672617_353664355337643_7934720589212680192_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5b33a806ad34095224028276/card_bg_44843561_194971448104695_6415354983172014080_n.jpg","tags":["Shopping","Lifesytle","Health and Wellness","Spirituality","Well Being"],"helpper":true,"confirmed":true,"rating":2},{"username":"OK People","email":"okpeople@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5b2cc85ba7b21a111b002054/34653965_2162859610409908_8628460775062634496_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5b2cc85ba7b21a111b002054/card_bg_34649147_195654397689959_5317009421837008896_n.jpg","tags":["Shopping","Sports","Sportswear","Technology","Clothes, Food And Drink, Jewlery, Animals, Lifestyle"],"helpper":true,"confirmed":true,"rating":2},{"username":"PUNEKARS_","email":"punekars_@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5aa9000cad3409603400e6ea/26296438_666330597089032_7595358107711045632_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5aa9000cad3409603400e6ea/card_bg_31028435_590983257930549_5388317007210872832_n.jpg","tags":["Food and Drink","Shopping","Travel","Brand Influencer","Brand Ambassador/Influencer"],"helpper":true,"confirmed":true,"rating":1},{"username":"Miami Turistico","email":"miamituristico@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5a73f60da7b21a4fd5000cf7/14063258_327155860959904_1108095935_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5a73f60da7b21a4fd5000cf7/card_bg_topbanner.jpg","tags":["Shopping","Miami","Travel And Tourism","Places To Go","Discounts"],"helpper":true,"confirmed":true,"rating":2},{"username":"Alma Viajera","email":"almaviajera@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5a564eabad34092984006020/72653622_436298793671833_428158688373506048_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5a564eabad34092984006020/card_bg_avion-portada.jpg","tags":["Shopping","Tourism","Travel","Hotel Reviews","Airline Tickets"],"helpper":true,"confirmed":true,"rating":4},{"username":"EdmontonMama.ca","email":"edmontonmama.ca@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/598d24fa4a047d026a00265b/20225954_1966421746949856_5335534921454714880_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/598d24fa4a047d026a00265b/card_bg_20225954_1966421746949856_5335534921454714880_a.jpg","tags":["Parenting","Kids and Babies","Travel And Tourism","Shopping"],"helpper":true,"confirmed":true,"rating":2},{"username":"Life as Leah","email":"lifeasleah@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/59433111c5fb937ceb061db0/65772396_882438652127009_572810146065940480_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/59433111c5fb937ceb061db0/card_bg_22708721_136191027107029_2621962875761065984_n.jpg","tags":["Lifestyle","Shopping","Parenting","Family Lifestyle","Traveling with Kids"],"helpper":true,"confirmed":true,"rating":3},{"username":"Hi, I'm Pamela Chieff(allo)","email":"hi,i'mpamelachieff(allo)@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/59245d8d4a047d7bfd5d8882/37634619_950475281818547_3892665294295924736_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/59245d8d4a047d7bfd5d8882/card_bg_Amberlair_villa_3.jpg","tags":["Restaurants","Shopping","Travel","Luxury Hotels","Resorts"],"helpper":true,"confirmed":true,"rating":4},{"username":"Súper Baratísimo o Gratis”","email":"súperbaratísimoogratis”@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/58fdf0df58cb881a2d4749fa/59596854_2212714702181608_6478763638357229568_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/58fdf0df58cb881a2d4749fa/card_bg_52654637_303504497027560_1934334804684142417_n.jpg","tags":["Finance","Retirement","Promotional Products","Shopping","Blogger"],"helpper":true,"confirmed":true,"rating":3},{"username":"Lisa @ Drugstore Divas","email":"lisa@drugstoredivas@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/58e2b1ef4a047d3d1a516529/52337806_567336620410030_7248594929406967808_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/58e2b1ef4a047d3d1a516529/card_bg_PANO_20170603_204651-01.jpeg","tags":["DIY","Lifestyle","Shopping","Travel"],"helpper":true,"confirmed":true,"rating":4},{"username":"Ashley DeJong","email":"ashleydejong@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/58b9d1fe58cb8842d003fdb8/36086090_2038198073174734_5458465866242850816_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/58b9d1fe58cb8842d003fdb8/card_bg_IMG_1109.JPG","tags":["Food and Drink","Shopping","Travel","Fashion & Beauty","Momlife"],"helpper":true,"confirmed":true,"rating":2},{"username":"livelovecolorfully","email":"livelovecolorfully@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/574eda474a047d495421e8b0/72224519_2502932906428730_7008194515949322240_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/574eda474a047d495421e8b0/card_bg_49554401_353880888532839_1124589144933291523_n.jpg","tags":["Momlife","Fashion","Baby","Shopping","Lifestyle Photography"],"helpper":true,"confirmed":true,"rating":3},{"username":"dalahi_ortiz","email":"dalahi_ortiz@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/574eb6c1ad340977321ae4f8/18298587_465855367088486_2916789140563427328_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/574eb6c1ad340977321ae4f8/card_bg_21149427_498835817130187_2964968919753818112_n.jpg","tags":["Fashion","Lifestyle","Shopping","Style","Travel"],"helpper":true,"confirmed":true,"rating":1},{"username":"pastelprettiness","email":"pastelprettiness@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/574ea5f5ad34097732172fc0/74830610_1401415290020940_3302955164884795392_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/574ea5f5ad34097732172fc0/card_bg_MYXJ_20170324153439_save.jpg","tags":["Beauty","Fashion","Shopping","Fashion Blogger","Beauty Blogger"],"helpper":true,"confirmed":true,"rating":1},{"username":"M A G N A","email":"magna@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/574e840a58cb88170f04a8e5/65471463_382457052386882_1421574376146337792_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/574e840a58cb88170f04a8e5/card_bg_38042619_216489022351986_7647924573224042496_n.jpg","tags":["Fashion","Petite Apparel","Shopping","Style","Fashion Blogger"],"helpper":true,"confirmed":true,"rating":1},{"username":"shermainezy","email":"shermainezy@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/574e693dad340977c40a8698/71512890_421202898539459_8477408600623415296_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/574e693dad340977c40a8698/card_bg_image.jpeg","tags":["Food and Drink","Makeup","Shopping","Fashion Blogger","Travel Photography"],"helpper":true,"confirmed":true,"rating":2},{"username":"Bérangère","email":"bérangère@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/56680a18ad340944ef1a587d/14276599_1782738035344723_1909685319_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/56680a18ad340944ef1a587d/card_bg__DSC5197.JPG","tags":["Fashion","Lifestyle","Shopping","Travel","Kids Fashion"],"helpper":true,"confirmed":true,"rating":3},{"username":"JAPANKURU","email":"japankuru@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5617f12d4a047d270c0bd01c/21296762_524643431201675_5541002965734653952_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5617f12d4a047d270c0bd01c/card_bg_Facebook_Cover_201608.jpg","tags":["Japan","Japanese Food","Shopping","Travel","Travel Photography"],"helpper":true,"confirmed":true,"rating":2},{"username":"Samantha Taylor","email":"samanthataylor@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5617db7b4a047d270c02170b/14295492_457220594452938_1846787998_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5617db7b4a047d270c02170b/card_bg_13108834_1020840164660053_1848400446_n.jpg","tags":["Beauty","C++","Lifestyle","Shopping","Blogger"],"helpper":true,"confirmed":true,"rating":2},{"username":"danielle rudy davis","email":"daniellerudydavis@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/56166d184a047d14a203449e/65110294_1323075974520682_4661807015461388288_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/56166d184a047d14a203449e/card_bg_13736060_879155645529549_970949839_n.jpg","tags":["Style","Blogger","Mom","Fitness","Shopping"],"helpper":true,"confirmed":true,"rating":4},{"username":"Nina","email":"nina@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/56166ca34a047d0b50034f88/80807972_468510133847215_4291344864747978752_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/56166ca34a047d0b50034f88/card_bg_10004344_952112484857655_817778108_n.jpg","tags":["Shopping","Online Shopping","Online Retail","Online Entrepreneur"],"helpper":true,"confirmed":true,"rating":1},{"username":"Brickell Fashion Market","email":"brickellfashionmarket@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/561663ee4a047d0b5001fa20/15802586_1839098833033635_2892510433468481536_a.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/561663ee4a047d0b5001fa20/card_bg_15135888_1877486132474767_7649049195612959563_n.jpg","tags":["Beauty","Fashion","Shopping","Style"],"helpper":true,"confirmed":true,"rating":2},{"username":"Fit Mermaid","email":"fitmermaid@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/561663d54a047d0b5001f0f9/31386925_1021003698049428_7456765715001901056_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/561663d54a047d0b5001f0f9/card_bg_11351539_869467123171714_670141943_n.jpg","tags":["Fitness","Health","Shopping","Trainer"],"helpper":true,"confirmed":true,"rating":4},{"username":"Laura Peruchi Mezari","email":"lauraperuchimezari@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612ff841bfa211de50cc06d/66608161_485788735589779_2558738255629516800_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612ff841bfa211de50cc06d/card_bg_13108696_1606221773029730_1090567337_n.jpg","tags":["Beauty","Shopping","Blogger","New York City"],"helpper":true,"confirmed":true,"rating":1},{"username":"Scallywag Sharla","email":"scallywagsharla@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612fa931bfa211de5083e9d/92293095_233302788030805_565537469353689088_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612fa931bfa211de5083e9d/card_bg_1170577_936174086478918_689653789_n.jpg","tags":["Model","Hair And Make Up","Shopping","Fitness Products","Tattoos"],"helpper":true,"confirmed":true,"rating":2},{"username":"Genevieve Burnesse","email":"genevieveburnesse@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612f9371bfa211de50700c5/70790898_445086379686116_8572721947920564224_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612f9371bfa211de50700c5/card_bg_14295556_643028229207179_5791111117677789184_n.jpg","tags":["Beauty","Fashion","Makeup","Shopping","Modeling"],"helpper":true,"confirmed":true,"rating":1},{"username":"Daphne Blunt","email":"daphneblunt@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612f59a1bfa211de5034802/22070689_464402723960302_2150669873783504896_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612f59a1bfa211de5034802/card_bg_Twitter_Header.jpg","tags":["Beauty","Fashion","Lifestyle","Shopping","Blogger"],"helpper":true,"confirmed":true,"rating":1},{"username":"Sarah","email":"sarah@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5612f4cd1bfa211de50279bc/61962972_329896821275145_3837891825478139904_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5612f4cd1bfa211de50279bc/card_bg_minneapolis-2347321_1280.jpg","tags":["Beauty","Fashion","Shopping","Travel","Parenting"],"helpper":true,"confirmed":true,"rating":2},{"username":"Danielle","email":"danielle@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/582f4710441ba5622a00054e/25038692_156389398317893_2821955197515857920_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/582f4710441ba5622a00054e/card_bg_12383368_1740557349515302_376809924_n.jpg","tags":["Cooking","Outdoors","Shopping","Travel","Parenting"],"helpper":true,"confirmed":true,"rating":2},{"username":"Lindsey","email":"lindsey@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/574e52e84a047d482d054dfe/31326418_205897730139265_8430829358175748096_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/574e52e84a047d482d054dfe/card_bg_14733151_1668891376756027_4607552700815507456_n.jpg","tags":["Beauty","Fashion","Lifestyle","Shopping","Culture"],"helpper":true,"confirmed":true,"rating":2},{"username":"Sara Ann","email":"saraann@meetnav.com","password":"1234","provider":"local","role":1,"avatar":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/avatar/5667afff58cb880fad06ddbd/27877547_338734513300296_5723200799895453696_n.jpg","background":"https://ddxcu89oqzgqh.cloudfront.net/uploads/account/result_card_image/5667afff58cb880fad06ddbd/card_bg_24175482_313524829146867_6061385940666941440_n.jpg","tags":["Food and Drink","Makeup","Plus Size Apparel","Shopping","Pets & Animals"],"helpper":true,"confirmed":true,"rating":4}]
+
+
+### IPAbuse
+https://api.abuseipdb.com/api/v2/check?ipAddress=202.186.192.197&verbose
+Accept: application/json
+Key: e0ea0d2980ae971b27af40040769cc6db60a34e02f1c517d67db7e05efe3183a26a3bc959f1656cf
+
+
+### graylog
+POST http://helppery.com:12201/gelf
+Content-Type: application/json
+
+{"short_message":"JSON post aaaa", "host":"json.post", "facility":"JSON post", "_foo":"bar", "version": "1.1"}
+

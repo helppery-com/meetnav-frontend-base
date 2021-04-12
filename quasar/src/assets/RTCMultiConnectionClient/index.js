@@ -5,7 +5,7 @@ global.io = io
 
 function randomString(length) {
   var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   var charactersLength = characters.length;
   for ( var i = 0; i < length; i++ ) {
      result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -26,11 +26,8 @@ export default class RTCNavroom {
   connected = false
   user = null
   streams = {}
-  userStrem = null
-  guests = []
-  waitingUsers = []
   anyHostConnected = false
-  muted = false
+  isMuted = false
   acceptedParticipants = []
   updatedAt = new Date()
   isHost = false
@@ -38,15 +35,25 @@ export default class RTCNavroom {
   onMessage = () => {}
   onUserConnected (event) {}
   onUserDisconnected () {}
-  onGuestConnected (event) {}
-  onGuestDisconnected (event) {}
   onGuestWaiting (event) {}
 
   constructor (user) {
     this.user = user
     this.connection = new RTCMultiConnection()
     // TODO: connection.password = this.room.roomPassword
-    this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com/' // TODO: process.env.RTC_IO_SERVER
+    this.connection.socketURL = process.env.RTC_IO_SERVER
+    // STUN / TURN Servers
+    /* this.connection.iceServers = []
+    this.connection.iceServers.push({
+      urls: 'stun:stun.meetnav.com:3478'
+    })
+    this.connection.iceServers.push({
+      urls: 'turn:turn.meetnav.com:3478',
+      credential: 'M3tNav',
+      username: 'coturn'
+    })
+    this.connection.iceTransportPolicy = 'relay'
+    */
   }
 
   async connect (roomId) {
@@ -65,11 +72,11 @@ export default class RTCNavroom {
       video: connection.DetectRTC.hasWebcam,
       data: true
     }
-    if (this.lowBandwith) {
+    if (true || this.lowBandwith) {
       // logging.info('lowBandwith', connection)
       connection.bandwidth = {
         audio: 50, // 50 kbps
-        video: 256, // 256 kbps
+        video: 150, // 256 kbps
         screen: 300 // 300 kbps
       }
       connection.mediaConstraints = {
@@ -92,10 +99,11 @@ export default class RTCNavroom {
     connection.onstream = this.onStream.bind(this)
     connection.onstreamended = this.onStreamEnded.bind(this)
     connection.onUserIdAlreadyTaken = this.onUserIdAlreadyTaken.bind(this)
-    connection.onmessage = this.onMessage.bind(this)
-    connection.onmute = this.onMute()
-    connection.onunmute = this.onUnmute()
-
+    connection.onmessage = this.receive.bind(this)
+    connection.onmute = this.onMute.bind(this)
+    connection.onunmute = this.onUnmute.bind(this)
+    connection.onclose = this.onClose.bind(this)
+    connection.onSocketDisconnect = this.onSocketDisconnect.bind(this)
     connection.extra = this.encodeExtra({
       id: this.user.id,
       username: this.user.username
@@ -103,16 +111,49 @@ export default class RTCNavroom {
     if (this.isHost) {
       this.connection.onNewParticipant = this.onNewParticipant.bind(this)
     }
-    const openOrJoin = this.isHost ? 'open' : 'join'
+    return await this.joinRoom()
+  }
+
+  async onSocketDisconnect (event) {
+    console.log('onSocketDisconnect', event)
+    if (this.connected) {
+      console.log('onSocketDisconnect, reconnecting')
+      await this.connect(this.roomId)
+    }
+  }
+
+  async checkPresence () {
     return new Promise((resolve, reject) => {
-      this.connection[openOrJoin](this.roomId, (isRoomOpened, roomid, error) => {
-        if(error) {
-          reject(error);
-        } else {
-          resolve()
-        }
+      this.connection.checkPresence(this.roomId, (isRoomExist, roomid, extra) => {
+        extra._room.isFull ? reject(error) : resolve({ isRoomExist, roomid })
       })
     })
+  }
+
+  async openOrJoin () {
+    const { isRoomExist, roomId } = await this.checkPresence()
+    return new Promise((resolve, reject) => {
+      this.connection[isRoomExist ? 'join' : 'open'](this.roomId, (isRoomExist, roomid, error) => {
+        error ? reject(error) : resolve({ isRoomExist, roomid })
+      })
+    })
+  }
+
+  async sleep (tout) {
+    return new Promise(resolve => setTimeout(resolve, tout))
+  }
+
+  async joinRoom () {
+    let attempts = 10
+    while(attempts--) {
+      try {
+        await this.openOrJoin()
+        break
+      } catch(ex) {
+        console.error('Error joining room', this.roomId)
+      }
+      await this.sleep(3000)
+    }
   }
 
   async initRTC () {
@@ -161,10 +202,12 @@ export default class RTCNavroom {
     this.connection.send(msg)
   }
 
-  onMessage (msg) {
-    if (this.onMessage) {
-      this.onMessage(msg)
-    }
+  receive (msg) {
+    this.onMessage({
+      ...msg,
+      ...msg.data,
+      ...this.decodeExtra(msg.extra)
+    })
   }
 
   // @Log
@@ -190,7 +233,7 @@ export default class RTCNavroom {
 
   // @Log
   onStream (stream) {
-    // logging.info('RTC on stream', stream)
+    console.log('RTC on stream', stream)
     stream.updatedAt = new Date()
     stream.mediaElement.snapshot = '/incognito-mode.png'
     stream.extra = this.decodeExtra(stream.extra)
@@ -198,14 +241,17 @@ export default class RTCNavroom {
     this.streams[extra.username || userid] = stream
     if (extra.username === this.user.username) {
       this.userStream = stream
-      this.onUserConnected(stream)
-    } else {
-      this.guests.push(stream)
-      this.onGuestConnected(stream)
+      this.connected = true
     }
+    this.onUserConnected(stream)
     if (this.isHost || extra.isHost) {
       this.anyHostConnected = true
     }
+  }
+
+  onClose (event) {
+    const { userid } = event
+    console.log('onClose ', event)
   }
 
   // @Log
@@ -218,12 +264,11 @@ export default class RTCNavroom {
 
   // @Log
   onStreamEnded (event) {
-    let {userid, extra } = event
+    const { extra } = event
     delete this.streams[extra.username]
-    if (event.userid === this.user.username) {
-      this.onUserDisconnected()
-    } else {
-      this.guests.splice(this.guests.findIndex(v => v.userid === event.userid), 1)
+    this.onUserDisconnected(event)
+    if (extra.id === this.user.id && this.connected) {
+      this.joinRoom()
     }
   }
 
@@ -246,32 +291,28 @@ export default class RTCNavroom {
         userPreferences,
         extra
       }
-      this.waitingUsers.push(newParticipant)
       this.onGuestWaiting(newParticipant)
     } else {
       this.connection.acceptParticipationRequest(participantId, userPreferences)
     }
   }
 
-  acceptUser (participantId) {
-    const ix = this.waitingUsers.findIndex(e => e.participantId === participantId)
-    const { userPreferences } = this.waitingUsers[ix]
+  acceptUser (newParticipant) {
+    const { userPreferences } = newParticipant
     const { sender } = userPreferences.connectionDescription
     this.acceptedParticipants.push(participantId)
     this.connection.acceptParticipationRequest(sender, userPreferences)
-    this.waitingUsers.splice(ix, 1)
     this.connection.send('Welcome', sender)
   }
 
-  rejectUser (participantId) {
-    const ix = this.waitingUsers.findIndex(e => e.participantId === participantId)
-    this.waitingUsers.splice(ix, 1)
+  rejectUser (newParticipant) {
   }
 
   leave () {
     if (!this.connection) {
       return
     }
+    this.connected = false
     // disconnect with all users
     this.connection.getAllParticipants().forEach(pid => this.connection.disconnectWith(pid))
 
@@ -284,11 +325,11 @@ export default class RTCNavroom {
   }
 
   get paused () {
-    return this.userStream.mediaElement.paused
+    return this.userStream && this.userStream.mediaElement.paused
   }
 
   get muted () {
-    return this.muted
+    return this.isMuted
   }
 
   toggleVideo () {
@@ -297,16 +338,16 @@ export default class RTCNavroom {
   }
 
   toggleAudio () {
-    if (this.muted) {
+    if (this.isMuted) {
       this.userStream.stream.unmute('audio')
       this.userStream.mediaElement.muted = true
       if (this.paused) {
         this.toggleVideo ()
       }
-      this.muted = false
+      this.isMuted = false
     } else {
       this.userStream.stream.mute('audio')
-      this.muted = true
+      this.isMuted = true
     }
   }
 

@@ -1,38 +1,32 @@
 <template>
-  <q-page class="home-page full-width flex adjusted-height overflow-hidden">
-    <div class="parent-sections q-px-xl">
+  <q-page class="full-width flex adjusted-height overflow-hidden">
+    <div class="parent-sections ">
       <!-- text section -->
       <div class="col wrap  full-height column justify-center items-center">
         <!--  Heading section  -->
-        <div class="q-mx-lg caption">
+        <div class="q-mx-lg caption" style="max-width: 600px;">
           <p class="text-h3">{{ $t('homePage.mainHeading') }}</p>
-          <p class="text-h5">{{ $t('homePage.subHeading') }}</p>
+          <p class="text-h3">{{ $t('homePage.subHeading') }}</p>
           <!--  caption  -->
           <p class="text-h6 text-grey-6" >{{ $t('homePage.caption') }}</p>
           <!--   navigation links   -->
           <div class="row justify-between q-mt-xl navigation-links" >
             <q-btn
               color="purple-7"
-              class="col float-left q-ma-xs ref-start-navroom"
+              class=" float-left q-ma-sm"
               size="19px"
               icon="video_call"
               v-bind:label="$t('homePage.navigateTogether')"
               square
-              @click="newRoom"
             />
             <q-input
               v-bind:placeholder="$t('homePage.enterCode')"
-              class="col float-right q-ma-xs ref-navroom-code"
+              class=" float-right q-ma-sm"
               outlined
               size="24px"
-              v-model="code"
-              @keypress.enter="openNavroom"
             >
               <template v-slot:prepend>
                 <q-icon name="keyboard" />
-              </template>
-              <template v-slot:append>
-                <q-btn flat icon="cast" v-if="code" @click="openNavroom" class="ref-join-navroom"/>
               </template>
             </q-input>
           </div>
@@ -49,24 +43,26 @@
           navigation-position="bottom"
           navigation
           padding
-          class="fit rounded-borders"
+          height="650px"
+          class=" rounded-borders"
           control-color="grey-8"
           :autoplay="true"
           infinite
         >
           <q-carousel-slide name="style" class="column no-wrap flex-center">
-            <img
-              src="/meetnav-browser.png"
+            <q-img
+              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
               class="q-mt-md"
+              style="width: 500px; height: 650px"
             />
             <div class="text-center " style="margin-top: 50px; width: 350px">
               <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
               <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
             </div>
           </q-carousel-slide>
-          <!--q-carousel-slide name="tv" class="column no-wrap flex-center">
+          <q-carousel-slide name="tv" class="column no-wrap flex-center">
             <q-img
-              src="/meetnav-browser.png"
+              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
               class="q-mt-md"
               style="width: 500px; height: 650px"
             />
@@ -77,7 +73,7 @@
           </q-carousel-slide>
           <q-carousel-slide name="pc" class="column no-wrap flex-center">
             <q-img
-              src="/meetnav-browser.png"
+              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
               class="q-mt-md"
               style="width: 500px; height: 650px"
             />
@@ -88,7 +84,7 @@
           </q-carousel-slide>
           <q-carousel-slide name="linux" class="column no-wrap flex-center">
             <q-img
-              src="/meetnav-browser.png"
+              src="https://images.unsplash.com/photo-1611095788646-86737a001141?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
               class="q-mt-md"
               style="width: 500px; height: 650px"
             />
@@ -96,7 +92,7 @@
               <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
               <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
             </div>
-          </q-carousel-slide-->
+          </q-carousel-slide>
         </q-carousel>
       </div>
     </div>
@@ -109,78 +105,53 @@ export default {
   name: 'Home',
   data () {
     return {
-      slide: 'style',
-      code: ''
-    }
-  },
-  methods: {
-    newRoom () {
-      if (!this.$storex.user.user) {
-        this.$root.$once('user-logged', () => this.newRoom())
-        return this.$root.$emit('login')
-      }
-      this.$router.push('/navroom')
-    },
-    openNavroom () {
-      if (this.code) {
-        this.$router.push(`/navroom/${this.code}`)
-      }
+      slide: 'style'
     }
   }
 }
 </script>
 
-<style lang="sass">
-.home-page
-  .adjusted-height
-    height: calc(100vh - 80px)
+<style scoped lang="sass">
+.adjusted-height
+  height: calc(100vh - 80px)
 
+.parent-sections
+  height: 100%
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: center
+  flex-grow: 1
+
+.caption
+  text-align: left
+
+.navigation-links
+  max-width: 600px
+
+@media screen and (max-width: 1023px)
   .parent-sections
-    height: 100%
+    height: fit-content
+    width: 100%
     display: flex
-    flex-direction: row
+    flex-direction: column
     align-items: center
     justify-content: center
     flex-grow: 1
 
   .caption
-    text-align: left
+    text-align: center
 
-  .navigation-links
-    max-width: 600px
+  .adjusted-height
+    height: fit-content
+    margin-top: 10px
 
-  .q-carousel
-    img
-      width: 550px
+  .navigation-links > *
+    width: 100%
 
-@media screen and (max-width: 1023px)
-  .home-page
-    .parent-sections
-      height: fit-content
-      width: 100%
-      display: flex
-      flex-direction: column
-      align-items: center
-      justify-content: center
-      flex-grow: 1
-
-    .caption
-      text-align: center
-
-    .adjusted-height
-      height: fit-content
-      margin-top: 10px
-
-    .navigation-links > *
-      width: 100%
-
-    .text-h3
-      font-size: 2.5rem
-      font-weight: 400
-      line-height: 3.125rem
-      letter-spacing: normal
-
-    .q-carousel
-      img
-        width: 350px
+  .text-h3
+    font-size: 2.5rem
+    font-weight: 400
+    line-height: 3.125rem
+    letter-spacing: normal
 </style>

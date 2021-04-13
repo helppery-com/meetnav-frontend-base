@@ -1,8 +1,5 @@
-import * as nekoEn from './neko/en-us.ts'
-
 export const translations = {
   en: {
-    ...nekoEn,
     name: 'English',
     searchPlaceholder: 'Start searching Internet together',
     welcomePage:
@@ -54,8 +51,8 @@ export const translations = {
     },
     homePage: {
       mainHeading: 'Navigate internet together.',
-      subHeading: 'Enjoy such new experience for free.',
-      caption: 'The new way to meet and navigate internet together. Start new session and invite your friends to navigte internet together!',
+      subHeading: 'Video-browsing for free.',
+      caption: 'The new way to meet and navigate internet together. Start video-browsing internet for free now!',
       navigateTogether: 'Navigate together',
       enterCode: 'Enter a code or link',
       codeOrLink: 'Enter a code or link',

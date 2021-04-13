@@ -5,10 +5,10 @@
       <div class="float-left">
         <p class="text-h2 q-ml-md main-heading">meetnav</p>
       </div>
-      <div v-if="user" class="float-right">
-        <q-btn round class="q-mt-md nav-button ref-user-menu">
+      <div v-if="getUser.avatar" class="float-right">
+        <q-btn round class="q-mt-md nav-button">
           <q-avatar size="42px">
-            <img :src="avatar">
+            <img :src="getUser.avatar">
           </q-avatar>
         <q-menu
           transition-show="scale"
@@ -16,7 +16,19 @@
           :offset="[-15, 10]"
         >
           <q-list style="min-width: 100px">
-            <q-item class="text-red ref-user-logout" clickable v-ripple @click="logout">
+            <q-item clickable v-ripple to="/" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Home</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple to="/user/profile" exact>
+              <q-item-section avatar>
+                <q-icon name="home" />
+              </q-item-section>
+              <q-item-section>Profile</q-item-section>
+            </q-item>
+            <q-item class="text-red" clickable v-ripple @click="logout">
               <q-item-section avatar>
                 <q-icon name="logout" />
               </q-item-section>
@@ -63,16 +75,13 @@ export default {
       this.selectedLanguage = this.$t('name')
     },
     logout () {
-      this.$storex.user.logout()
+      this.$store.commit('user/SET_USER', {})
       location.reload()
     }
   },
   computed: {
-    user () {
-      return this.$storex.user.user
-    },
-    avatar () {
-      return this.$storex.user.user.avatar
+    getUser () {
+      return this.$store.getters['user/getUser']
     }
   }
 }

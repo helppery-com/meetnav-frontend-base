@@ -1,10 +1,10 @@
-import { storex } from '../store'
+import { store } from '../store'
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Home.vue') },
+      { path: '', component: () => import('pages/Index.vue') },
       {
         path: 'user',
         component: () => import('pages/user'),
@@ -16,8 +16,8 @@ const routes = [
     ],
     beforeEnter (to, from, next) {
       if (to.matched.some(record => record.meta.userRequired)) {
-        const { user } = storex.user
-        if (!user) {
+        const user = store.getters['user/getUser']
+        if (!user.length) {
           next('/')
         }
       }
@@ -38,7 +38,7 @@ const routes = [
     component: () => import('layouts/CobrowsingLayout.vue'),
     children: [
       {
-        path: '', component: () => import('pages/Cobrowse.vue')
+        path: '', component: () => import('pages/cobrowse.vue')
       }
     ]
   },
@@ -60,33 +60,7 @@ const routes = [
       }
     ]
   },
-  {
-    path: '/neko',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        path: '', component: () => import('pages/Neko.vue')
-      }
-    ]
-  },
-  {
-    path: '/navroom/:roomId',
-    component: () => import('layouts/RoomLayout.vue'),
-    children: [
-      {
-        path: '', component: () => import('pages/Navroom.vue')
-      }
-    ]
-  },
-  {
-    path: '/navroom',
-    component: () => import('layouts/RoomLayout.vue'),
-    children: [
-      {
-        path: '', component: () => import('pages/Navroom.vue')
-      }
-    ]
-  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

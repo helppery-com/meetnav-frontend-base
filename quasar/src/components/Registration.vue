@@ -46,25 +46,25 @@ export default {
     }
   },
   methods: {
-    async register (credentials) {
+    register (credentials) {
       const email = credentials.target.email.value
       const password = credentials.target.password.value
       const rePassword = credentials.target.rePassword.value
-      if (!password || password !== rePassword) {
-        this.message = 'Invalid password'
-        return
-      }
       this.loading = true
-      try {
-        const username = email.split('@')[0]
-        await this.$storex.user.register({ username, email, password })
-        this.createSuccessfull = true
-        this.openLoginDialog = false
-      } catch (error) {
-        this.message = error.message
-      } finally {
-        this.loading = false
-      }
+      setTimeout(async () => {
+        try {
+          const { ok, message } = await this.$store.dispatch('user/registration', { email, password, rePassword })
+          this.loading = false
+          if (!ok) {
+            throw new Error(message)
+          }
+          this.message = message
+          this.createSuccessfull = true
+          this.openLoginDialog = false
+        } catch (error) {
+          this.message = error.message
+        }
+      }, 3000)
     },
     openDialog () {
       this.openRegisterDialog = true

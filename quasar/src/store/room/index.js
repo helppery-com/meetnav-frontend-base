@@ -23,13 +23,15 @@ export const state = () => ({
   paused: false,
   muted: false,
   controlMode: 'free',
-  userStream: null
+  userStream: null,
+  hasControl: false
 })
 
 // Computed state
 export const getters = getterTree(state, {
   roomId: state => state.room ? state.room.roomId : null,
   password: state => state.room ? state.room.password : null,
+  cameras: state => state.rtcConnected ? state.rtc.cameras : [],
   neko: () => neko
 })
 
@@ -39,9 +41,11 @@ export const mutations = mutationTree(state, {
     state.room = room
   },
   addStream (state, stream) {
+    const ss = state.streams[stream.userid] || []
+    ss.push(stream)
     state.streams = {
       ...state.streams,
-      [stream.userid]: stream
+      [stream.userid]: ss
     }
     if (stream.extra.id === storex.user.user.id) {
       state.userStream = stream
@@ -80,6 +84,9 @@ export const mutations = mutationTree(state, {
   },
   setMuted (state, muted) {
     state.muted = muted
+  },
+  setControl (state, value) {
+    state.hasControl = value
   }
 })
 
@@ -96,18 +103,17 @@ async function connectRTC (roomId) {
 export const actions = actionTree(
   { state, getters, mutations },
   {
-    async openOrJoin ({ state }, { roomId }) {
+    async openOrJoin ({ state }, { template, roomId }) {
       const isNew = !roomId
-      const rtc = await connectRTC(roomId)
-
       let room = null
       if (isNew) {
-        room = await api.createRoom(rtc.roomId)
+        room = await api.createRoom(template)
       } else {
-        room = await api.joinRoom(rtc.roomId)
+        room = await api.joinRoom(roomId)
       }
       if (room) {
         await storex.room.connect(room)
+        const rtc = await connectRTC(room.roomId)
         neko.settings.setScroll(1)
         storex.room.setRTC(rtc)
         storex.room.setRoom(room)
@@ -231,12 +237,16 @@ export const actions = actionTree(
       } else {
         neko.remote.request()
       }
+      storex.room.setControl(true)
+      neko.settings.setKeyboardLayout(storex.user.lang)
+      neko.remote.changeKeyboard()
     },
     releaseControls ({ state }) {
       if (!neko.remote.hosting) {
         return
       }
       neko.remote.release()
+      storex.room.setControl(false)
     }
   }
 )

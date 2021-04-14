@@ -12,14 +12,50 @@
           <!--   navigation links   -->
           <div class="row justify-between q-mt-xl navigation-links" >
             <q-btn
-              color="purple-7"
+              color="accent"
               class="col float-left q-ma-xs ref-start-navroom"
               size="19px"
               icon="video_call"
               v-bind:label="$t('homePage.navigateTogether')"
               square
-              @click="newRoom"
-            />
+            >
+              <q-menu fit>
+                <q-list style="min-width: 100px">
+                  <q-item clickable v-close-popup @click="newRoom()">
+                    <q-item-section avatar>
+                      <q-avatar icon="offline_bolt" color="dark" text-color="white" />
+                    </q-item-section>
+                    <q-item-section class="text-h6">
+                      {{ $t('Quick session')}}
+                    </q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup @click="newRoom('watching')">
+                    <q-item-section avatar>
+                      <q-avatar icon="cast" color="red-10" text-color="white" />
+                    </q-item-section>
+                    <q-item-section class="text-h6">
+                      {{ $t('Watching together')}}
+                    </q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup @click="newRoom('shopping')">
+                    <q-item-section avatar>
+                      <q-avatar icon="shopping_cart" color="orange-7" text-color="white" />
+                    </q-item-section>
+                    <q-item-section class="text-h6">
+                      {{ $t('Shopping together')}}
+                    </q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup @click="newRoom('playing')">
+                    <q-item-section avatar>
+                      <q-avatar icon="videogame_asset" color="green-8" text-color="white" />
+                    </q-item-section>
+                    <q-item-section class="text-h6">
+                      {{ $t('Playing together')}}
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
             <q-input
               v-bind:placeholder="$t('homePage.enterCode')"
               class="col float-right q-ma-xs ref-navroom-code"
@@ -57,6 +93,16 @@
           <q-carousel-slide name="style" class="column no-wrap flex-center">
             <img
               src="/meetnav-browser.png"
+              class="q-mt-md"
+            />
+            <div class="text-center " style="margin-top: 50px; width: 350px">
+              <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
+              <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
+            </div>
+          </q-carousel-slide>
+          <q-carousel-slide name="watch" class="column no-wrap flex-center">
+            <img
+              src="/meetnav-browser-music.png"
               class="q-mt-md"
             />
             <div class="text-center " style="margin-top: 50px; width: 350px">
@@ -114,12 +160,12 @@ export default {
     }
   },
   methods: {
-    newRoom () {
+    newRoom (template) {
       if (!this.$storex.user.user) {
         this.$root.$once('user-logged', () => this.newRoom())
         return this.$root.$emit('login')
       }
-      this.$router.push('/navroom')
+      this.$router.push({ path: '/navroom', query: { template } })
     },
     openNavroom () {
       if (this.code) {

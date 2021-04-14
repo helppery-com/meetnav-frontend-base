@@ -146,11 +146,12 @@ export default {
       if (this.overlayLastCursorPosition === null) {
         return { display: 'none' }
       }
-      const { clientX: x, clientY: y } = this.overlayLastCursorPosition
+      const { screenX: x, screenY: y } = this.overlayLastCursorPosition
       const { y: overlayY } = this.getPlayer().getBoundingClientRect()
+      const { y: bodyY } = document.body.getBoundingClientRect()
       return {
         left: (x + 10) + 'px',
-        top: (y - overlayY) + 'px',
+        top: (y - overlayY + bodyY) + 'px',
         position: 'absolute',
         width: '24px',
         height: '24p',

@@ -2,6 +2,7 @@ import axios from 'axios'
 
 class Api {
   jwt = null
+  user = null
   baseUrl = process.env.API_ROOT
 
   url (path) {
@@ -29,9 +30,9 @@ class Api {
     await axios.post(this.url('/auth/local/register'), { username, email, password })
   }
 
-  async createRoom (roomId) {
+  async createRoom (template) {
     const headers = this.headers
-    const res = await axios.post(this.url('/nekos'), { roomId }, { headers })
+    const res = await axios.post(this.url('/nekos'), { template }, { headers })
     return res.data
   }
 
@@ -44,6 +45,12 @@ class Api {
   async closeRoom (roomId) {
     const headers = this.headers
     const res = await axios.delete(this.url(`/nekos/${roomId}`), { headers })
+    return res.data
+  }
+
+  async changeLanguage (lang) {
+    const headers = this.headers
+    const res = await axios.put(this.url('/users/' + this.user.id), { lang }, { headers })
     return res.data
   }
 }

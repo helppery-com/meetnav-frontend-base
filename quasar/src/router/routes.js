@@ -10,6 +10,15 @@ const routes = [
     ]
   },
   {
+    path: '/welcome/:landing',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Landing.vue')
+      }
+    ]
+  },
+  {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [

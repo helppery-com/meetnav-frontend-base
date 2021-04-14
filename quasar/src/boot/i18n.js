@@ -14,9 +14,9 @@ const i18n = new VueI18n(
     messages: translations
   }
 )
-export default ({ app }) => {
+export default ({ app, Vue }) => {
+  i18n.locale = Vue.prototype.$storex.user.lang
   app.i18n = i18n
-  app.dummy = true
 }
 
 export { i18n }

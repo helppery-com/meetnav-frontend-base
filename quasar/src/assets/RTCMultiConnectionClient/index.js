@@ -28,6 +28,7 @@ export default class RTCNavroom {
   streams = {}
   anyHostConnected = false
   isMuted = false
+  isPaused = false
   acceptedParticipants = []
   updatedAt = new Date()
   isHost = false
@@ -43,17 +44,16 @@ export default class RTCNavroom {
     // TODO: connection.password = this.room.roomPassword
     this.connection.socketURL = (process.env.RTC_IO_SERVER + '') + '/'
     // STUN / TURN Servers
-    /* this.connection.iceServers = []
+    this.connection.iceServers = []
     this.connection.iceServers.push({
-      urls: 'stun:stun.meetnav.com:3478'
+      urls: 'stun:turn.meetnav.com:3478'
     })
     this.connection.iceServers.push({
       urls: 'turn:turn.meetnav.com:3478',
-      credential: 'M3tNav',
-      username: 'coturn'
+      credential: 'meetnav',
+      username: 'meetnav'
     })
     this.connection.iceTransportPolicy = 'relay'
-    */
   }
 
   async connect (roomId) {
@@ -72,6 +72,7 @@ export default class RTCNavroom {
       video: connection.DetectRTC.hasWebcam,
       data: true
     }
+    const camera = this.connection.DetectRTC.videoInputDevices[0]
     if (true || this.lowBandwith) {
       // logging.info('lowBandwith', connection)
       connection.bandwidth = {
@@ -82,11 +83,7 @@ export default class RTCNavroom {
       connection.mediaConstraints = {
         audio: true,
         video: {
-          mandatory: {
-            minFrameRate: 15,
-            maxFrameRate: 15
-          },
-          optional: []
+          deviceId: camera.id
         }
       }
     }
@@ -106,7 +103,11 @@ export default class RTCNavroom {
     connection.onSocketDisconnect = this.onSocketDisconnect.bind(this)
     connection.extra = this.encodeExtra({
       id: this.user.id,
-      username: this.user.username
+      username: this.user.username,
+      camera: {
+        id: camera.id,
+        label: camera.label
+      }
     })
     if (this.isHost) {
       this.connection.onNewParticipant = this.onNewParticipant.bind(this)
@@ -325,7 +326,7 @@ export default class RTCNavroom {
   }
 
   get paused () {
-    return this.userStream && this.userStream.mediaElement.paused
+    return this.isPaused
   }
 
   get muted () {
@@ -334,7 +335,13 @@ export default class RTCNavroom {
 
   toggleVideo () {
     const pause = !this.paused
-    this.userStream.stream[pause ? "mute": "unmute"]('video')
+    if (pause) {
+      this.userStream.stream.mute('video')
+      this.isPaused = true
+    } else {
+      this.userStream.stream.unmute('video')
+      this.isPaused = false
+    }
   }
 
   toggleAudio () {
@@ -362,5 +369,73 @@ export default class RTCNavroom {
       console.error('Error decoding user extra', ex)
     }
     return {}
+  }
+
+  get cameras () {
+    return this.connection.DetectRTC.videoInputDevices
+  }
+
+  selectFrontCameraDuringActiveSession() {
+    // we need to stop previous video tracks because
+    // mobile device may not allow us capture
+    // both front and back camera streams
+    // at the same time
+    connection.attachStreams.forEach(function(stream) {
+        // stop only video tracks
+        // so that we can recapture video track
+        stream.getVideoTracks().forEach(function(track) {
+            track.stop();
+        });
+    });
+
+    var mediaConstraints = {
+        audio: false, // NO need to capture audio again
+        video: {
+            facingMode: {exact : 'user'}
+        }
+    };
+
+    navigator.mediaDevices.getUserMedia(mediaConstraints).then(function(frontCamera) {
+        var frontCameraTrack = frontCamera.getVideoTracks()[0];
+        connection.getAllParticipants().forEach(function(pid) {
+            connection.peers[pid].peer.getSenders().forEach(function(sender) {
+                if (sender.track.kind == 'video') {
+                    sender.replaceTrack(frontCameraTrack);
+                }
+            });
+        });
+    });
+  }
+
+  selectBackCameraDuringActiveSession() {
+    // we need to stop previous video tracks because
+    // mobile device may not allow us capture
+    // both front and back camera streams
+    // at the same time
+    connection.attachStreams.forEach(function(stream) {
+        // stop only video tracks
+        // so that we can recapture video track
+        stream.getVideoTracks().forEach(function(track) {
+            track.stop();
+        });
+    });
+
+    var mediaConstraints = {
+        audio: false, // NO need to capture audio again
+        video: {
+            facingMode: {exact : 'environment'}
+        }
+    };
+
+    navigator.mediaDevices.getUserMedia(mediaConstraints).then(function(frontCamera) {
+        var frontCameraTrack = frontCamera.getVideoTracks()[0];
+        connection.getAllParticipants().forEach(function(pid) {
+            connection.peers[pid].peer.getSenders().forEach(function(sender) {
+                if (sender.track.kind == 'video') {
+                    sender.replaceTrack(frontCameraTrack);
+                }
+            });
+        });
+    });
   }
 }

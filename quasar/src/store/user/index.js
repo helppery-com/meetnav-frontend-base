@@ -14,6 +14,12 @@ export const state = () => ({
 
 // Computed state
 export const getters = getterTree(state, {
+  lang: state => {
+    if (state.user && state.user.lang) {
+      return state.user.lang
+    }
+    return navigator.language
+  }
 })
 
 // Change state
@@ -24,6 +30,12 @@ export const mutations = mutationTree(state, {
     api.jwt = jwt
     Cookies.set('session_jwt', jwt)
     Cookies.set('session_user', user)
+  },
+  async changeLanguage (state, lang) {
+    if (state.user) {
+      state.user = await api.changeLanguage(lang)
+      Cookies.set('session_user', state.user)
+    }
   }
 })
 

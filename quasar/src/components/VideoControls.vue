@@ -1,42 +1,103 @@
 <template>
   <div class="q-gutter-xs row">
-    <q-btn outline color="red" size="xs" class="col" @click="$emit('leave')">
-      <q-icon name="hourglass_bottom" />
-      {{ '30\'' }}
+    <q-btn round outline
+      :icon="rtcmuted ? 'fas fa-microphone-alt-slash' : 'fas fa-microphone-alt'"
+      :color="rtcmuted ? 'dark' : 'primary'"
+      class="col-auto" @click="toggleAudio" />
+    <q-btn round outline
+      v-for="(camera, ix) in cameras" :key="ix"
+      :icon="paused ? 'fas fa-video-slash' : 'fas fa-video'"
+      :color="paused  ? 'dark' : 'primary'"
+      class="col-auto" @click="toggleVideo(ix)">
+      <q-tooltip>
+        {{ camera.label }}
+      </q-tooltip>
     </q-btn>
-    <q-btn outline color="primary" class="col" :icon="paused ? 'fas fa-video-slash': 'fas fa-video'" @click="toggleVideo()" />
-    <q-btn outline color="primary" class="col" :icon="rtcmuted ? 'fas fa-microphone-alt-slash': 'fas fa-microphone-alt'" @click="toggleAudio()" />
-    <q-btn outline icon="fas fa-ellipsis-h" color="black">
-      <q-menu>
-        <q-list style="min-width: 200px" class="q-pt-md">
-          <q-item clickable v-close-popup v-if="nekoConnected && me">
-            <q-item-section side>
-              <q-icon name="zoom_out" @click="setZoom(zoomIndex - 1)" />
-            </q-item-section>
-            <q-item-section>
-              <q-slider
-                :value="zoomIndex"
-                color="green"
-                markers
-                snap
-                :min="0"
-                :max="maxZoomSize"
-                label
-                :label-value="zoomLabel"
-                @input="setZoom"
-              />
-            </q-item-section>
-            <q-item-section side>
-              <q-icon name="zoom_in" @click="setZoom(zoomIndex + 1)" />
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-menu>
-    </q-btn>
+    <q-btn round outline
+      icon="fas fa-share-alt"
+      color="accent"
+      class="col-auto" @click="share = true"/>
+    <q-input rounded
+      :label="$t('Type a message')"
+      outlined
+      dense
+      v-model="text"
+      class="col-4"
+      @keydown.enter="sendMessage"
+    >
+      <template v-slot:append>
+        <q-btn round flat icon="chat" class="p-pa-none" @click="notifyChat"/>
+        <NekoEmotes />
+      </template>
+    </q-input>
+    <q-btn round outline icon="fas fa-sign-out-alt" color="red" class="col-auto" @click="leave = true"/>
+    <q-dialog v-model="leave" transition-show="scale" transition-hide="scale">
+      <q-card class="bg-white text-primary" style="width: 600px">
+        <q-card-section>
+          <div class="text-h5">
+            {{ $t('Leave room') }}
+          </div>
+        </q-card-section>
+
+        <q-card-section class="bg-white">
+          <div class="text-h6">{{ $t('How was your experience') }}</div>
+          <q-rating
+            v-model="rating"
+            max="4"
+            size="3em"
+            color="yellow"
+            icon="star_border"
+            icon-selected="star"
+            icon-half="star_half"
+            no-dimming
+          />
+        </q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn outline color="red" :label="$t('Exit room')" v-close-popup @click="closeRoom">
+            <q-tooltip>
+              {{ $t('All participants will be disconnected') }}
+            </q-tooltip>
+          </q-btn>
+          <q-btn outline :label="$t('Back')" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="share" transition-show="scale" transition-hide="scale">
+      <q-card class="bg-white text-primary" style="width: 600px">
+        <q-card-section>
+          <div class="text-h5">
+            {{ $t('Share') }}
+          </div>
+        </q-card-section>
+
+        <q-card-section class="bg-white">
+          <Social :url="shareUrl"/>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn outline :label="$t('Back')" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
+import { NekoEmotes } from 'neko-client/dist/neko-lib.umd'
+import Social from '../components/Social'
+
 export default {
+  components: {
+    NekoEmotes,
+    Social
+  },
+  data () {
+    return {
+      leave: false,
+      share: false,
+      text: '',
+      rating: 0
+    }
+  },
   computed: {
     nekoConnected () {
       return this.$storex.room.nekoConnected
@@ -89,6 +150,12 @@ export default {
     },
     me () {
       return this.$storex.room.neko.user.member
+    },
+    shareUrl () {
+      return window.location.href
+    },
+    cameras () {
+      return this.$storex.room.cameras
     }
   },
   methods: {
@@ -111,6 +178,21 @@ export default {
       const resolution = this.screens[ix]
       this.$storex.room.neko.video.setResolution(resolution)
       console.log('Set resolution....', this.zoomLabel)
+    },
+    justLeave () {
+      this.$router.push('/')
+    },
+    async closeRoom () {
+      await this.$storex.room.closeRoom()
+      this.justLeave()
+    },
+    notifyChat () {
+      console.log('Emit chat')
+      this.$emit('chat')
+    },
+    sendMessage () {
+      this.$emit('message', this.text)
+      this.text = null
     }
   }
 }

@@ -1,19 +1,11 @@
 <template>
   <q-page class="navroom-page column">
     <div class="col row">
-      <div class="col-2 members column q-px-xs q-pt-xs" v-if="$storex.room.rtcConnected">
-        <VideoControls class="col-auto" @leave="leave = true" />
-        <UserVideo
-          :stream="stream" v-for="(stream, userid, ix) in users"
-          :key="ix"
-          :showUserInfo="true"
-          class="col-auto"/>
-      </div>
-      <div class="col q-py-xs q-pr-xs">
-        <NekoVideo class="bg-dark rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
+      <div class="col q-pa-xs">
+        <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
       </div>
     </div>
-    <q-dialog v-model="welcome" persistent transition-show="scale" transition-hide="scale">
+    <q-dialog v-model="welcome" transition-show="scale" transition-hide="scale">
       <q-card class="bg-primary text-white" style="width: 300px">
         <q-card-section>
           <div class="text-h6">
@@ -41,45 +33,10 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="leave" transition-show="scale" transition-hide="scale">
-      <q-card class="bg-primary text-white" style="width: 600px">
-        <q-card-section>
-          <div class="text-h6">
-            {{ $t('Leave room') }}
-          </div>
-        </q-card-section>
-
-        <q-card-section class="bg-white">
-          <div class="text-h6">{{ $t('How was your experience') }}</div>
-          <q-rating
-            v-model="rating"
-            max="4"
-            size="3em"
-            color="yellow"
-            icon="star_border"
-            icon-selected="star"
-            icon-half="star_half"
-            no-dimming
-          />
-        </q-card-section>
-
-        <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn outline color="primary" :label="$t('Leave room open')" v-close-popup @click="justLeave"/>
-          <q-btn outline color="red" :label="$t('Leave')" v-close-popup @click="closeRoom">
-            <q-tooltip>
-              {{ $t('All participants will be disconnected') }}
-            </q-tooltip>
-          </q-btn>
-          <q-btn outline :label="$t('Ops!')" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 <script>
-import VideoControls from '../components/VideoControls'
 import NekoVideo from '../components/neko/NekoVideo'
-import UserVideo from '../components/UserVideo'
 import Commercial from '../components/Commercial'
 
 import '../assets/styles/vendor/_emote.scss'
@@ -87,8 +44,6 @@ import '../assets/styles/vendor/_emote.scss'
 export default {
   components: {
     NekoVideo,
-    UserVideo,
-    VideoControls,
     Commercial
   },
   data () {
@@ -106,9 +61,6 @@ export default {
   computed: {
     connected () {
       return this.$storex.room.nekoConnected
-    },
-    users () {
-      return this.$storex.room.streams
     },
     roomId () {
       return this.$storex.room.roomId
@@ -144,15 +96,9 @@ export default {
   methods: {
     async openRoom () {
       this.welcome = true
-      const { roomId, password } = this.$route.params
-      await this.$storex.room.openOrJoin({ roomId, password })
-    },
-    justLeave () {
-      this.$router.push('/')
-    },
-    async closeRoom () {
-      await this.$storex.room.closeRoom()
-      this.justLeave()
+      const { roomId } = this.$route.params
+      const { template } = this.$route.query
+      await this.$storex.room.openOrJoin({ roomId, template })
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')
@@ -167,7 +113,8 @@ export default {
   body
     overflow: hidden
   .navroom-page
-    background-color: gainsboro
+    .neko-video
+      opacity: 0.9
     .footer
       height: 45px
     ul.video-menu.bottom,

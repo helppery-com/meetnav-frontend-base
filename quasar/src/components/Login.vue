@@ -43,6 +43,7 @@ export default {
       this.loading = true
       try {
         await this.$storex.user.login({ username, password })
+        this.$i18n.locale = this.$storex.user.lang
         this.openLoginDialog = false
         this.$root.$emit('user-logged')
       } catch (error) {
@@ -53,7 +54,9 @@ export default {
     }
   },
   created () {
-    this.$root.$on('login', () => { this.openLoginDialog = true })
+    this.$root.$on('login', () => {
+      this.openLoginDialog = true
+    })
   }
 }
 </script>

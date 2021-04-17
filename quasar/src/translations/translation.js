@@ -70,6 +70,13 @@ export const translations = {
       join: 'join',
       cancel: 'cancel',
       waiting: 'is waiting to join.'
+    },
+    selectDateTime: {
+      accountReview: 'Account Review',
+      description: 'Meet with your account manager for a quarterly check-in and address any updates that may need to be made.',
+      select: 'Select a date & time',
+      callNow: 'Call Now',
+      bookCall: 'Book Call'
     }
   },
   es: {
@@ -142,6 +149,13 @@ export const translations = {
       join: 'unirse',
       cancel: 'cancelar',
       waiting: 'está esperando para unirse.'
+    },
+    selectDateTime: {
+      accountReview: 'Revisión de cuenta',
+      description: 'Reúnase con su gerente de cuenta para un registro trimestral y aborde cualquier actualización que deba realizarse.',
+      select: 'Seleccione una fecha y hora',
+      callNow: 'llama ahora',
+      bookCall: 'reservar llamada'
     }
   },
   in: {
@@ -214,6 +228,13 @@ export const translations = {
       join: 'में शामिल होने के',
       cancel: 'रद्द करना',
       waiting: 'शामिल होने का इंतजार है।'
+    },
+    selectDateTime: {
+      accountReview: 'खाता समीक्षा',
+      description: 'त्रैमासिक चेक-इन के लिए अपने खाता प्रबंधक से मिलें और ऐसे किसी भी अपडेट को संबोधित करें, जिसे बनाने की आवश्यकता हो।',
+      select: 'दिनांक और समय चुनें',
+      callNow: 'अब कॉल करें',
+      bookCall: 'पुस्तक कॉल'
     }
   }
 }

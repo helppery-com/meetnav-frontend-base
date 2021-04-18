@@ -114,7 +114,7 @@ export const actions = actionTree(
       if (room) {
         await storex.room.connect(room)
         const rtc = await connectRTC(room.roomId)
-        neko.settings.setScroll(1)
+        neko.settings.setScroll(5)
         storex.room.setRTC(rtc)
         storex.room.setRoom(room)
         storex.room.setNekoConnected(true)
@@ -181,7 +181,6 @@ export const actions = actionTree(
       })
     },
     onRoomMessage ({ state }, message) {
-      console.log('on room message', message)
       if (message.event === 'mousemove') {
         if (state.pointers[message.id]) {
           clearTimeout(state.pointers[message.id].tout)

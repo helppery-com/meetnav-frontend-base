@@ -1,9 +1,11 @@
 import axios from 'axios'
+const { v4: uuidv4 } = require('uuid')
 
 class Api {
   jwt = null
   user = null
   baseUrl = process.env.API_ROOT
+  sessionId = uuidv4()
 
   url (path) {
     if (this.baseUrl) {
@@ -52,6 +54,11 @@ class Api {
     const headers = this.headers
     const res = await axios.put(this.url('/users/' + this.user.id), { lang }, { headers })
     return res.data
+  }
+
+  async log (logEntry) {
+    const headers = this.headers
+    await axios.post(this.url('/logs'), { ...logEntry, source: 'client', session_id: this.sessionId }, { headers })
   }
 }
 const api = new Api()

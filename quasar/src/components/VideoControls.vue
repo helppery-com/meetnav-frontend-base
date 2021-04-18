@@ -26,10 +26,17 @@
       @keydown.enter="sendMessage"
     >
       <template v-slot:append>
-        <q-btn round flat icon="chat" class="p-pa-none" @click="notifyChat"/>
         <NekoEmotes />
       </template>
     </q-input>
+    <q-btn round outline
+      icon="chat"
+      color="dark"
+      class="p-pa-none" @click="notifyChat">
+      <q-tooltip>
+       {{ $t('Open/Close chat window') }}
+      </q-tooltip>
+    </q-btn>
     <q-btn round outline icon="fas fa-sign-out-alt" color="red" class="col-auto" @click="leave = true"/>
     <q-dialog v-model="leave" transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-primary" style="width: 600px">
@@ -55,9 +62,6 @@
 
         <q-card-actions align="right" class="bg-white text-teal">
           <q-btn outline color="red" :label="$t('Exit room')" v-close-popup @click="closeRoom">
-            <q-tooltip>
-              {{ $t('All participants will be disconnected') }}
-            </q-tooltip>
           </q-btn>
           <q-btn outline :label="$t('Back')" v-close-popup />
         </q-card-actions>
@@ -197,3 +201,7 @@ export default {
   }
 }
 </script>
+<style lang="sass">
+  .emotes .fas.fa-grin-beam
+    color: #ffc107
+</style>

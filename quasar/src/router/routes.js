@@ -56,7 +56,7 @@ const routes = [
     component: () => import('layouts/CobrowsingLayout.vue'),
     children: [
       {
-        path: '', component: () => import('pages/cobrowse.vue')
+        path: '', component: () => import('pages/Cobrowse.vue')
       }
     ]
   },

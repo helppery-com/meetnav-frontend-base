@@ -2,21 +2,14 @@
   <q-footer class="footer bg-grey-8 ">
     <div class="footer-area">
       <div class="language-section ">
-        <p class="q-ml-md">Language</p>
+        <p class="q-ml-md">{{ $t('Language') }}</p>
         <q-btn-dropdown  size="20" ref="special" text-color="black" auto-close flat v-bind:label="selectedLanguage">
-          <q-item clickable v-close-popup @click="changeLanguage('en')">
+          <q-item
+            v-for="(item, lang, ix) in languages" :key="ix"
+            clickable
+            v-close-popup @click="changeLanguage(lang)">
             <q-item-section>
-              <q-item-label>English</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-close-popup @click="changeLanguage('es')">
-            <q-item-section>
-              <q-item-label>Español</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-close-popup @click="changeLanguage('in')">
-            <q-item-section>
-              <q-item-label>हिन्दी</q-item-label>
+              <q-item-label>{{ item }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-btn-dropdown>
@@ -31,19 +24,28 @@
 <script>
 import SiteLinkComponent from 'components/SiteLinkComponent'
 export default {
-  name: 'footer',
+  name: 'shared-footer',
+  data () {
+    return {
+      languages: {
+        en: 'English',
+        es: 'Español',
+        hi: 'हिन्दी'
+      }
+    }
+  },
   components: {
     SiteLinkComponent
   },
-  data () {
-    return {
-      selectedLanguage: 'English'
+  computed: {
+    selectedLanguage () {
+      return this.languages[this.$storex.user.lang]
     }
   },
   methods: {
     changeLanguage (lang) {
       this.$i18n.locale = lang
-      this.selectedLanguage = this.$t('name')
+      this.$storex.user.changeLanguage(lang)
     }
   }
 }

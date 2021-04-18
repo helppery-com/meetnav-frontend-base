@@ -1,0 +1,14 @@
+.room-layout {
+  background-color: #9E9E9E;
+}
+
+.room-layout .header {
+}
+
+.room-layout .users {
+  background-color: #176480;
+}
+
+.room-layout .chat {
+  background-color: grey;
+}

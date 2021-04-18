@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function (/* ctx */) {
+module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -19,7 +19,9 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'i18n'
+            'init',
+            'i18n',
+            'neko'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -43,8 +45,8 @@ module.exports = function (/* ctx */) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      vueRouterMode: 'history', // available values: 'hash', 'history'
+      vueCompiler: true,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
@@ -71,15 +73,33 @@ module.exports = function (/* ctx */) {
         })
       },
       env: {
-        RTC_IO_SERVER: 'https://rtcmulticonnection.herokuapp.com/'
+        RTC_IO_SERVER: process.env.RTC_IO_SERVER || 'https://api.meetnav.com/',
+        API_ROOT: process.env.API_ROOT || 'https://api.meetnav.com'
       }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8080,
-      open: true // opens browser window automatically
+      port: 8085,
+      open: true, // opens browser window automatically
+      public: process.env.MEETNAV_WWW_INDEX,
+      proxy: {
+        // proxy all requests starting with /api to jsonplaceholder
+        '/api': {
+          target: 'http://localhost:1337',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          },
+          ws: true
+        },
+        '/socket.io': {
+          target: 'http://localhost:1337',
+          changeOrigin: true,
+          ws: true
+        }
+      }
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
@@ -101,7 +121,10 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        'Cookies'
+      ]
     },
 
     // animations: 'all', // --- includes all animations

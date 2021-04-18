@@ -156,7 +156,7 @@ export default {
     justify-content: flex-start
 
   .controller > *
-  width: 100%
+    width: 100%
 
 @media screen and (max-width: 422px)
   .search-layout

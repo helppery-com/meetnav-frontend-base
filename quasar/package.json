@@ -6,6 +6,9 @@
   "author": "gbrian <gustavo.brian@gmail.com>",
   "private": true,
   "scripts": {
+    "help": "quasar serve --help",
+    "start": "quasar serve ./dist/spa --history",
+    "build": "quasar build",
     "dev": "quasar dev",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
@@ -13,6 +16,7 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "@webzlodimir/vue-bottom-sheet": "^1.2.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "easytimer.js": "^4.3.2",
     "quasar": "^1.0.0",
@@ -21,6 +25,7 @@
     "typed-vuex": "^0.1.22",
     "vue-bottom-dialog": "^1.0.5",
     "vue-i18n": "^8.22.4",
+    "vue-socialmedia-share": "^1.0.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

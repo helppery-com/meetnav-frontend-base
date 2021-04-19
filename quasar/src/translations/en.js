@@ -71,5 +71,12 @@ export default {
     join: 'join',
     cancel: 'cancel',
     waiting: 'is waiting to join.'
+  },
+  selectDateTime: {
+    accountReview: 'Account Review',
+    description: 'Meet with your account manager for a quarterly check-in and address any updates that may need to be made.',
+    select: 'Select a date & time',
+    callNow: 'Call Now',
+    bookCall: 'Book Call'
   }
 }

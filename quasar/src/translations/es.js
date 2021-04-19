@@ -76,5 +76,12 @@ export default {
   'Quick session': 'Nueva sala',
   'Watching together': 'Ver videos juntos',
   'Shopping together': 'De compras juntos',
-  'Playing together': 'Jugando juntos'
+  'Playing together': 'Jugando juntos',
+  selectDateTime: {
+    accountReview: 'Revisión de cuenta',
+    description: 'Reúnase con su gerente de cuenta para un registro trimestral y aborde cualquier actualización que deba realizarse.',
+    select: 'Seleccione una fecha y hora',
+    callNow: 'llama ahora',
+    bookCall: 'reservar llamada'
+  }
 }

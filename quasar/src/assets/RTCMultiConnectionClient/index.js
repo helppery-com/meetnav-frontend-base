@@ -339,7 +339,10 @@ export default class RTCNavroom {
       this.userStream.stream.mute('video')
       this.isPaused = true
     } else {
-      this.userStream.stream.unmute('video')
+      this.userStream.stream.unmute()
+      if (this.isMuted) {
+        this.userStream.stream.mute('audio')
+      }
       this.isPaused = false
     }
   }

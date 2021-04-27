@@ -14,17 +14,18 @@
       </q-toolbar>
     </q-header>
     <q-drawer
-      v-if="anyUser"
+      v-if="false"
       show-if-above
-      :breakpoint="700"
+      :breakpoint="800"
       elevated
       class="bg-primary text-white btn"
       :mini="userMini"
       :mini-width="150"
+      :width="450"
       @click="userMini = !userMini"
     >
       <div class="q-pa-xs fit users column justify-start">
-        <div class="col-auto" v-for="(stream, userid, ix) in userStreams" :key="ix">
+        <div :class="userVideoClass" v-for="(stream, userid, ix) in users" :key="ix">
           <UserVideo
           :style="{ 'max-height': userVideoHeight() }"
           :stream="stream"
@@ -77,6 +78,9 @@ export default {
     }
   },
   computed: {
+    isDebug () {
+      return this.$route.query.debug
+    },
     user () {
       return this.$storex.user.user
     },
@@ -87,12 +91,24 @@ export default {
       return Object.keys(this.$storex.room.streams).length !== 0
     },
     users () {
-      return this.$storex.room.streams
+      return this.isDebug ? this.debugUserStreams : this.$storex.room.streams
     },
-    userStreams () {
-      return Object.keys(this.$storex.room.streams)
-        .map(k => this.$storex.room.streams[k])
-        .reduce((a, b) => a.concat(b), [])
+    debugUserStreams () {
+      let debug = this.isDebug
+      const streams = this.$storex.room.streams
+      const u = streams[Object.keys(streams)[0]][0]
+      const res = {}
+      while (debug--) {
+        const stream = u.stream.clone()
+        const mediaElement = document.createElement('video')
+        mediaElement.srcObject = stream
+        res['u' + debug] = [{
+          ...u,
+          mediaElement,
+          stream
+        }]
+      }
+      return res
     },
     style () {
       const { room } = this.$storex.room
@@ -100,6 +116,20 @@ export default {
     },
     userCount () {
       return Object.keys(this.users).length
+    },
+    userVideoClass () {
+      const col = parseInt(12 / this.userCount)
+      return `col-${col}`
+    },
+    messages () {
+      return this.$storex.room.messages
+    }
+  },
+  watch: {
+    messages () {
+      if (!this.openChat) {
+        this.openChat = true
+      }
     }
   },
   methods: {

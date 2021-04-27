@@ -159,7 +159,7 @@ export default {
       return window.location.href
     },
     cameras () {
-      return this.$storex.room.cameras
+      return [this.$storex.room.cameras[0]]
     }
   },
   methods: {

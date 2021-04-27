@@ -1,9 +1,16 @@
 <template>
-  <q-page class="navroom-page column">
-    <div class="col row">
-      <div class="col q-pa-xs">
-        <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
+  <q-page class="navroom-page row">
+    <div class="q-pa-xs users col-3 column justify-start" v-if="anyUser">
+      <div :class="userVideoClass" v-for="(stream, userid, ix) in users" :key="ix">
+        <UserVideo
+          :style="{ 'max-height': userVideoHeight() }"
+          :stream="stream"
+          :showUserInfo="true"
+        />
       </div>
+    </div>
+    <div class="col q-pa-xs">
+      <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
     </div>
     <q-dialog v-model="welcome" transition-show="scale" transition-hide="scale">
       <q-card class="bg-primary text-white" style="width: 300px">
@@ -38,13 +45,15 @@
 <script>
 import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
+import UserVideo from '../components/UserVideo'
 
 import '../assets/styles/vendor/_emote.scss'
 
 export default {
   components: {
     NekoVideo,
-    Commercial
+    Commercial,
+    UserVideo
   },
   data () {
     return {
@@ -59,6 +68,9 @@ export default {
     }
   },
   computed: {
+    isDebug () {
+      return this.$route.query.debug
+    },
     connected () {
       return this.$storex.room.nekoConnected
     },
@@ -73,6 +85,36 @@ export default {
         return this.nekoVideoRef.videoWidth + 'px'
       }
       return '100%'
+    },
+    userCount () {
+      return Object.keys(this.users).length
+    },
+    userVideoClass () {
+      const col = parseInt(12 / this.userCount)
+      return `col-${col}`
+    },
+    users () {
+      return this.isDebug ? this.debugUserStreams : this.$storex.room.streams
+    },
+    debugUserStreams () {
+      let debug = this.isDebug
+      const streams = this.$storex.room.streams
+      const u = streams[Object.keys(streams)[0]][0]
+      const res = {}
+      while (debug--) {
+        const stream = u.stream.clone()
+        const mediaElement = document.createElement('video')
+        mediaElement.srcObject = stream
+        res['u' + debug] = [{
+          ...u,
+          mediaElement,
+          stream
+        }]
+      }
+      return res
+    },
+    anyUser () {
+      return Object.keys(this.$storex.room.streams).length !== 0
     }
   },
   watch: {
@@ -102,6 +144,12 @@ export default {
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')
+    },
+    userVideoHeight () {
+      const { minHeight } = this.$el.style
+      const height = parseInt(minHeight.replace('px', ''))
+      const userCount = this.userCount
+      return `${parseInt(height / userCount)}px`
     }
   },
   beforeDestroy () {

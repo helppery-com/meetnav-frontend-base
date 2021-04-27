@@ -24,7 +24,8 @@ export const state = () => ({
   muted: false,
   controlMode: 'free',
   userStream: null,
-  hasControl: false
+  hasControl: false,
+  host: null
 })
 
 // Computed state
@@ -32,6 +33,7 @@ export const getters = getterTree(state, {
   roomId: state => state.room ? state.room.roomId : null,
   password: state => state.room ? state.room.password : null,
   cameras: state => state.rtcConnected ? state.rtc.cameras : [],
+  messages: state => state.rtcConnected ? neko.chat.history : [],
   neko: () => neko
 })
 
@@ -70,6 +72,18 @@ export const mutations = mutationTree(state, {
   },
   setNekoConnected (state, connected) {
     state.nekoConnected = connected
+  },
+  updateHost (state) {
+    setTimeout(() => {
+      if (neko.remote.host) {
+        state.host = {
+          ...neko.remote.host,
+          displayName: neko.remote.host.displayname
+        }
+      } else {
+        state.host = null
+      }
+    }, 1000)
   },
   reset (state) {
     state.rtcConnecting = false
@@ -198,6 +212,9 @@ export const actions = actionTree(
           storex.room.releaseControls()
         }
       }
+      if (message.event === 'updatehost') {
+        storex.room.updateHost()
+      }
       if (message.event.startsWith('touch')) {
         console.log(message)
       }
@@ -239,6 +256,10 @@ export const actions = actionTree(
       storex.room.setControl(true)
       neko.settings.setKeyboardLayout(storex.user.lang)
       neko.remote.changeKeyboard()
+      storex.room.updateHost()
+      storex.room.sendRoomMessage({
+        event: 'updatehost'
+      })
     },
     releaseControls ({ state }) {
       if (!neko.remote.hosting) {

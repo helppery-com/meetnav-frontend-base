@@ -7,7 +7,7 @@
     <div :class="{ 'user-info': true, hasControl }" v-if="showUserInfo" :dummy="updatedAt">
       <q-icon name="fas fa-mouse-pointer" color="white" v-if="hasControl"/>
       <q-icon name="mic_off" color="red" v-if="isAudioMuted" />
-      {{ `@${stream.extra.username}` }}
+      {{ `@${displayName}` }}
     </div>
   </div>
 </template>
@@ -16,30 +16,41 @@ export default {
   props: ['stream', 'muted', 'controls', 'poster', 'showUserInfo', 'videoClass'],
   data () {
     return {
-      isAudioMuted: false,
-      isLocal: this.stream.type === 'local'
+      isAudioMuted: false
     }
   },
   computed: {
+    displayName () {
+      return this.mainStream.extra.username
+    },
+    mainStream () {
+      return this.stream[0]
+    },
     updatedAt () {
-      return this.stream.updatedAt
+      return this.mainStream.updatedAt
     },
     paused () {
-      return this.$storex.room.paused
+      return this.isLocal && this.$storex.room.paused
+    },
+    host () {
+      return this.$storex.room.host
     },
     hasControl () {
-      return this.$storex.room.hasControl
+      return this.host && this.host.displayName === this.displayName
+    },
+    isLocal () {
+      return this.mainStream.type === 'local'
     }
   },
   watch: {
     updatedAt () {
       if (!this.isLocal) {
-        this.isAudioMuted = this.stream.isAudioMuted
+        this.isAudioMuted = this.mainStream.isAudioMuted
       }
     }
   },
   mounted () {
-    const video = this.stream.mediaElement
+    const video = this.mainStream.mediaElement
     video.controls = this.controls
     if (this.muted) {
       video.volumen = 0
@@ -50,7 +61,7 @@ export default {
     }
     this.$refs.v.appendChild(video)
     if (!this.isLocal) {
-      this.isAudioMuted = this.stream.isAudioMuted
+      this.isAudioMuted = this.mainStream.isAudioMuted
     }
   },
   methods: {
@@ -63,6 +74,7 @@ export default {
 <style lang="sass">
   .user-video
     width: 100%
+    height: 100%
     video
       width: 100%
       height: 100%

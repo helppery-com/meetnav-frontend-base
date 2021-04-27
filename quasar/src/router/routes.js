@@ -1,5 +1,31 @@
 import { storex } from '../store'
+const beforeEnter = (to, from, next) => {
+  if (to.matched.some(record => record.meta.userRequired)) {
+    const { user } = storex.user
+    if (!user) {
+      next('/')
+    }
+  }
+  if (to.matched.some(record => record.meta.userAdmin)) {
+    const { user } = storex.user
+    if (!user || user.role.name !== 'administrator') {
+      next('/')
+    }
+  }
+  next()
+}
 const routes = [
+  {
+    path: '/admin',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Admin.vue')
+      }
+    ],
+    meta: { userAdmin: true },
+    beforeEnter
+  },
   {
     path: '/@:username',
     component: () => import('layouts/MainLayout.vue'),
@@ -32,15 +58,7 @@ const routes = [
         meta: { userRequired: true }
       }
     ],
-    beforeEnter (to, from, next) {
-      if (to.matched.some(record => record.meta.userRequired)) {
-        const { user } = storex.user
-        if (!user) {
-          next('/')
-        }
-      }
-      next()
-    }
+    beforeEnter
   },
   {
     path: '/search',

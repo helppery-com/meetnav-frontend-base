@@ -25,7 +25,8 @@ export const state = () => ({
   controlMode: 'free',
   userStream: null,
   hasControl: false,
-  host: null
+  host: null,
+  autoReconnect: null
 })
 
 // Computed state
@@ -34,6 +35,11 @@ export const getters = getterTree(state, {
   password: state => state.room ? state.room.password : null,
   cameras: state => state.rtcConnected ? state.rtc.cameras : [],
   messages: state => state.rtcConnected ? neko.chat.history : [],
+  connected: state => state.rtcConnected && state.nekoConnected,
+  uploadUrl: () => api.uploadUrl,
+  uploadHeaders: () => api.headers,
+  mediaUrl: () => api.mediaUrl,
+  nekoTemplates: () => api.nekotemplates(),
   neko: () => neko
 })
 
@@ -72,6 +78,9 @@ export const mutations = mutationTree(state, {
   },
   setNekoConnected (state, connected) {
     state.nekoConnected = connected
+    if (connected) {
+      state.autoReconnect = setInterval(() => storex.room.reconnect(), 5000)
+    }
   },
   updateHost (state) {
     setTimeout(() => {
@@ -86,6 +95,8 @@ export const mutations = mutationTree(state, {
     }, 1000)
   },
   reset (state) {
+    clearInterval(state.autoReconnect)
+    state.autoReconnect = null
     state.rtcConnecting = false
     state.rtcConnected = false
     state.nekoConnected = false
@@ -101,6 +112,9 @@ export const mutations = mutationTree(state, {
   },
   setControl (state, value) {
     state.hasControl = value
+  },
+  setRoomStyle (state, style) {
+    state.room.style = style
   }
 })
 
@@ -168,6 +182,15 @@ export const actions = actionTree(
         check()
       })
     },
+    reconnect ({ state }) {
+      if (state.nekoConnected && !neko.video.playing) {
+        try {
+          storex.room.connect(state.room)
+        } catch (ex) {
+          console.error(ex)
+        }
+      }
+    },
     async leave ({ state }) {
       if (!state.rtcConnected) {
         return
@@ -178,7 +201,6 @@ export const actions = actionTree(
       } catch {
         // BUG: Issue with Swal plugin
       }
-
       storex.room.reset()
     },
     async closeRoom ({ state }) {

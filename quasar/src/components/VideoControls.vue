@@ -159,7 +159,9 @@ export default {
       return window.location.href
     },
     cameras () {
-      return [this.$storex.room.cameras[0]]
+      // TODO: Add camera switch
+      const camera = this.$storex.room.cameras[0]
+      return camera ? [camera] : []
     }
   },
   methods: {

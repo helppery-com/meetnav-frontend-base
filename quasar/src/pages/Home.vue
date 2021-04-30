@@ -21,36 +21,15 @@
             >
               <q-menu fit>
                 <q-list style="min-width: 100px">
-                  <q-item clickable v-close-popup @click="newRoom()">
+                  <q-item v-for="(item, ix) in templates" :key="ix" clickable v-close-popup @click="newRoom(item.name)">
                     <q-item-section avatar>
-                      <q-avatar icon="offline_bolt" color="dark" text-color="white" />
+                      <q-avatar :icon="item.icon" color="dark" text-color="white" v-if="item.icon" />
+                      <q-avatar v-else>
+                        <img :src="item.image" />
+                      </q-avatar>
                     </q-item-section>
                     <q-item-section class="text-h6">
-                      {{ $t('Quick session')}}
-                    </q-item-section>
-                  </q-item>
-                  <q-item clickable v-close-popup @click="newRoom('watching')">
-                    <q-item-section avatar>
-                      <q-avatar icon="cast" color="red-10" text-color="white" />
-                    </q-item-section>
-                    <q-item-section class="text-h6">
-                      {{ $t('Watching together')}}
-                    </q-item-section>
-                  </q-item>
-                  <q-item clickable v-close-popup @click="newRoom('shopping')">
-                    <q-item-section avatar>
-                      <q-avatar icon="shopping_cart" color="orange-7" text-color="white" />
-                    </q-item-section>
-                    <q-item-section class="text-h6">
-                      {{ $t('Shopping together')}}
-                    </q-item-section>
-                  </q-item>
-                  <q-item clickable v-close-popup @click="newRoom('playing')">
-                    <q-item-section avatar>
-                      <q-avatar icon="videogame_asset" color="green-8" text-color="white" />
-                    </q-item-section>
-                    <q-item-section class="text-h6">
-                      {{ $t('Playing together')}}
+                      {{ templateName(item) }}
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -156,8 +135,13 @@ export default {
   data () {
     return {
       slide: 'style',
-      code: ''
+      code: '',
+      templates: []
     }
+  },
+  async created () {
+    const tpls = await this.$storex.room.nekoTemplates
+    this.templates = tpls.filter(t => t.user === null)
   },
   methods: {
     newRoom (template) {
@@ -171,6 +155,11 @@ export default {
       if (this.code) {
         this.$router.push(`/navroom/${this.code}`)
       }
+    },
+    templateName (tpl) {
+      const language = this.$storex.user.lang
+      const translation = tpl.translations.filter(t => t.language === language)[0]
+      return translation ? translation.translation : this.$t(tpl.name)
     }
   }
 }

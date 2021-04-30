@@ -3,7 +3,10 @@
     <Login v-if="!user" />
     <q-header elevated class="bg-white header">
       <q-toolbar class="row">
-        <q-toolbar-title class="col text-primary text-h5 btn" @click="$router.push('/')" >meetnav</q-toolbar-title>
+        <q-toolbar-title class="col text-primary text-h5" >
+          <UserMenu class="btn"/>
+          <span>meetnav</span>
+        </q-toolbar-title>
         <VideoControls
           class="col-8 justify-center row q-gutter-md"
           @chat="openChat = !openChat"
@@ -61,13 +64,15 @@ import VideoControls from '../components/VideoControls'
 import NekoChat from '../components/neko/NekoChat'
 
 import UserVideo from '../components/UserVideo'
+import UserMenu from '../components/UserMenu'
 
 export default {
   components: {
     Login,
     VideoControls,
     NekoChat,
-    UserVideo
+    UserVideo,
+    UserMenu
   },
   data () {
     return {

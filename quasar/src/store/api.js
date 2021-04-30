@@ -14,6 +14,14 @@ class Api {
     return path
   }
 
+  get mediaUrl () {
+    return this.baseUrl
+  }
+
+  get uploadUrl () {
+    return this.url('/upload')
+  }
+
   get headers () {
     const headers = {
     }
@@ -59,6 +67,12 @@ class Api {
   async log (logEntry) {
     const headers = this.headers
     await axios.post(this.url('/logs'), { ...logEntry, source: 'client', session_id: this.sessionId }, { headers })
+  }
+
+  async nekotemplates () {
+    const headers = this.headers
+    const res = await axios.get(this.url('/nekotemplates'), { headers })
+    return res.data
   }
 }
 const api = new Api()

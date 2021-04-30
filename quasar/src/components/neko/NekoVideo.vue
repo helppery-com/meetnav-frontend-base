@@ -6,7 +6,7 @@
         :color="hasControl ? 'primary' : me.color"
         class="text-white"
         v-if="me"
-      >You!</q-chip>
+      >{{ hasControl ? 'You!' : 'You, click to control!' }}</q-chip>
     </div>
     <div v-for="(pointer, ix) in pointers"
       :key="ix"
@@ -134,7 +134,7 @@ export default {
       return neko.connected && neko.user.member
     },
     hasControl () {
-      return neko.remote.hosting
+      return this.$storex.room.hasControl
     },
     hashControlClass () {
       return this.hasControl ? 'hasControl' : 'viewOnly'

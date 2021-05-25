@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh Lpr lff" class="room-layout" ref="layout">
-    <Login v-if="!user" />
+    <GuestLogin v-if="!user" />
     <q-header elevated class="bg-white header">
       <q-toolbar class="row">
         <q-toolbar-title class="col text-primary text-h5" >
@@ -16,28 +16,6 @@
         </div>
       </q-toolbar>
     </q-header>
-    <q-drawer
-      v-if="false"
-      show-if-above
-      :breakpoint="800"
-      elevated
-      class="bg-primary text-white btn"
-      :mini="userMini"
-      :mini-width="150"
-      :width="450"
-      @click="userMini = !userMini"
-    >
-      <div class="q-pa-xs fit users column justify-start">
-        <div :class="userVideoClass" v-for="(stream, userid, ix) in users" :key="ix">
-          <UserVideo
-          :style="{ 'max-height': userVideoHeight() }"
-          :stream="stream"
-          :showUserInfo="true"
-        />
-        </div>
-      </div>
-    </q-drawer>
-
     <q-drawer
       side="right"
       v-model="openChat"
@@ -59,19 +37,17 @@
 </template>
 
 <script>
-import Login from '../components/Login'
+import GuestLogin from '../components/GuestLogin'
 import VideoControls from '../components/VideoControls'
 import NekoChat from '../components/neko/NekoChat'
 
-import UserVideo from '../components/UserVideo'
 import UserMenu from '../components/UserMenu'
 
 export default {
   components: {
-    Login,
+    GuestLogin,
     VideoControls,
     NekoChat,
-    UserVideo,
     UserMenu
   },
   data () {
@@ -95,9 +71,6 @@ export default {
     anyUser () {
       return Object.keys(this.$storex.room.streams).length !== 0
     },
-    users () {
-      return this.isDebug ? this.debugUserStreams : this.$storex.room.streams
-    },
     debugUserStreams () {
       let debug = this.isDebug
       const streams = this.$storex.room.streams
@@ -118,13 +91,6 @@ export default {
     style () {
       const { room } = this.$storex.room
       return room ? room.style : ''
-    },
-    userCount () {
-      return Object.keys(this.users).length
-    },
-    userVideoClass () {
-      const col = parseInt(12 / this.userCount)
-      return `col-${col}`
     },
     messages () {
       return this.$storex.room.messages
@@ -151,12 +117,6 @@ export default {
       if (!this.openChat) {
         this.openChat = true
       }
-    },
-    userVideoHeight () {
-      const { minHeight } = this.$refs.layout.style
-      const height = parseInt(minHeight.replace('px', ''))
-      const userCount = this.userCount
-      return `${height / userCount}px`
     }
   }
 }

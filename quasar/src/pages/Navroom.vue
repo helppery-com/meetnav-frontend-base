@@ -1,18 +1,26 @@
 <template>
   <q-page class="navroom-page row">
-    <div class="q-pa-xs users col-3 column justify-start" v-if="anyUser">
-      <div :class="userVideoClass" v-for="(stream, userid, ix) in users" :key="ix">
-        <UserVideo
-          :style="{ 'max-height': userVideoHeight() }"
-          :stream="stream"
-          :showUserInfo="true"
-        />
-      </div>
+    <div class="q-pa-xs users col-3 relative-position" v-if="anyUser">
+      <Dish
+        class="fit q-pt-xs"
+        :cameras="cameras"
+      >
+        <template v-slot:camera="{ camera }">
+          <UserVideo
+            :stream="camera"
+            :showUserInfo="true"
+          />
+        </template>
+      </Dish>
     </div>
     <div class="col q-pa-xs">
       <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
     </div>
-    <q-dialog v-model="welcome" transition-show="scale" transition-hide="scale">
+    <q-dialog
+      v-model="welcome"
+      transition-show="scale"
+      transition-hide="scale"
+      persistent>
       <q-card class="bg-primary text-white" style="width: 300px">
         <q-card-section>
           <div class="text-h6">
@@ -46,6 +54,7 @@
 import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
 import UserVideo from '../components/UserVideo'
+import Dish from '../components/Dish'
 
 import '../assets/styles/vendor/_emote.scss'
 
@@ -53,7 +62,8 @@ export default {
   components: {
     NekoVideo,
     Commercial,
-    UserVideo
+    UserVideo,
+    Dish
   },
   data () {
     return {
@@ -68,6 +78,10 @@ export default {
     }
   },
   computed: {
+    cameras () {
+      const users = this.users
+      return Object.keys(users).map(k => users[k])
+    },
     isDebug () {
       return this.$route.query.debug
     },
@@ -88,10 +102,6 @@ export default {
     },
     userCount () {
       return Object.keys(this.users).length
-    },
-    userVideoClass () {
-      const col = parseInt(12 / this.userCount)
-      return `col-${col}`
     },
     users () {
       return this.isDebug ? this.debugUserStreams : this.$storex.room.streams
@@ -129,7 +139,6 @@ export default {
   },
   async created () {
     if (!this.$storex.user.user) {
-      this.$root.$emit('login')
       this.$root.$once('user-logged', () => this.openRoom())
     } else {
       this.openRoom()
@@ -138,9 +147,10 @@ export default {
   methods: {
     async openRoom () {
       this.welcome = true
-      const { roomId } = this.$route.params
+      const { roomId, username } = this.$route.params
       const { template } = this.$route.query
-      await this.$storex.room.openOrJoin({ roomId, template })
+      const calling = this.$route.path.endsWith('/call')
+      await this.$storex.room.openOrJoin({ roomId, template, username, calling })
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')

@@ -2,12 +2,18 @@
   <q-icon color="primary" name="menu">
     <q-menu>
       <q-list style="min-width: 100px">
-        <q-item clickable v-ripple @click="editStyle = true">
+        <q-item clickable v-ripple @click="editStyle = true" v-if="isAdmin">
           <q-item-section avatar>
             <q-icon color="primary" name="settings" />
           </q-item-section>
-        <q-item-section>{{ $t('Settings') }}</q-item-section>
-      </q-item>
+          <q-item-section>{{ $t('Settings') }}</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple @click="$router.push('/')">
+          <q-item-section avatar>
+            <q-icon color="primary" name="exit" />
+          </q-item-section>
+          <q-item-section>{{ $t('Leave') }}</q-item-section>
+        </q-item>
       </q-list>
     </q-menu>
     <q-dialog v-model="editStyle" v-if="connected">
@@ -42,6 +48,9 @@ export default {
   computed: {
     connected () {
       return this.$storex.room.connected
+    },
+    isAdmin () {
+      return this.$storex.room.isAdmin
     }
   },
   methods: {

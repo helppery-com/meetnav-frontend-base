@@ -19,7 +19,9 @@ export const getters = getterTree(state, {
       return state.user.lang
     }
     return navigator.language
-  }
+  },
+  displayName: state => state.user ? state.user.displayName || state.user.username : '',
+  isGuest: state => state.user.license.max_daily === 0
 })
 
 // Change state
@@ -28,6 +30,10 @@ export const mutations = mutationTree(state, {
     state.user = user
     state.jwt = jwt
     api.jwt = jwt
+    if (storex.user.isGuest) {
+      user = null
+      jwt = null
+    }
     Cookies.set('session_jwt', jwt)
     Cookies.set('session_user', user)
   },
@@ -43,8 +49,11 @@ export const mutations = mutationTree(state, {
 export const actions = actionTree(
   { state, getters, mutations },
   {
-    async login ({ state }, { username, password }) {
+    async login ({ state }, { username, password, displayName }) {
       const user = await api.login(username, password)
+      if (displayName) {
+        user.displayName = displayName
+      }
       storex.user.setUser(user)
     },
     logout () {

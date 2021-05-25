@@ -16,6 +16,16 @@ const beforeEnter = (to, from, next) => {
 }
 const routes = [
   {
+    path: '/widget',
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/WidgetConnect.vue')
+      }
+    ],
+    beforeEnter
+  },
+  {
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -46,6 +56,7 @@ const routes = [
   },
   {
     path: '/',
+    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Home.vue') },
@@ -106,6 +117,24 @@ const routes = [
     ]
   },
   {
+    path: '/@:username/call',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Navroom.vue')
+      }
+    ]
+  },
+  {
+    path: '/navroom/@:username/call',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Navroom.vue')
+      }
+    ]
+  },
+  {
     path: '/navroom/:roomId',
     component: () => import('layouts/RoomLayout.vue'),
     children: [
@@ -116,6 +145,7 @@ const routes = [
   },
   {
     path: '/navroom',
+    name: 'navroom',
     component: () => import('layouts/RoomLayout.vue'),
     children: [
       {

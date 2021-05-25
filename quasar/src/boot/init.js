@@ -17,4 +17,15 @@ export default async ({ app, router, Vue, store }) => {
     } catch {}
     next()
   })
+
+  Vue.mixin({
+    computed: {
+      $user () {
+        return this.$storex.user.user
+      },
+      $isGuest () {
+        return this.$user && this.$user.isGuest
+      }
+    }
+  })
 }

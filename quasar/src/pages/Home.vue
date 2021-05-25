@@ -18,9 +18,21 @@
               icon="video_call"
               v-bind:label="$t('homePage.navigateTogether')"
               square
+              :disabled="!canCreateRoom"
             >
-              <q-menu fit>
+              <q-menu fit
+                anchor="center middle"
+                self="center middle">
                 <q-list style="min-width: 100px">
+                  <q-item clickable v-close-popup @click="openMyRoom">
+                    <q-item-section avatar>
+                      <q-avatar icon="account_circle" color="accent" text-color="white" />
+                    </q-item-section>
+                    <q-item-section class="text-h6 text-accent">
+                      {{ $t('My room') }}
+                    </q-item-section>
+                  </q-item>
+                  <q-separator />
                   <q-item v-for="(item, ix) in templates" :key="ix" clickable v-close-popup @click="newRoom(item.name)">
                     <q-item-section avatar>
                       <q-avatar :icon="item.icon" color="dark" text-color="white" v-if="item.icon" />
@@ -143,9 +155,25 @@ export default {
     const tpls = await this.$storex.room.nekoTemplates
     this.templates = tpls.filter(t => t.user === null)
   },
+  computed: {
+    user () {
+      return this.$storex.user.user
+    },
+    canCreateRoom () {
+      return this.user && !this.$isGuest
+    }
+  },
   methods: {
+    openMyRoom () {
+      if (this.canCreateRoom) {
+        this.$router.push({ path: `/navroom/@${this.user.username}` })
+      }
+    },
     newRoom (template) {
-      if (!this.$storex.user.user) {
+      if (!this.canCreateRoom) {
+        if (this.$isGuest) {
+          this.$q.notify(this.$t('Guest users can\'t create rooms'))
+        }
         this.$root.$once('user-logged', () => this.newRoom())
         return this.$root.$emit('login')
       }

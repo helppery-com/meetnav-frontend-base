@@ -46,9 +46,15 @@ class Api {
     return res.data
   }
 
+  async waitRoom (username, template) {
+    const headers = this.headers
+    const res = await axios.post(this.url('/nekos/wait'), { username, template }, { headers })
+    return res.data
+  }
+
   async joinRoom (roomId) {
     const headers = this.headers
-    const res = await axios.put(this.url(`/nekos/${roomId}`), { }, { headers })
+    const res = await axios.put(this.url(`/nekos/${roomId}/join`), { }, { headers })
     return res.data
   }
 

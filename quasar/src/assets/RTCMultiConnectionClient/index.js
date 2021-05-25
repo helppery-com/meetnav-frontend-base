@@ -32,6 +32,7 @@ export default class RTCNavroom {
   acceptedParticipants = []
   updatedAt = new Date()
   isHost = false
+  recorder = null
 
   onMessage = () => {}
   onUserConnected (event) {}
@@ -243,11 +244,29 @@ export default class RTCNavroom {
     if (extra.username === this.user.username) {
       this.userStream = stream
       this.connected = true
+      try {
+        this.startRecording(stream.stream)
+      } catch(ex) {
+        console.error('Error recording stream', ex)
+      }
     }
     this.onUserConnected(stream)
     if (this.isHost || extra.isHost) {
       this.anyHostConnected = true
     }
+  }
+
+  startRecording (stream) {
+    const options = {
+      audioBitsPerSecond : 128000,
+      videoBitsPerSecond : 0,
+      mimeType : 'video/webm;codecs=vp9'
+    }
+    this.recorder = new MediaRecorder(stream, options)
+    this.recorder.ondataavailable = function(e) {
+      // console.log('Video data available, size: ' + (e.data||{size: 0}).size);
+    }
+    this.recorder.start(5000)
   }
 
   onClose (event) {

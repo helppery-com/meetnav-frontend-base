@@ -1,9 +1,9 @@
 <template>
-  <div :class="['neko-video', 'fit', hashControlClass]">
+  <div :class="['neko-video', 'fit', hashControlClass]" ref="pointerLayer">
     <neko-video ref="nekoVideo" class="rounded-borders" />
     <div class="me-pointer" :style="customCursor">
       <q-chip dense :icon="hasControl ? 'mouse' : 'visibility'"
-        :color="hasControl ? 'primary' : me.color"
+        :color="hasControl ? 'primary' : 'dark'"
         class="text-white"
         v-if="me"
       >{{ hasControl ? 'You!' : 'You, click to control!' }}</q-chip>
@@ -147,11 +147,9 @@ export default {
         return { display: 'none' }
       }
       const { screenX: x, screenY: y } = this.overlayLastCursorPosition
-      const { y: overlayY } = this.getPlayer().getBoundingClientRect()
-      const { y: bodyY } = document.body.getBoundingClientRect()
       return {
         left: (x + 10) + 'px',
-        top: (y - overlayY + bodyY) + 'px',
+        top: y + 'px',
         position: 'absolute',
         width: '24px',
         height: '24p',
@@ -244,7 +242,7 @@ export default {
     },
     onOverlayMouseMove (e) {
       this.overlayLastCursorPosition = e
-      const { clientX: x, clientY: y } = this.overlayLastCursorPosition
+      const { screenX: x, screenY: y } = this.overlayLastCursorPosition
       this.$storex.room.sendRoomMessage({
         event: 'mousemove',
         hasControl: this.hasControl,
@@ -377,8 +375,12 @@ export default {
           video
             border-radius: 5px
           .overlay
+
             &:focus
               outline: none
             background-position: center
             transition: background 0.8s
+    &.viewOnly
+      .overlay
+        cursor: none
 </style>

@@ -1,17 +1,24 @@
 <template>
   <q-page class="navroom-page row">
-    <div class="q-pa-xs users col-3 relative-position" v-if="anyUser">
-      <Dish
-        class="fit q-pt-xs"
-        :cameras="cameras"
-      >
-        <template v-slot:camera="{ camera }">
-          <UserVideo
-            :stream="camera"
-            :showUserInfo="true"
-          />
-        </template>
-      </Dish>
+    <div :class="['q-pa-xs users relative-position column', `col-${userVideoCol}`]">
+      <div class="col-auto">
+        <q-btn icon="fas fa-search-minus" @click="userVideoCol = Math.max(1, userVideoCol - 1)" />
+        <q-btn icon="fas fa-search-plus"  @click="userVideoCol = Math.min(6, userVideoCol + 1)"/>
+      </div>
+      <div class="col relative-position">
+        <Dish
+          class="fit q-pt-xs col"
+          :cameras="cameras"
+          :colSize="userVideoCol"
+        >
+          <template v-slot:camera="{ camera }">
+            <UserVideo
+              :stream="camera"
+              :showUserInfo="true"
+            />
+          </template>
+        </Dish>
+      </div>
     </div>
     <div class="col q-pa-xs">
       <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
@@ -74,7 +81,8 @@ export default {
       leave: false,
       welcome: false,
       rating: 0,
-      commercialLink: null
+      commercialLink: null,
+      userVideoCol: 3
     }
   },
   computed: {
@@ -124,7 +132,10 @@ export default {
       return res
     },
     anyUser () {
-      return Object.keys(this.$storex.room.streams).length !== 0
+      return !this.incognito || this.cameras.length > 1
+    },
+    incognito () {
+      return this.$storex.room.muted && this.$storex.room.paused
     }
   },
   watch: {
@@ -148,9 +159,8 @@ export default {
     async openRoom () {
       this.welcome = true
       const { roomId, username } = this.$route.params
-      const { template } = this.$route.query
       const calling = this.$route.path.endsWith('/call')
-      await this.$storex.room.openOrJoin({ roomId, template, username, calling })
+      await this.$storex.room.openOrJoin({ ...this.$route.query, roomId, username, calling })
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')

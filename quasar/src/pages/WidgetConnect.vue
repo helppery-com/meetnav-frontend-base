@@ -1,54 +1,63 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px">
-    <q-form
-      @submit="onSubmit"
-      @reset="onReset"
-      class="q-gutter-md"
-    >
-      <q-input
-        filled
-        v-model="email"
-        :label="$t('Your email')"
-        :hint="$t('Please write your email')"
-        lazy-rules
-        :rules="emailRule"
-      />
-
-      <q-toggle v-model="accept" :label="$t('I accept the license and terms')" />
-
-      <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-      </div>
-    </q-form>
-    <GuestLogin />
+  <div>
+    <div v-if="cameraTest">
+      <q-card class="my-card">
+        <q-card-section>
+          <div class="text-h6">
+          {{ $t('Camera test') }}
+        </div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <UserVideo :stream="[cameraStream]" v-if="cameraStream" />
+          <q-spinner-ball
+            color="primary"
+            size="2em"
+            v-else
+          />
+        </q-card-section>
+        <q-card-actions vertical>
+          <q-btn flat v-close-popup :label="$t('Close')" />
+        </q-card-actions>
+      </q-card>
+    </div>
   </div>
 </template>
 <script>
-const emailRe = /^(([^<>()[\].,;:\s@"]+(.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i
-import GuestLogin from '../components/GuestLogin'
+import NavRoom from '../assets/RTCMultiConnectionClient'
+import UserVideo from '../components/UserVideo'
 
 export default {
   components: {
-    GuestLogin
+    UserVideo
   },
   data () {
     return {
-      email: '',
-      accept: false
+      rtc: null,
+      cameraTest: null,
+      cameraStream: null
     }
   },
   computed: {
-    emailRule () {
-      return [val => (val && emailRe.exec(val)) || this.$t('Invalid email format')]
+  },
+  mounted () {
+    if (this.$route.query.mode === 'camera') {
+      this.testCamera()
+    }
+  },
+  destroyed () {
+    if (this.rtc) {
+      this.rtc.leave()
     }
   },
   methods: {
-    onSubmit () {
-    },
-    onReset () {
-      this.email = ''
-      this.accept = false
+    testCamera () {
+      this.cameraTest = 'testing'
+      this.rtc = new NavRoom({ id: 0, username: this.$t('Guest') })
+      this.rtc.onUserConnected = stream => {
+        this.cameraStream = stream
+      }
+      this.rtc.connect(`${new Date().getTime()}`)
     }
   }
 }

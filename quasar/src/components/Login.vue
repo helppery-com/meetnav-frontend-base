@@ -37,11 +37,10 @@
 export default {
   data () {
     return {
-      user: { username: '', password: '' },
+      user: { username: '', password: '', displayName: '' },
       openLoginDialog: false,
       loading: false,
-      message: '',
-      displayName: ''
+      message: ''
     }
   },
   methods: {

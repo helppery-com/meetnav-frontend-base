@@ -121,7 +121,7 @@ export const mutations = mutationTree(state, {
 async function connectRTC (roomId) {
   const rtc = new RTCNavroom({
     id: storex.user.user.id,
-    username: storex.user.user.displayName
+    username: storex.user.displayName
   })
   rtc.onUserConnected = storex.room.addStream.bind(this)
   rtc.onUserDisconnected = storex.room.removeStream.bind(storex)
@@ -134,14 +134,15 @@ async function connectRTC (roomId) {
 export const actions = actionTree(
   { state, getters, mutations },
   {
-    async openOrJoin ({ state }, { template, roomId, username, calling }) {
+    async openOrJoin ({ state }, settings) {
+      const { template, roomId, username, calling } = settings
       let room = null
       if (calling) {
         room = await api.waitRoom(username, template)
       } else if (!roomId) {
-        room = await api.createRoom(template)
+        room = await api.createRoom(settings)
       } else {
-        room = await api.joinRoom(roomId)
+        room = await api.joinRoom(roomId, template)
       }
       if (room) {
         await storex.room.connect(room)

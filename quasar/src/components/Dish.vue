@@ -16,7 +16,7 @@
 <script>
 // https://github.com/Alicunde/Videoconference-Dish-CSS-JS
 export default {
-  props: ['cameras', 'margin'],
+  props: ['cameras', 'margin', 'colSize'],
   data () {
     return {
       width: null,
@@ -30,6 +30,14 @@ export default {
   },
   destroyed () {
     window.removeEventListener('resize', this.onResize)
+  },
+  watch: {
+    colSize () {
+      this.dish()
+    },
+    cameras () {
+      setTimeout(() => this.dish(), 100)
+    }
   },
   methods: {
     getWidth () {
@@ -100,9 +108,7 @@ export default {
       position: relative
       vertical-align: middle
       align-self: center
-      border-radius: 10px
       overflow: hidden
       display: inline-block
-      box-shadow: 0px 12px 22px rgba(0, 0, 0, 0.4)
       animation: show 0.4s ease
 </style>

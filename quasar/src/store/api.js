@@ -40,9 +40,9 @@ class Api {
     await axios.post(this.url('/auth/local/register'), { username, email, password })
   }
 
-  async createRoom (template) {
+  async createRoom (settings) {
     const headers = this.headers
-    const res = await axios.post(this.url('/nekos'), { template }, { headers })
+    const res = await axios.post(this.url('/nekos'), settings, { headers })
     return res.data
   }
 
@@ -52,9 +52,9 @@ class Api {
     return res.data
   }
 
-  async joinRoom (roomId) {
+  async joinRoom (roomId, template) {
     const headers = this.headers
-    const res = await axios.put(this.url(`/nekos/${roomId}/join`), { }, { headers })
+    const res = await axios.put(this.url(`/nekos/${roomId}/join`), { template }, { headers })
     return res.data
   }
 

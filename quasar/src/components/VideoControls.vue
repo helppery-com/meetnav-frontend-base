@@ -14,6 +14,10 @@
       </q-tooltip>
     </q-btn>
     <q-btn round outline
+      :icon="fullScreen ? 'fas fa-compress' : 'fas fa-expand'"
+      color="dark"
+      class="col-auto" @click="toogleFullScreen"/>
+    <q-btn round outline
       icon="fas fa-share-alt"
       color="accent"
       class="col-auto" @click="share = true"/>
@@ -88,6 +92,7 @@
 <script>
 import { NekoEmotes } from 'neko-client/dist/neko-lib.umd'
 import Social from '../components/Social'
+import { AppFullscreen } from 'quasar'
 
 export default {
   components: {
@@ -99,7 +104,8 @@ export default {
       leave: false,
       share: false,
       text: '',
-      rating: 0
+      rating: 0,
+      fullScreen: false
     }
   },
   computed: {
@@ -199,6 +205,15 @@ export default {
     sendMessage () {
       this.$emit('message', this.text)
       this.text = null
+    },
+    async toogleFullScreen () {
+      if (this.fullScreen) {
+        await AppFullscreen.exit()
+        this.fullScreen = false
+      } else {
+        await AppFullscreen.request()
+        this.fullScreen = true
+      }
     }
   }
 }

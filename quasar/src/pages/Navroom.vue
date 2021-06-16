@@ -1,7 +1,7 @@
 <template>
   <q-page class="navroom-page row">
     <div :class="['q-pa-xs users relative-position column', `col-${userVideoCol}`]">
-      <div class="col-auto">
+      <div class="col-auto" style="display:none">
         <q-btn icon="fas fa-search-minus" @click="userVideoCol = Math.max(1, userVideoCol - 1)" />
         <q-btn icon="fas fa-search-plus"  @click="userVideoCol = Math.min(6, userVideoCol + 1)"/>
       </div>

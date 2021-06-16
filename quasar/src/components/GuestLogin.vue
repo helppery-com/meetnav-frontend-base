@@ -14,17 +14,19 @@
         <q-card-section>
           <div class="text-h3">{{ $t('Welcome') }}</div>
           <q-input
-              name='username'
-              v-model="username"
-              :label="$t('Display name')"
+              name='email'
+              v-model="email"
+              type="email"
+              :label="$t('Email')"
               bg-color="white"
               filled
             />
         </q-card-section>
         <q-card-section class="row">
           <q-btn class="col" color="primary" :label="$t('Guest')"
-          :disabled="!username"
-          @click="onGuest" />
+          :disabled="!email"
+          @click="onGuest"
+          :loading="loading" />
           <q-btn class="col q-ml-xl" color="white"
             outline
             icon="account_circle"
@@ -44,7 +46,8 @@ export default {
   data () {
     return {
       openLoginDialog: true,
-      username: ''
+      email: '',
+      loading: false
     }
   },
   created () {
@@ -52,13 +55,18 @@ export default {
   },
   methods: {
     onGuest () {
-      this.$root.$emit('login', { username: 'guest', password: 'guest', displayName: this.username })
+      this.loading = true
+      const displayName = this.email.split('@')[0].replace(/[^a-zA-Z0-9]/, '')
+      this.$root.$emit('login', { username: 'guest', password: 'guest', displayName, email: this.email })
+      // this.$storex.user.registerGuest(this.email)
     },
     onLogin () {
+      this.loading = true
       this.$root.$emit('login')
       this.close()
     },
     close () {
+      this.loading = false
       this.openLoginDialog = false
     }
   }

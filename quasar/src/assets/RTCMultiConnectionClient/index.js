@@ -78,7 +78,7 @@ export default class RTCNavroom {
       // logging.info('lowBandwith', connection)
       connection.bandwidth = {
         audio: 50, // 50 kbps
-        video: 150, // 256 kbps
+        video: 300, // 256 kbps
         screen: 300 // 300 kbps
       }
       connection.mediaConstraints = {

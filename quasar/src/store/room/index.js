@@ -138,7 +138,7 @@ export const actions = actionTree(
       const { template, roomId, username, calling } = settings
       let room = null
       if (calling) {
-        room = await api.waitRoom(username, template)
+        room = await api.waitRoom(storex.user.user, username, template)
       } else if (!roomId) {
         room = await api.createRoom(settings)
       } else {

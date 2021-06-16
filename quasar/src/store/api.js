@@ -40,15 +40,19 @@ class Api {
     await axios.post(this.url('/auth/local/register'), { username, email, password })
   }
 
+  async registerGuest (email) {
+    await axios.get(this.url('/accounts/registerGuest?email=' + email))
+  }
+
   async createRoom (settings) {
     const headers = this.headers
     const res = await axios.post(this.url('/nekos'), settings, { headers })
     return res.data
   }
 
-  async waitRoom (username, template) {
+  async waitRoom (user, account, template) {
     const headers = this.headers
-    const res = await axios.post(this.url('/nekos/wait'), { username, template }, { headers })
+    const res = await axios.post(this.url('/nekos/wait'), { ...user, account, template }, { headers })
     return res.data
   }
 

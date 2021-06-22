@@ -1,13 +1,10 @@
 <template>
-  <q-page class="navroom-page row">
-    <div :class="['q-pa-xs users relative-position column', `col-${userVideoCol}`]">
-      <div class="col-auto" style="display:none">
-        <q-btn icon="fas fa-search-minus" @click="userVideoCol = Math.max(1, userVideoCol - 1)" />
-        <q-btn icon="fas fa-search-plus"  @click="userVideoCol = Math.min(6, userVideoCol + 1)"/>
-      </div>
+  <q-page class="navroom-page row q-pa-md">
+    <div :class="['users relative-position column', `col-${userVideoCol}`]">
       <div class="col relative-position">
+        <VideoControls />
         <Dish
-          class="fit q-pt-xs col"
+          class="fit col"
           :cameras="cameras"
           :colSize="userVideoCol"
         >
@@ -20,7 +17,7 @@
         </Dish>
       </div>
     </div>
-    <div class="col q-pa-xs">
+    <div class="col">
       <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
     </div>
     <q-dialog
@@ -62,6 +59,7 @@ import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
 import UserVideo from '../components/UserVideo'
 import Dish from '../components/Dish'
+import VideoControls from '../components/VideoControls.vue'
 
 import '../assets/styles/vendor/_emote.scss'
 
@@ -70,6 +68,7 @@ export default {
     NekoVideo,
     Commercial,
     UserVideo,
+    VideoControls,
     Dish
   },
   data () {
@@ -214,4 +213,7 @@ export default {
         padding-inline-start: 0
         margin-block-end: 0
         margin-block-start: 0
+    .dish
+      .camera
+        border-radius: 5px
 </style>

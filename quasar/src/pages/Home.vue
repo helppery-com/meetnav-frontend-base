@@ -152,8 +152,7 @@ export default {
     }
   },
   async created () {
-    const tpls = await this.$storex.room.nekoTemplates
-    this.templates = tpls.filter(t => t.user === null)
+    this.templates = await this.$storex.room.nekoTemplates
   },
   computed: {
     user () {

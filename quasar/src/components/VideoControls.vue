@@ -65,8 +65,8 @@
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn outline color="red" :label="$t('Exit room')" v-close-popup @click="closeRoom">
-          </q-btn>
+          <q-btn outline color="accent" :label="$t('Exit room')" v-close-popup @click="closeRoom"/>
+          <q-btn outline color="red" :label="$t('Close room')" v-close-popup @click="closeRoom(true)" v-if="isAdmin" />
           <q-btn outline :label="$t('Back')" v-close-popup />
         </q-card-actions>
       </q-card>
@@ -168,6 +168,9 @@ export default {
       // TODO: Add camera switch
       const camera = this.$storex.room.cameras[0]
       return camera ? [camera] : []
+    },
+    isAdmin () {
+      return this.$storex.room.room && this.$storex.room.room.isAdmin
     }
   },
   methods: {
@@ -194,8 +197,8 @@ export default {
     justLeave () {
       this.$router.push('/')
     },
-    async closeRoom () {
-      await this.$storex.room.closeRoom()
+    closeRoom (close) {
+      this.$storex.room.closeRoom(close)
       this.justLeave()
     },
     notifyChat () {

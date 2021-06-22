@@ -78,6 +78,7 @@ export default {
     video
       width: 100%
       height: 100%
+      object-fit: cover
     &.paused
       background-image: url(https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png)
       background-size: contain
@@ -95,7 +96,7 @@ export default {
       width: 100%
       font-weight: bold
       color: white
-      top: 80%
+      bottom: 0
       background-color: #17161633
       height: 40px
       &.hasControl

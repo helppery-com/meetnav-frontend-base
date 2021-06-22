@@ -49,15 +49,19 @@ export const mutations = mutationTree(state, {
 export const actions = actionTree(
   { state, getters, mutations },
   {
-    async login ({ state }, { username, password, displayName, email }) {
-      const user = await api.login(username, password)
+    async login ({ state }, { username, password, displayName, email, guestEmail }) {
+      const userLogged = await api.login(username, password)
+      const { user } = userLogged
+      if (guestEmail) {
+        user.guestEmail = guestEmail
+      }
       if (displayName) {
         user.displayName = displayName
       }
       if (email) {
         user.email = email
       }
-      storex.user.setUser(user)
+      storex.user.setUser(userLogged)
     },
     logout () {
       storex.user.setUser({ user: null, jwt: null })

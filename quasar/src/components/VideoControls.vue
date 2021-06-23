@@ -4,6 +4,7 @@
       :icon="rtcmuted ? 'fas fa-microphone-alt-slash' : 'fas fa-microphone-alt'"
       :color="rtcmuted ? 'dark' : 'primary'"
       class="col-auto" @click="toggleAudio" />
+    <q-icon name="fas fa-sign-out-alt" color="red" class="col-auto btn" @click="leave = true" size="xl"/>
     <q-btn round outline
       v-for="(camera, ix) in cameras" :key="ix"
       :icon="paused ? 'fas fa-video-slash' : 'fas fa-video'"
@@ -21,27 +22,24 @@
       icon="fas fa-share-alt"
       color="accent"
       class="col-auto" @click="share = true"/>
-    <q-input rounded
-      :label="$t('Type a message')"
-      outlined
-      dense
-      v-model="text"
-      class="col-4"
-      @keydown.enter="sendMessage"
-    >
-      <template v-slot:append>
-        <NekoEmotes />
-      </template>
-    </q-input>
-    <q-btn round outline
-      icon="chat"
-      color="dark"
-      class="p-pa-none" @click="notifyChat">
-      <q-tooltip>
-       {{ $t('Open/Close chat window') }}
-      </q-tooltip>
-    </q-btn>
-    <q-btn round outline icon="fas fa-sign-out-alt" color="red" class="col-auto" @click="leave = true"/>
+    <q-btn round outline icon="chat" @click="$storex.room.toggleChat()" />
+    <NekoEmotes />
+    <q-dialog v-model="share" transition-show="scale" transition-hide="scale">
+      <q-card class="bg-white text-primary" style="width: 600px">
+        <q-card-section>
+          <div class="text-h5">
+            {{ $t('Share') }}
+          </div>
+        </q-card-section>
+
+        <q-card-section class="bg-white">
+          <Social :url="shareUrl"/>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn outline :label="$t('Back')" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-dialog v-model="leave" transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-primary" style="width: 600px">
         <q-card-section>
@@ -71,22 +69,6 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="share" transition-show="scale" transition-hide="scale">
-      <q-card class="bg-white text-primary" style="width: 600px">
-        <q-card-section>
-          <div class="text-h5">
-            {{ $t('Share') }}
-          </div>
-        </q-card-section>
-
-        <q-card-section class="bg-white">
-          <Social :url="shareUrl"/>
-        </q-card-section>
-        <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn outline :label="$t('Back')" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 <script>
@@ -105,7 +87,8 @@ export default {
       share: false,
       text: '',
       rating: 0,
-      fullScreen: false
+      fullScreen: false,
+      chatStatus: this.$storex.room.showChat
     }
   },
   computed: {
@@ -213,9 +196,16 @@ export default {
       if (this.fullScreen) {
         await AppFullscreen.exit()
         this.fullScreen = false
+        if (this.chatStatus !== this.$storex.room.showChat) {
+          this.$storex.room.toggleChat()
+        }
       } else {
         await AppFullscreen.request()
         this.fullScreen = true
+        this.chatStatus = this.$storex.room.showChat
+        if (this.chatStatus) {
+          this.$storex.room.toggleChat()
+        }
       }
     }
   }

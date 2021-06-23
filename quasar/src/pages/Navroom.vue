@@ -1,12 +1,13 @@
 <template>
-  <q-page class="navroom-page row q-pa-md">
-    <div :class="['users relative-position column', `col-${userVideoCol}`]">
-      <div class="col relative-position">
-        <VideoControls />
+  <q-page class="navroom-page column">
+    <div class="col row">
+      <div
+        :class="['users relative-position column', `col-${userVideoCol}`]">
         <Dish
-          class="fit col"
+          class="col"
           :cameras="cameras"
           :colSize="userVideoCol"
+          v-if="false"
         >
           <template v-slot:camera="{ camera }">
             <UserVideo
@@ -15,16 +16,38 @@
             />
           </template>
         </Dish>
+        <div class="col column" v-for="(camera, ix) in cameras" :key="ix">
+          <UserVideo
+              class="col"
+              :stream="camera"
+              :showUserInfo="true"
+            />
+        </div>
+      </div>
+      <NekoVideo :class="['col rounded-borders q-pa-md']" @connected="ref => nekoVideoRef = ref" v-if="connected" />
+      <div
+        :class="['users relative-position column', `col-${userVideoCol}`]"
+        v-if="$storex.room.showChat"
+      >
+        <div class="col column relative-position">
+          <q-scroll-area class="col fit chat">
+            <div class="q-pa-sm fit">
+              <NekoChat />
+            </div>
+          </q-scroll-area>
+        </div>
       </div>
     </div>
-    <div class="col">
-      <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
+    <div class="col-auto row q-pb-md bg-black">
+      <VideoControls class="col-auto q-gutter-md" style="margin:auto"/>
     </div>
     <q-dialog
       v-model="welcome"
       transition-show="scale"
       transition-hide="scale"
-      persistent>
+      :persistent="!isAdmin"
+      @hide="$storex.room.toggleChat()"
+    >
       <q-card class="bg-primary text-white" style="width: 300px">
         <q-card-section>
           <div class="text-h6">
@@ -60,6 +83,7 @@ import Commercial from '../components/Commercial'
 import UserVideo from '../components/UserVideo'
 import Dish from '../components/Dish'
 import VideoControls from '../components/VideoControls.vue'
+import NekoChat from '../components/neko/NekoChat'
 
 import '../assets/styles/vendor/_emote.scss'
 
@@ -69,7 +93,8 @@ export default {
     Commercial,
     UserVideo,
     VideoControls,
-    Dish
+    Dish,
+    NekoChat
   },
   data () {
     return {
@@ -81,13 +106,23 @@ export default {
       welcome: false,
       rating: 0,
       commercialLink: null,
-      userVideoCol: 3
+      userVideoCol: 2,
+      myCam: null,
+      guestCams: null,
+      openChat: false
     }
   },
   computed: {
+    myCamera () {
+      const myCams = this.cameras.filter(c => c[0].extra.id === this.$storex.user.user.id)
+      return myCams.length ? myCams[0] : null
+    },
+    guestCameras () {
+      const cams = this.cameras.filter(c => c[0].extra.id !== this.$storex.user.user.id)
+      return cams.length ? cams : null
+    },
     cameras () {
-      const users = this.users
-      return Object.keys(users).map(k => users[k])
+      return Object.keys(this.users).map(k => this.users[k])
     },
     isDebug () {
       return this.$route.query.debug
@@ -135,6 +170,9 @@ export default {
     },
     incognito () {
       return this.$storex.room.muted && this.$storex.room.paused
+    },
+    isAdmin () {
+      return this.$storex.user.user.role.description === 'administrator'
     }
   },
   watch: {
@@ -145,6 +183,10 @@ export default {
     },
     connected () {
       console.log('Connected')
+    },
+    cameras () {
+      this.myCam = this.myCamera
+      this.guestCams = this.guestCameras
     }
   },
   async created () {
@@ -216,4 +258,15 @@ export default {
     .dish
       .camera
         border-radius: 5px
+
+    .q-scrollarea
+      .absolute.full-width
+        height: 100% !important
+    .neko-chat
+      .neko-emoji
+        width: 100% !important
+      .message
+        margin-top: 3px
+        background-color: #ffffffe0 !important
+        border-radius: 5px !important
 </style>

@@ -80,8 +80,8 @@ export default {
       height: 100%
       object-fit: cover
     &.paused
-      background-image: url(https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png)
-      background-size: contain
+      background-image: url('/incognito-mode.png')
+      background-size: cover
       background-repeat: no-repeat
       video
         opacity: 0
@@ -97,8 +97,8 @@ export default {
       font-weight: bold
       color: white
       bottom: 0
-      background-color: #17161633
-      height: 40px
+      background-color: #171616d4
+      height: 10%
       &.hasControl
         background-color: $accent
 </style>

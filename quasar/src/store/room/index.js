@@ -34,7 +34,8 @@ export const state = () => ({
   userStream: null,
   hasControl: false,
   host: null,
-  autoReconnect: null
+  autoReconnect: null,
+  showChat: false
 })
 
 // Computed state
@@ -123,6 +124,9 @@ export const mutations = mutationTree(state, {
   },
   setRoomStyle (state, style) {
     state.room.style = style
+  },
+  toggleChat (state) {
+    state.showChat = !state.showChat
   }
 })
 
@@ -143,6 +147,9 @@ export const actions = actionTree(
   { state, getters, mutations },
   {
     async openOrJoin ({ state }, settings) {
+      if (state.showChat) {
+        storex.room.toogleChat()
+      }
       const { template, roomId, username, calling, email } = settings
       let room = null
       if (calling) {
@@ -175,16 +182,16 @@ export const actions = actionTree(
         nekoMembersMap[members[k].displayname] = k
       })
       function getMemberId (message) {
-        const { user, username: displayName } = message
-        let id = nekoMembersMap[displayName]
+        const { user, username: displayname } = message
+        let id = nekoMembersMap[displayname]
         if (!id) {
           id = `fake_${user}`
           members[id] = {
             id,
-            displayName,
+            displayname,
             fake: true
           }
-          nekoMembersMap[displayName] = id
+          nekoMembersMap[displayname] = id
         }
         return id
       }

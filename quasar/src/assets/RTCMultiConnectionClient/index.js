@@ -218,9 +218,9 @@ export default class RTCNavroom {
     return function (e) {
       org.call(this.connection, e)
       this.updatedAt = e.updatedAt = new Date()
-      if (e.muteType === 'video') {
+      /* if (e.muteType === 'video') {
         e.mediaElement.setAttribute('poster', '/incognito-mode.png')
-      }
+      } */
     }
   }
 
@@ -237,22 +237,27 @@ export default class RTCNavroom {
   onStream (stream) {
     console.log('RTC on stream', stream)
     stream.updatedAt = new Date()
-    stream.mediaElement.snapshot = '/incognito-mode.png'
+    // stream.mediaElement.snapshot = '/incognito-mode.png'
+    stream.mediaElement.poster = ''
     stream.extra = this.decodeExtra(stream.extra)
     const { userid, extra } = stream
-    this.streams[extra.username || userid] = stream
-    if (extra.username === this.user.username) {
-      this.userStream = stream
-      this.connected = true
-      try {
-        this.startRecording(stream.stream)
-      } catch(ex) {
-        console.error('Error recording stream', ex)
+    if (extra.id) {
+      this.streams[extra.username || userid] = stream
+      if (extra.username === this.user.username) {
+        this.userStream = stream
+        this.connected = true
+        try {
+          this.startRecording(stream.stream)
+        } catch(ex) {
+          console.error('Error recording stream', ex)
+        }
       }
-    }
-    this.onUserConnected(stream)
-    if (this.isHost || extra.isHost) {
-      this.anyHostConnected = true
+      this.onUserConnected(stream)
+      if (this.isHost || extra.isHost) {
+        this.anyHostConnected = true
+      }
+    } else {
+      console.error('Invalid stream', stream)
     }
   }
 

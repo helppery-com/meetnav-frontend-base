@@ -5,6 +5,8 @@ export default {
   searchPlaceholder: 'Start searching Internet together',
   welcomePage:
     {
+      Language: 'Language',
+      'Playing together': 'Playing together',
       login: 'LOGIN',
       moreLogin: {
         username: 'Username or Email',
@@ -71,5 +73,9 @@ export default {
     join: 'join',
     cancel: 'cancel',
     waiting: 'is waiting to join.'
-  }
+  },
+  'Quick session': 'Quick session',
+  'Watching together': 'Watching together',
+  'Shopping together': 'Shopping together',
+  'Playing together': 'Playing together'
 }

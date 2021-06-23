@@ -1,5 +1,41 @@
 import { storex } from '../store'
+const beforeEnter = (to, from, next) => {
+  if (to.matched.some(record => record.meta.userRequired)) {
+    const { user } = storex.user
+    if (!user) {
+      next('/')
+    }
+  }
+  if (to.matched.some(record => record.meta.userAdmin)) {
+    const { user } = storex.user
+    if (!user || user.role.name !== 'administrator') {
+      next('/')
+    }
+  }
+  next()
+}
 const routes = [
+  {
+    path: '/widget',
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/WidgetConnect.vue')
+      }
+    ],
+    beforeEnter
+  },
+  {
+    path: '/admin',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Admin.vue')
+      }
+    ],
+    meta: { userAdmin: true },
+    beforeEnter
+  },
   {
     path: '/@:username',
     component: () => import('layouts/MainLayout.vue'),
@@ -20,6 +56,7 @@ const routes = [
   },
   {
     path: '/',
+    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Home.vue') },
@@ -32,15 +69,7 @@ const routes = [
         meta: { userRequired: true }
       }
     ],
-    beforeEnter (to, from, next) {
-      if (to.matched.some(record => record.meta.userRequired)) {
-        const { user } = storex.user
-        if (!user) {
-          next('/')
-        }
-      }
-      next()
-    }
+    beforeEnter
   },
   {
     path: '/search',
@@ -88,6 +117,24 @@ const routes = [
     ]
   },
   {
+    path: '/@:username/call',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Navroom.vue')
+      }
+    ]
+  },
+  {
+    path: '/navroom/@:username/call',
+    component: () => import('layouts/RoomLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Navroom.vue')
+      }
+    ]
+  },
+  {
     path: '/navroom/:roomId',
     component: () => import('layouts/RoomLayout.vue'),
     children: [
@@ -98,6 +145,7 @@ const routes = [
   },
   {
     path: '/navroom',
+    name: 'navroom',
     component: () => import('layouts/RoomLayout.vue'),
     children: [
       {

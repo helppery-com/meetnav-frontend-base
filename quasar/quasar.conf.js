@@ -123,7 +123,8 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Notify',
-        'Cookies'
+        'Cookies',
+        'AppFullscreen'
       ]
     },
 

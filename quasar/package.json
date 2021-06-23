@@ -16,9 +16,13 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@quasar/extras": "^1.0.0",
+    "@webzlodimir/vue-bottom-sheet": "^1.2.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "easytimer.js": "^4.3.2",
     "emoji-datasource": "^5.0.1",
+    "has-binary2": "^2.0.0",
+    "isarray": "^2.0.5",
     "neko-client": "file:../../neko/client",
     "quasar": "^1.0.0",
     "rtcmulticonnection": "^3.7.0",
@@ -26,8 +30,10 @@
     "touch-events": "0.0.7",
     "typed-vuex": "^0.1.22",
     "v-tooltip": "^2.1.2",
+    "vue-advanced-chat": "^0.8.4",
     "vue-i18n": "^8.22.4",
     "vue-socialmedia-share": "^1.0.1",
+    "vuejs-ace-editor": "^1.0.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

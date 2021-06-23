@@ -6,12 +6,22 @@ class Api {
   user = null
   baseUrl = process.env.API_ROOT
   sessionId = uuidv4()
+  logsBuffer = []
+  logsTimer = -1
 
   url (path) {
     if (this.baseUrl) {
       return this.baseUrl + path
     }
     return path
+  }
+
+  get mediaUrl () {
+    return this.baseUrl
+  }
+
+  get uploadUrl () {
+    return this.url('/upload')
   }
 
   get headers () {
@@ -32,15 +42,25 @@ class Api {
     await axios.post(this.url('/auth/local/register'), { username, email, password })
   }
 
-  async createRoom (template) {
+  async registerGuest (email) {
+    await axios.get(this.url('/accounts/registerGuest?email=' + email))
+  }
+
+  async createRoom (settings) {
     const headers = this.headers
-    const res = await axios.post(this.url('/nekos'), { template }, { headers })
+    const res = await axios.post(this.url('/nekos'), settings, { headers })
     return res.data
   }
 
-  async joinRoom (roomId) {
+  async waitRoom (user, account, template, email) {
     const headers = this.headers
-    const res = await axios.put(this.url(`/nekos/${roomId}`), { }, { headers })
+    const res = await axios.post(this.url('/nekos/wait'), { ...user, account, template, email }, { headers })
+    return res.data
+  }
+
+  async joinRoom (roomId, template) {
+    const headers = this.headers
+    const res = await axios.put(this.url(`/nekos/${roomId}/join`), { template }, { headers })
     return res.data
   }
 
@@ -57,8 +77,26 @@ class Api {
   }
 
   async log (logEntry) {
+    this.logsBuffer.push(logEntry)
+    clearTimeout(this.logsTimer)
+    this.logsTimer = setTimeout(() => {
+      const headers = this.headers
+      const logs = this.logsBuffer
+      this.logsBuffer = []
+      axios.post(this.url('/logs'), { logs, source: 'client', session_id: this.sessionId }, { headers })
+    }, 2000)
+  }
+
+  async nekotemplates () {
     const headers = this.headers
-    await axios.post(this.url('/logs'), { ...logEntry, source: 'client', session_id: this.sessionId }, { headers })
+    const res = await axios.get(this.url('/nekotemplates'), { headers })
+    return res.data
+  }
+
+  async chat (roomId, message) {
+    const headers = this.headers
+    const res = await axios.post(this.url(`/nekos/${roomId}/chat`), { message }, { headers })
+    return res.data
   }
 }
 const api = new Api()

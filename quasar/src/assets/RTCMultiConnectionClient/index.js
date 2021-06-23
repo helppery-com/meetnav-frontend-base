@@ -32,6 +32,7 @@ export default class RTCNavroom {
   acceptedParticipants = []
   updatedAt = new Date()
   isHost = false
+  recorder = null
 
   onMessage = () => {}
   onUserConnected (event) {}
@@ -77,7 +78,7 @@ export default class RTCNavroom {
       // logging.info('lowBandwith', connection)
       connection.bandwidth = {
         audio: 50, // 50 kbps
-        video: 150, // 256 kbps
+        video: 300, // 256 kbps
         screen: 300 // 300 kbps
       }
       connection.mediaConstraints = {
@@ -217,9 +218,9 @@ export default class RTCNavroom {
     return function (e) {
       org.call(this.connection, e)
       this.updatedAt = e.updatedAt = new Date()
-      if (e.muteType === 'video') {
+      /* if (e.muteType === 'video') {
         e.mediaElement.setAttribute('poster', '/incognito-mode.png')
-      }
+      } */
     }
   }
 
@@ -236,18 +237,41 @@ export default class RTCNavroom {
   onStream (stream) {
     console.log('RTC on stream', stream)
     stream.updatedAt = new Date()
-    stream.mediaElement.snapshot = '/incognito-mode.png'
+    // stream.mediaElement.snapshot = '/incognito-mode.png'
+    stream.mediaElement.poster = ''
     stream.extra = this.decodeExtra(stream.extra)
     const { userid, extra } = stream
-    this.streams[extra.username || userid] = stream
-    if (extra.username === this.user.username) {
-      this.userStream = stream
-      this.connected = true
+    if (extra.id) {
+      this.streams[extra.username || userid] = stream
+      if (extra.username === this.user.username) {
+        this.userStream = stream
+        this.connected = true
+        try {
+          this.startRecording(stream.stream)
+        } catch(ex) {
+          console.error('Error recording stream', ex)
+        }
+      }
+      this.onUserConnected(stream)
+      if (this.isHost || extra.isHost) {
+        this.anyHostConnected = true
+      }
+    } else {
+      console.error('Invalid stream', stream)
     }
-    this.onUserConnected(stream)
-    if (this.isHost || extra.isHost) {
-      this.anyHostConnected = true
+  }
+
+  startRecording (stream) {
+    const options = {
+      audioBitsPerSecond : 128000,
+      videoBitsPerSecond : 0,
+      mimeType : 'video/webm;codecs=vp9'
     }
+    this.recorder = new MediaRecorder(stream, options)
+    this.recorder.ondataavailable = function(e) {
+      // console.log('Video data available, size: ' + (e.data||{size: 0}).size);
+    }
+    this.recorder.start(5000)
   }
 
   onClose (event) {
@@ -339,7 +363,10 @@ export default class RTCNavroom {
       this.userStream.stream.mute('video')
       this.isPaused = true
     } else {
-      this.userStream.stream.unmute('video')
+      this.userStream.stream.unmute()
+      if (this.isMuted) {
+        this.userStream.stream.mute('audio')
+      }
       this.isPaused = false
     }
   }

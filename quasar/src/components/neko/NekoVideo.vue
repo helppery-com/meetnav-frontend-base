@@ -1,19 +1,16 @@
 <template>
-  <div :class="['neko-video', 'fit', hashControlClass]">
+  <div :class="['neko-video', '', hashControlClass]" ref="pointerLayer">
     <neko-video ref="nekoVideo" class="rounded-borders" />
     <div class="me-pointer" :style="customCursor">
       <q-chip dense :icon="hasControl ? 'mouse' : 'visibility'"
-        :color="hasControl ? 'primary' : me.color"
+        :color="hasControl ? 'primary' : 'dark'"
         class="text-white"
-        v-if="me"
-      >You!</q-chip>
+        v-if="me && !hasControl"
+      >{{ hasControl ? 'You!' : 'You, click to control!' }}</q-chip>
     </div>
     <div v-for="(pointer, ix) in pointers"
       :key="ix"
-      :style="{ ...customCursor,
-              left: `${pointer.x}px`,
-              top: `${pointer.y}px`
-      }">
+      :style="remotePointerStyle(pointer)">
       <q-chip dense :icon="pointer.hasControl ? 'mouse' : 'visibility'"
         :color="pointer.hasControl ? 'primary' : pointer.color"
         class="text-white"
@@ -134,7 +131,7 @@ export default {
       return neko.connected && neko.user.member
     },
     hasControl () {
-      return neko.remote.hosting
+      return this.$storex.room.hasControl
     },
     hashControlClass () {
       return this.hasControl ? 'hasControl' : 'viewOnly'
@@ -146,16 +143,14 @@ export default {
       if (this.overlayLastCursorPosition === null) {
         return { display: 'none' }
       }
-      const { screenX: x, screenY: y } = this.overlayLastCursorPosition
-      const { y: overlayY } = this.getPlayer().getBoundingClientRect()
-      const { y: bodyY } = document.body.getBoundingClientRect()
+      const { layerX: x, layerY: y, target } = this.overlayLastCursorPosition
+      const { left } = target.getBoundingClientRect()
       return {
-        left: (x + 10) + 'px',
-        top: (y - overlayY + bodyY) + 'px',
+        left: (x + left + 3) + 'px',
+        top: y + 'px',
         position: 'absolute',
         width: '24px',
         height: '24p',
-        cursor: 'none',
         display: 'grid'
       }
     },
@@ -196,6 +191,18 @@ export default {
     // this.updateBgCanvas()
   },
   methods: {
+    remotePointerStyle (pointer) {
+      const { px, py } = pointer
+      const overlay = this.getOverlay()
+      const x = overlay.clientWidth / 100 * px
+      const y = overlay.clientHeight / 100 * py
+      const { left } = overlay.getBoundingClientRect()
+      return {
+        ...this.customCursor,
+        left: `${left + x}px`,
+        top: `${y}px`
+      }
+    },
     updateBgCanvas () {
       const video = this.getVideo()
       if (video) {
@@ -244,12 +251,14 @@ export default {
     },
     onOverlayMouseMove (e) {
       this.overlayLastCursorPosition = e
-      const { clientX: x, clientY: y } = this.overlayLastCursorPosition
+      const { layerX, layerY, target } = this.overlayLastCursorPosition
+      const px = 100 / target.clientWidth * layerX
+      const py = 100 / target.clientHeight * layerY
       this.$storex.room.sendRoomMessage({
         event: 'mousemove',
         hasControl: this.hasControl,
-        x,
-        y
+        px,
+        py
       })
     },
     onOverlayMousedown (e) {
@@ -377,8 +386,12 @@ export default {
           video
             border-radius: 5px
           .overlay
+
             &:focus
               outline: none
             background-position: center
             transition: background 0.8s
+    &.viewOnly
+      .overlay
+        cursor: none
 </style>

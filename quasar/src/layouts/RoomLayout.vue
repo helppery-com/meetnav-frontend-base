@@ -53,6 +53,9 @@ export default {
     anyUser () {
       return Object.keys(this.$storex.room.streams).length !== 0
     },
+    permissionState () {
+      return this.$store.permissionState
+    },
     debugUserStreams () {
       let debug = this.isDebug
       const streams = this.$storex.room.streams

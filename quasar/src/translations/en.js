@@ -66,7 +66,9 @@ export default {
   },
   coBrowsePage: {
     invite: 'INVITE PEOPLE',
-    instructions: 'you have to be two or more to start navigating internet together'
+    instructions: 'you have to be two or more to start navigating internet together',
+    permission: 'ops, your camera and microphone are not enabled, please enable them to contine',
+    allowPermission: 'How to allow camera & mic permissions ?'
   },
   connectionRequest: {
     newRequest: 'New Request',

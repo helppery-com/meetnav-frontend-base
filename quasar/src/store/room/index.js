@@ -11,6 +11,14 @@ window.io = io
 Vue.prototype.$accessor = neko
 window.$neko = neko
 
+// Hack neko chat
+
+const _sendMessage = neko.chat.sendMessage
+neko.chat.sendMessage = function (...args) {
+  _sendMessage.apply(neko, args)
+  api.chat(storex.room.roomId, args[0])
+}
+
 // Module state
 export const state = () => ({
   rtcConnecting: false,
@@ -26,7 +34,8 @@ export const state = () => ({
   userStream: null,
   hasControl: false,
   host: null,
-  autoReconnect: null
+  autoReconnect: null,
+  showChat: false
 })
 
 // Computed state
@@ -115,6 +124,9 @@ export const mutations = mutationTree(state, {
   },
   setRoomStyle (state, style) {
     state.room.style = style
+  },
+  toggleChat (state) {
+    state.showChat = !state.showChat
   }
 })
 
@@ -135,26 +147,61 @@ export const actions = actionTree(
   { state, getters, mutations },
   {
     async openOrJoin ({ state }, settings) {
-      const { template, roomId, username, calling } = settings
+      if (state.showChat) {
+        storex.room.toogleChat()
+      }
+      const { template, roomId, username, calling, email } = settings
       let room = null
       if (calling) {
-        room = await api.waitRoom(storex.user.user, username, template)
+        room = await api.waitRoom(storex.user.user, username, template, email)
       } else if (!roomId) {
         room = await api.createRoom(settings)
       } else {
         room = await api.joinRoom(roomId, template)
       }
       if (room) {
-        await storex.room.connect(room)
         const rtc = await connectRTC(room.roomId)
-        neko.settings.setScroll(5)
         storex.room.setRTC(rtc)
+        await storex.room.connect(room)
+        neko.settings.setScroll(5)
         storex.room.setRoom(room)
         storex.room.setNekoConnected(true)
+        storex.room.initChat()
       } else {
         storex.room.leave()
         throw new Error('Could not open room')
       }
+    },
+    initChat ({ state }) {
+      const { room } = state
+      const { members } = neko.user
+      const { chat } = room
+      const memberIds = Object.keys(members)
+      const nekoMembersMap = {}
+      memberIds.forEach(k => {
+        nekoMembersMap[members[k].displayname] = k
+      })
+      function getMemberId (message) {
+        const { user, username: displayname } = message
+        let id = nekoMembersMap[displayname]
+        if (!id) {
+          id = `fake_${user}`
+          members[id] = {
+            id,
+            displayname,
+            fake: true
+          }
+          nekoMembersMap[displayname] = id
+        }
+        return id
+      }
+      const messages = chat.map(c => ({
+        id: getMemberId(c),
+        content: c.message.content,
+        created: new Date(Date.parse(c.message.created)),
+        type: 'text'
+      }))
+      messages.forEach(m => neko.chat.addMessage(m))
     },
     async connect ({ state }, { wurl, password }) {
       const user = storex.user.user
@@ -175,6 +222,12 @@ export const actions = actionTree(
         let attempts = 10
         const check = () => setTimeout(() => {
           if (neko.user.member) {
+            storex.room.sendRoomMessage({
+              event: 'nekoconnected',
+              nekoId: neko.user.member.id,
+              userId: storex.user.user.id
+            })
+            neko.user.member.userid = storex.user.user.id
             resolve()
           } else {
             if (--attempts) {
@@ -208,12 +261,14 @@ export const actions = actionTree(
       }
       storex.room.reset()
     },
-    async closeRoom ({ state }) {
+    async closeRoom ({ state }, close) {
       if (!state.rtcConnected) {
         return
       }
-      await api.closeRoom(state.rtc.roomId)
       storex.room.leave()
+      if (close) {
+        await api.closeRoom(state.rtc.roomId)
+      }
     },
     sendRoomMessage ({ state }, message) {
       state.rtc.send({
@@ -244,6 +299,10 @@ export const actions = actionTree(
       }
       if (message.event.startsWith('touch')) {
         console.log(message)
+      }
+      if (message.event === 'nekoconnected') {
+        const { nekoId, userId } = message
+        neko.user.members[nekoId].meetnavId = userId
       }
     },
     removePointer ({ state }, id) {

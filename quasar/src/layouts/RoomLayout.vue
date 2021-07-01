@@ -5,14 +5,11 @@
     elevated class="bg-white header">
       <q-toolbar class="row">
         <q-toolbar-title class="col text-primary text-h5" >
-          <UserMenu class="btn"/>
           <span>meetnav</span>
         </q-toolbar-title>
-        <VideoControls
-          class="col-8 justify-center row q-gutter-md"
-          @chat="openChat = !openChat"
-          @message="onMessage"
-        />
+        <div class="text-accent text-h3">
+          {{ roomId }}
+        </div>
         <div class="col row justify-end">
         </div>
       </q-toolbar>
@@ -39,17 +36,12 @@
 
 <script>
 import GuestLogin from '../components/GuestLogin'
-import VideoControls from '../components/VideoControls'
 import NekoChat from '../components/neko/NekoChat'
-
-import UserMenu from '../components/UserMenu'
 
 export default {
   components: {
     GuestLogin,
-    VideoControls,
-    NekoChat,
-    UserMenu
+    NekoChat
   },
   data () {
     return {
@@ -60,6 +52,9 @@ export default {
     }
   },
   computed: {
+    isAdmin () {
+      return this.$storex.user.user.role.description === 'administrator'
+    },
     isDebug () {
       return this.$route.query.debug
     },
@@ -98,13 +93,13 @@ export default {
     },
     messages () {
       return this.$storex.room.messages
+    },
+    roomId () {
+      return this.$route.path.split('/').reverse()[0]
     }
   },
   watch: {
     messages () {
-      if (!this.openChat) {
-        this.openChat = true
-      }
     }
   },
   methods: {
@@ -118,9 +113,13 @@ export default {
     },
     onMessage (msg) {
       this.$storex.room.neko.chat.sendMessage(msg)
-      if (!this.openChat) {
-        this.openChat = true
-      }
+    },
+    justLeave () {
+      this.$router.push('/')
+    },
+    closeRoom (close) {
+      this.$storex.room.closeRoom(close)
+      this.justLeave()
     }
   }
 }

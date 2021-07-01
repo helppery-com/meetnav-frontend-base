@@ -57,7 +57,7 @@ export default {
     onGuest () {
       this.loading = true
       const displayName = this.email.split('@')[0].replace(/[^a-zA-Z0-9]/, '')
-      this.$root.$emit('login', { username: 'guest', password: 'guest', displayName, email: this.email })
+      this.$root.$emit('login', { username: 'guest', password: 'guest', displayName, guestEmail: this.email })
       // this.$storex.user.registerGuest(this.email)
     },
     onLogin () {

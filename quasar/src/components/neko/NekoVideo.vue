@@ -1,5 +1,5 @@
 <template>
-  <div :class="['neko-video', 'fit', hashControlClass]" ref="pointerLayer">
+  <div :class="['neko-video', '', hashControlClass]" ref="pointerLayer">
     <neko-video ref="nekoVideo" class="rounded-borders" />
     <div class="me-pointer" :style="customCursor">
       <q-chip dense :icon="hasControl ? 'mouse' : 'visibility'"

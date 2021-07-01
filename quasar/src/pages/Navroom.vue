@@ -1,52 +1,80 @@
 <template>
   <q-page class="navroom-page column">
-    <div class="col row">
+    <GuestLogin v-if="!user" />
+    <div class="col row" v-if="termsAccepted">
       <div
-        :class="['users relative-position column', `col-${userVideoCol}`]">
-        <Dish
-          class="col"
-          :cameras="cameras"
-          :colSize="userVideoCol"
-          v-if="false"
-        >
-          <template v-slot:camera="{ camera }">
-            <UserVideo
-              :stream="camera"
-              :showUserInfo="true"
-            />
-          </template>
-        </Dish>
-        <div class="col column" v-for="(camera, ix) in cameras" :key="ix">
-          <UserVideo
-              class="col"
-              :stream="camera"
-              :showUserInfo="true"
-            />
-        </div>
-      </div>
-      <NekoVideo :class="['col rounded-borders q-pa-md']" @connected="ref => nekoVideoRef = ref" v-if="connected" />
-      <div
-        :class="['users relative-position column', `col-${userVideoCol}`]"
+        :class="['users relative-position column', `col-${chatCol}`]"
         v-if="$storex.room.showChat"
       >
         <div class="col column relative-position">
-          <q-scroll-area class="col fit chat">
+          <q-scroll-area class="col fit chat" v-if="connected">
             <div class="q-pa-sm fit">
               <NekoChat />
             </div>
           </q-scroll-area>
         </div>
       </div>
-    </div>
-    <div class="col-auto row q-pb-md bg-black">
-      <VideoControls class="col-auto q-gutter-md" style="margin:auto"/>
+      <div class="col column">
+        <NekoVideo :class="['col rounded-borders q-py-md q-px-xs']" @connected="ref => nekoVideoRef = ref" v-if="connected" />
+        <div class="col-auto row q-pb-md">
+          <VideoControls class="col-auto video-controls" v-if="connected"/>
+        </div>
+      </div>
+      <div
+        :class="['users relative-position column', `col-${userVideoCol}`]">
+        <q-card :class="['col column', ix ? 'q-mt-xs' : '']" v-for="(camera, ix) in cameras" :key="ix">
+          <UserVideo
+              class="col"
+              :stream="camera"
+              :showUserInfo="true"
+            />
+        </q-card>
+        <div class="col-auto column q-py-xs">
+          <q-card class="col-auto q-pa-xs" v-for="(offlineUser, ix) in offlineUsers" :key="ix">
+            <q-card-section class="row q-pa-xs ">
+              <q-avatar class="col-auto">
+                <img :src="offlineUser.avatar" />
+              </q-avatar>
+              <div class="col column q-ml-md">
+                <div class="col text-h6">{{ $t('Offline') }}</div>
+                <div class="col">{{ offlineUser.username }}</div>
+              </div>
+              <div class="col-auto row q-gutter-xs">
+                <q-btn color="accent" :class="['col', callingOfflineUser ? 'pulse' : '']" icon="call" @click="callOfflineUser(offlineUser)" />
+                <q-btn color="primary" class="col" icon="send" @click="openSendDlg(offlineUser)" />
+                <q-dialog v-model="openSend" persistent>
+                  <q-card style="min-width: 350px">
+                    <q-card-section>
+                      <div class="text-h6" v-if="offlineUserSendMessage">{{ `${$t('Write your message for')} @${offlineUserSendMessage.username}`}}</div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-none">
+                      <q-input dense v-model="offlineUserMessage" autofocus @keyup.enter="prompt = false" />
+                      <q-toggle
+                        v-model="sendToChat"
+                        color="pink"
+                        icon="chat"
+                        :label="$t('Send message to room\'s chat as well')"
+                    />
+                    </q-card-section>
+
+                    <q-card-actions align="right" class="text-primary">
+                      <q-btn flat color="accent" :label="$t('Send')" v-close-popup @click="sendOfflineUserMessage"/>
+                      <q-btn :label="$t('Cancel')" color="red" v-close-popup />
+                    </q-card-actions>
+                  </q-card>
+                </q-dialog>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
     </div>
     <q-dialog
       v-model="welcome"
       transition-show="scale"
       transition-hide="scale"
       :persistent="!isAdmin"
-      @hide="$storex.room.toggleChat()"
     >
       <q-card class="bg-primary text-white" style="width: 300px">
         <q-card-section>
@@ -64,7 +92,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-teal" v-if="connected && commercialLink">
-          <q-btn outline color="primary" :label="$t('OK')" v-close-popup class="ref-navroom-ready" />
+          <q-btn outline color="primary" :label="$t('OK')" v-close-popup class="ref-navroom-ready" @click="termsAccepted = true" />
           <q-btn outline icon="fas fa-external-link-alt" color="accent" :label="$t('Visit sponsor')" @click="openCommercial" class="ref-navroom-sponsor-link" />
         </q-card-actions>
         <q-card-actions align="right" class="bg-white text-teal" v-else>
@@ -81,9 +109,9 @@
 import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
 import UserVideo from '../components/UserVideo'
-import Dish from '../components/Dish'
 import VideoControls from '../components/VideoControls.vue'
 import NekoChat from '../components/neko/NekoChat'
+import GuestLogin from '../components/GuestLogin.vue'
 
 import '../assets/styles/vendor/_emote.scss'
 
@@ -93,8 +121,8 @@ export default {
     Commercial,
     UserVideo,
     VideoControls,
-    Dish,
-    NekoChat
+    NekoChat,
+    GuestLogin
   },
   data () {
     return {
@@ -106,10 +134,17 @@ export default {
       welcome: false,
       rating: 0,
       commercialLink: null,
-      userVideoCol: 2,
+      userVideoCol: 3,
+      chatCol: 2,
       myCam: null,
       guestCams: null,
-      openChat: false
+      openChat: false,
+      openSend: false,
+      offlineUserSendMessage: null,
+      offlineUserMessage: '',
+      sendToChat: false,
+      callingOfflineUser: null,
+      termsAccepted: false
     }
   },
   computed: {
@@ -172,7 +207,21 @@ export default {
       return this.$storex.room.muted && this.$storex.room.paused
     },
     isAdmin () {
-      return this.$storex.user.user.role.description === 'administrator'
+      return this.$storex.user.user && this.$storex.user.user.role.description === 'administrator'
+    },
+    onlineUsers () {
+      return Object.keys(this.users).map(k => this.users[k][0].extra)
+    },
+    offlineUsers () {
+      const onlineUserIds = this.onlineUsers.map(u => u.id)
+      if (onlineUserIds.length === 0 || this.$storex.room.room === null) {
+        return []
+      }
+      const users = this.$storex.room.room.users
+      return users.filter(u => onlineUserIds.indexOf(u.id) === -1)
+    },
+    user () {
+      return this.$storex.user.user
     }
   },
   watch: {
@@ -190,10 +239,10 @@ export default {
     }
   },
   async created () {
-    if (!this.$storex.user.user) {
-      this.$root.$once('user-logged', () => this.openRoom())
-    } else {
+    if (this.user) {
       this.openRoom()
+    } else {
+      this.$root.$once('user-logged', () => this.openRoom())
     }
   },
   methods: {
@@ -211,6 +260,19 @@ export default {
       const height = parseInt(minHeight.replace('px', ''))
       const userCount = this.userCount
       return `${parseInt(height / userCount)}px`
+    },
+    openSendDlg (offlineUser) {
+      this.openSend = true
+      this.offlineUserSendMessage = offlineUser
+    },
+    sendOfflineUserMessage () {
+      if (this.sendToChat) {
+        this.$storex.room.sendChatMessage(`@${this.offlineUserSendMessage.username}: ${this.offlineUserMessage}`)
+      }
+    },
+    callOfflineUser (offlineUser) {
+      this.callingOfflineUser = offlineUser
+      setTimeout(() => { this.callingOfflineUser = null }, 40000)
     }
   },
   beforeDestroy () {
@@ -234,6 +296,12 @@ export default {
     .members
       video
         border-radius: 5px
+    .video-controls
+      margin: auto
+      border: 1px solid
+      border-radius: 50px
+      padding: 0px 3px 4px 0px
+      background-color: #717a7e
     .emotes
       max-witdh: 100%
       max-height: 100%

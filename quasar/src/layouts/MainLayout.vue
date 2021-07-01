@@ -5,8 +5,10 @@
       <div class="float-left">
         <p class="text-h2 q-ml-md main-heading">meetnav</p>
       </div>
-      <div v-if="user" class="float-right">
-        <q-btn round class="q-mt-md nav-button ref-user-menu">
+      <q-separator />
+      <div v-if="user" class="row justify-end">
+        <NekoRooms />
+        <q-btn round class="col-auto q-mt-md nav-button ref-user-menu">
           <q-avatar size="42px">
             <img :src="avatar">
           </q-avatar>
@@ -46,11 +48,14 @@
 import SharedFooter from 'components/SharedFooter'
 import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
+import NekoRooms from '../components/NekoRooms.vue'
+
 export default {
   components: {
     LoginBtn: Login,
     RegisterBtn: Registration,
-    SharedFooter: SharedFooter
+    SharedFooter,
+    NekoRooms
   },
   data () {
     return {

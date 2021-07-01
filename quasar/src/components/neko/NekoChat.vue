@@ -24,6 +24,10 @@ export default {
       margin-block-end: 0
       margin-inline-start: 0
       margin-inline-end: 0
+    .author
+      display: none
+    .content-body
+      padding-bottom: 10px
     div
       margin: 0
     span

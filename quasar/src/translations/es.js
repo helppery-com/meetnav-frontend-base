@@ -76,5 +76,22 @@ export default {
   'Quick session': 'Nueva sala',
   'Watching together': 'Ver videos juntos',
   'Shopping together': 'De compras juntos',
-  'Playing together': 'Jugando juntos'
+  'Playing together': 'Jugando juntos',
+  'Room is begin created': 'Abriendo la sala',
+  'By joining this room you accept terms and conditions.': 'Al continuar acepta los términos y condiciones.',
+  'Connecting...': 'Conectando...',
+  Leave: 'Salir',
+  'Leave room': 'Salir de la sala',
+  'How was your experience': '¿ Qué tal fue su experiencia?',
+  'Exit room': 'Salir de la sala',
+  Back: 'Volver',
+  Offline: 'Desconectado',
+  'Send message to room': 'Enviar un mensaje',
+  'Write your message for': 'Escribe tu mensaje para',
+  'Send message to room\'s chat as well': 'Enviar también al chat',
+  Send: 'Enviar',
+  Welcome: 'Bienvenido',
+  Email: 'Correo electrónico',
+  Guest: 'Invitado',
+  'Login with my account': 'Entrar con tu cuenta'
 }

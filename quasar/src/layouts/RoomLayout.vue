@@ -1,30 +1,18 @@
 <template>
   <q-layout view="hHh Lpr lff" class="room-layout" ref="layout">
-    <GuestLogin v-if="!user" />
     <q-header elevated class="bg-white header">
       <q-toolbar class="row">
         <q-toolbar-title class="col text-primary text-h5" >
           <span>meetnav</span>
         </q-toolbar-title>
-        <div class="text-accent text-h3">
-          {{ roomId }}
-        </div>
-        <div class="col row justify-end">
+        <div class="col row justify-end q-gutter-md" v-if="user">
+          <NekoRooms class="col q-ma-none" />
+          <q-avatar class="btn">
+            <img :src="user.avatar" />
+          </q-avatar>
         </div>
       </q-toolbar>
     </q-header>
-    <q-drawer
-      side="right"
-      v-model="openChat"
-      bordered
-      :breakpoint="500"
-    >
-      <q-scroll-area class="fit chat">
-        <div class="q-pa-sm fit">
-          <NekoChat />
-        </div>
-      </q-scroll-area>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -34,20 +22,19 @@
 </template>
 
 <script>
-import GuestLogin from '../components/GuestLogin'
-import NekoChat from '../components/neko/NekoChat'
+import NekoRooms from '../components/NekoRooms'
 
 export default {
   components: {
-    GuestLogin,
-    NekoChat
+    NekoRooms
   },
   data () {
     return {
       selectedLanguage: 'English',
       leave: false,
       openChat: false,
-      userMini: false
+      userMini: false,
+      rating: 0
     }
   },
   computed: {
@@ -114,7 +101,7 @@ export default {
       this.$router.push('/')
     },
     closeRoom (close) {
-      this.$storex.room.closeRoom(close)
+      this.$storex.room.closeLiveRoom(close)
       this.justLeave()
     }
   }

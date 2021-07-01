@@ -7,6 +7,8 @@ import io from 'socket.io-client'
 import RTCNavroom from '../../assets/RTCMultiConnectionClient'
 import { i18n } from '../../boot/i18n'
 
+export const namespaced = true
+
 window.io = io
 Vue.prototype.$accessor = neko
 window.$neko = neko
@@ -35,7 +37,8 @@ export const state = () => ({
   hasControl: false,
   host: null,
   autoReconnect: null,
-  showChat: false
+  showChat: false,
+  nekoRooms: []
 })
 
 // Computed state
@@ -48,7 +51,7 @@ export const getters = getterTree(state, {
   uploadUrl: () => api.uploadUrl,
   uploadHeaders: () => api.headers,
   mediaUrl: () => api.mediaUrl,
-  nekoTemplates: () => api.nekotemplates(),
+  nekoTemplates: () => api.user ? api.nekotemplates() : [],
   neko: () => neko
 })
 
@@ -127,18 +130,24 @@ export const mutations = mutationTree(state, {
   },
   toggleChat (state) {
     state.showChat = !state.showChat
+  },
+  setRooms (state, rooms) {
+    state.nekoRooms = rooms
   }
 })
 
-async function connectRTC (roomId) {
+async function connectRTC (roomId, incognito) {
   const rtc = new RTCNavroom({
     id: storex.user.user.id,
-    username: storex.user.displayName
+    username: storex.user.displayName,
+    email: storex.user.email,
+    avatar: storex.user.user.avatar
   })
   rtc.onUserConnected = storex.room.addStream.bind(this)
   rtc.onUserDisconnected = storex.room.removeStream.bind(storex)
   rtc.onMessage = storex.room.onRoomMessage.bind(storex)
-  rtc.connect(roomId)
+  const settings = { withCamera: !incognito, withMic: !incognito }
+  rtc.connect(roomId, settings)
   return rtc
 }
 
@@ -150,7 +159,7 @@ export const actions = actionTree(
       if (state.showChat) {
         storex.room.toogleChat()
       }
-      const { template, roomId, username, calling, email } = settings
+      const { template, roomId, username, calling, email, incognito } = settings
       let room = null
       if (calling) {
         room = await api.waitRoom(storex.user.user, username, template, email)
@@ -160,7 +169,7 @@ export const actions = actionTree(
         room = await api.joinRoom(roomId, template)
       }
       if (room) {
-        const rtc = await connectRTC(room.roomId)
+        const rtc = await connectRTC(room.roomId, incognito)
         storex.room.setRTC(rtc)
         await storex.room.connect(room)
         neko.settings.setScroll(5)
@@ -261,14 +270,23 @@ export const actions = actionTree(
       }
       storex.room.reset()
     },
-    async closeRoom ({ state }, close) {
+    async closeLiveRoom ({ state }, closeRemote) {
       if (!state.rtcConnected) {
         return
       }
       storex.room.leave()
-      if (close) {
+      if (closeRemote) {
         await api.closeRoom(state.rtc.roomId)
+        storex.room.loadUserRooms()
       }
+    },
+    async stopRoom ({ state }, { roomId }) {
+      await api.stopRoom(roomId)
+      storex.room.loadUserRooms()
+    },
+    async deleteRoom ({ state }, { roomId }) {
+      await api.stopRoom(roomId)
+      storex.room.loadUserRooms()
     },
     sendRoomMessage ({ state }, message) {
       state.rtc.send({
@@ -353,6 +371,16 @@ export const actions = actionTree(
       }
       neko.remote.release()
       storex.room.setControl(false)
+    },
+    sendChatMessage ({ state }, message) {
+      neko.chat.sendMessage(message)
+    },
+    async loadUserRooms ({ state }) {
+      let rooms = []
+      if (storex.user.user) {
+        rooms = await api.nekoRooms()
+      }
+      storex.room.setRooms(rooms)
     }
   }
 )

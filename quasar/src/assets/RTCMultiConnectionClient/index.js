@@ -27,17 +27,21 @@ export default class RTCNavroom {
   user = null
   streams = {}
   anyHostConnected = false
-  isMuted = false
-  isPaused = false
   acceptedParticipants = []
   updatedAt = new Date()
   isHost = false
   recorder = null
 
-  onMessage = () => {}
+  extra = {
+    paused: false,
+    muted: false
+  }
+
+  onMessage (event) {}
   onUserConnected (event) {}
   onUserDisconnected () {}
   onGuestWaiting (event) {}
+  onRoomOpened () {}
 
   constructor (user) {
     this.user = user
@@ -57,7 +61,7 @@ export default class RTCNavroom {
     this.connection.iceTransportPolicy = 'relay'
   }
 
-  async connect (roomId) {
+  async connect (roomId, { withCamera, withMic }) {
     this.isHost = !roomId
     const { connection } = this
   
@@ -67,25 +71,40 @@ export default class RTCNavroom {
       await this.newRoomId()
     }
 
-    await this.initRTC()
-    connection.session = {
-      audio: connection.DetectRTC.hasMicrophone,
-      video: connection.DetectRTC.hasWebcam,
-      data: true
-    }
-    const camera = this.connection.DetectRTC.videoInputDevices[0]
-    if (true || this.lowBandwith) {
-      // logging.info('lowBandwith', connection)
-      connection.bandwidth = {
-        audio: 50, // 50 kbps
-        video: 300, // 256 kbps
-        screen: 300 // 300 kbps
+    const dataOnly = !(withCamera || withMic)
+    let camera = {}
+    if (dataOnly) {
+      connection.session = {
+        audio: false,
+        video: false,
+        data: true
       }
-      connection.mediaConstraints = {
-        audio: true,
-        video: {
-          deviceId: camera.id
+    } else {
+      await this.initRTC()
+      connection.session = {
+        audio: connection.DetectRTC.hasMicrophone,
+        video: connection.DetectRTC.hasWebcam,
+        data: true
+      }
+      camera = this.connection.DetectRTC.videoInputDevices[0]
+      if (true || this.lowBandwith) {
+        // logging.info('lowBandwith', connection)
+        connection.bandwidth = {
+          audio: 50, // 50 kbps
+          video: 300, // 256 kbps
+          screen: 300 // 300 kbps
         }
+        connection.mediaConstraints = {
+          audio: true,
+          video: {
+            deviceId: camera.id
+          }
+        }
+      }
+      // For extra
+      camera = {
+        id: camera.id,
+        label: camera.label
       }
     }
     // STUN / TURN Servers
@@ -102,14 +121,13 @@ export default class RTCNavroom {
     connection.onunmute = this.onUnmute.bind(this)
     connection.onclose = this.onClose.bind(this)
     connection.onSocketDisconnect = this.onSocketDisconnect.bind(this)
-    connection.extra = this.encodeExtra({
-      id: this.user.id,
-      username: this.user.username,
-      camera: {
-        id: camera.id,
-        label: camera.label
-      }
-    })
+    connection.onExtraDataUpdated = this.onExtraDataUpdated.bind(this)
+    this.extra = {
+      ...this.extra,
+      ...this.user,
+      camera
+    }
+    connection.extra = this.encodeExtra()
     if (this.isHost) {
       this.connection.onNewParticipant = this.onNewParticipant.bind(this)
     }
@@ -150,6 +168,7 @@ export default class RTCNavroom {
     while(attempts--) {
       try {
         await this.openOrJoin()
+        this.onRoomOpened()
         break
       } catch(ex) {
         console.error('Error joining room', this.roomId)
@@ -176,7 +195,7 @@ export default class RTCNavroom {
     let attemps = 10
     while(attemps--) {
       try {
-        this.roomId = makeid(3)
+        this.roomId = `${this.user.id}-${makeid(3)}`
         this.checkRoomIsFree(this.roomId)
         break
       } catch {}
@@ -242,9 +261,12 @@ export default class RTCNavroom {
     stream.extra = this.decodeExtra(stream.extra)
     const { userid, extra } = stream
     if (extra.id) {
-      this.streams[extra.username || userid] = stream
-      if (extra.username === this.user.username) {
-        this.userStream = stream
+      this.streams[userid] = stream
+      if (extra.id === this.user.id) {
+        this.userStream = {
+          ...stream,
+          extra: this.extra
+        }
         this.connected = true
         try {
           this.startRecording(stream.stream)
@@ -289,8 +311,8 @@ export default class RTCNavroom {
 
   // @Log
   onStreamEnded (event) {
-    const { extra } = event
-    delete this.streams[extra.username]
+    const { extra, userid } = event
+    delete this.streams[userid]
     this.onUserDisconnected(event)
     if (extra.id === this.user.id && this.connected) {
       this.joinRoom()
@@ -350,43 +372,53 @@ export default class RTCNavroom {
   }
 
   get paused () {
-    return this.isPaused
+    return this.extra.paused
   }
 
   get muted () {
-    return this.isMuted
+    return this.extra.muted
   }
 
   toggleVideo () {
-    const pause = !this.paused
-    if (pause) {
+    this.extra.paused = !this.extra.paused
+    if (this.extra.paused) {
       this.userStream.stream.mute('video')
-      this.isPaused = true
     } else {
       this.userStream.stream.unmute()
-      if (this.isMuted) {
+      if (this.muted) {
         this.userStream.stream.mute('audio')
       }
-      this.isPaused = false
     }
+    this.updateExtra()
   }
 
   toggleAudio () {
-    if (this.isMuted) {
+    this.extra.muted = !this.extra.muted
+    if (this.extra.muted) {
       this.userStream.stream.unmute('audio')
       this.userStream.mediaElement.muted = true
-      if (this.paused) {
-        this.toggleVideo ()
-      }
-      this.isMuted = false
     } else {
       this.userStream.stream.mute('audio')
-      this.isMuted = true
+    }
+    this.updateExtra()
+  }
+
+
+  updateExtra() {
+    this.connection.extra = this.encodeExtra()
+    this.connection.updateExtraData()
+  }
+
+  onExtraDataUpdated ({ extra, userid }) {
+    extra = this.decodeExtra(extra)
+    const user = this.streams[userid]
+    if (user) {
+      user.extra = extra
     }
   }
 
-  encodeExtra (extra) {
-    return encodeURIComponent(JSON.stringify(extra))
+  encodeExtra () {
+    return encodeURIComponent(JSON.stringify(this.extra))
   }
 
   decodeExtra (extra) {
@@ -464,5 +496,51 @@ export default class RTCNavroom {
             });
         });
     });
+  }
+
+  // ----------------------------------------------------
+  // getStats codes goes here
+  // ----------------------------------------------------
+  onPeerStateChanged (event) {
+    if(event.iceConnectionState === 'connected' && event.signalingState === 'stable') {
+      if(connection.peers[event.userid].gettingStats === true) {
+        return;
+      }
+      connection.peers[event.userid].gettingStats = true; // do not duplicate
+
+      var peer = connection.peers[event.userid].peer;
+      var interval = 1000;
+
+      if(DetectRTC.browser.name === 'Firefox') {
+        getStats(peer, peer.getLocalStreams()[0].getTracks()[0], function(stats) {
+          onGettingWebRTCStats(stats, event.userid);
+        }, interval);
+      }
+      else {
+        getStats(peer, function(stats) {
+          onGettingWebRTCStats(stats, event.userid);
+        }, interval);
+      }
+    }
+  }
+
+  onGettingWebRTCStats(stats, remoteUserId) {
+    if(!this.connection.peers[remoteUserId]) {
+      stats.nomore();
+    }
+  
+    var statsData = 'UserID: ' + remoteUserId + '\n';
+    statsData += 'Bandwidth: ' + bytesToSize(stats.bandwidth.speed);
+    statsData += '\n';
+    statsData += 'Encryption: ' + stats.encryption;
+    statsData += '\n';
+    statsData += 'Codecs: ' + stats.audio.recv.codecs.concat(stats.video.recv.codecs).join(', ');
+    statsData += '\n';
+    statsData += 'Data: ' + bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived);
+    statsData += '\n';
+    statsData += 'ICE: ' + stats.connectionType.remote.candidateType.join(', ');
+    statsData += '\n';
+    statsData += 'Port: ' + stats.connectionType.remote.transport.join(', ');
+    console.log(statsData)  
   }
 }

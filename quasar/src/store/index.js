@@ -6,10 +6,12 @@ Vue.use(Vuex)
 
 import * as user from './user'
 import * as room from './room'
+import * as live from './live'
 
 const modules = {
   user,
-  room
+  room,
+  live
 }
 
 const store = new Vuex.Store({

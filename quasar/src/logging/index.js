@@ -18,16 +18,27 @@ class Logging {
     this.injectLogging()
   }
 
+  filterOut (msg) {
+    try {
+      if ((msg || '').indexOf('vue-i18n') !== -1) {
+        return true
+      }
+    } catch {}
+    return false
+  }
+
   initMethods () {
     ['info', 'log', 'debug', 'trace', 'warn', 'error'].forEach(k => {
       this[k] = function (msg) {
-        const stack = this.getSource()
         const args = [...arguments]
-        api.log({
-          type: k,
-          args: [...arguments],
-          stack
-        })
+        if (!this.filterOut(msg)) {
+          const stack = this.getSource()
+          api.log({
+            type: k,
+            args,
+            stack
+          })
+        }
         if (!this.console[k]) {
           k = 'log'
         }

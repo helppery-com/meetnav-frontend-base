@@ -3,13 +3,12 @@ import api from '../api'
 import { storex } from '../index'
 import { Cookies } from 'quasar'
 
-api.jwt = Cookies.get('session_jwt')
-api.user = Cookies.get('session_user')
+export const namespaced = true
 
 // Module state
 export const state = () => ({
-  user: api.user,
-  jwt: api.jwt
+  user: null,
+  jwt: null
 })
 
 // Computed state
@@ -21,12 +20,14 @@ export const getters = getterTree(state, {
     return navigator.language
   },
   displayName: state => state.user ? state.user.displayName || state.user.username : '',
-  isGuest: state => state.user && state.user.license.max_daily === 0
+  isGuest: state => state.user && state.user.license.max_daily === 0,
+  email: state => storex.user.isGuest ? state.user.guestEmail : state.user.email,
+  id: state => state.user ? state.user.id : null
 })
 
 // Change state
 export const mutations = mutationTree(state, {
-  setUser (state, { user, jwt }) {
+  async setUser (state, { user, jwt }) {
     state.user = user
     state.jwt = jwt
     api.jwt = jwt
@@ -36,6 +37,16 @@ export const mutations = mutationTree(state, {
     }
     Cookies.set('session_jwt', jwt, { path: '/' })
     Cookies.set('session_user', user, { path: '/' })
+    try {
+      if (user) {
+        storex.live.connect()
+      } else {
+        storex.live.disconnect()
+      }
+    } catch (ex) {
+      console.error(ex)
+    }
+    storex.room.loadUserRooms()
   },
   async changeLanguage (state, lang) {
     if (state.user) {
@@ -49,6 +60,11 @@ export const mutations = mutationTree(state, {
 export const actions = actionTree(
   { state, getters, mutations },
   {
+    init () {
+      api.jwt = Cookies.get('session_jwt')
+      api.user = Cookies.get('session_user')
+      storex.user.setUser({ jwt: api.jwt, user: api.user })
+    },
     async login ({ state }, { username, password, displayName, email, guestEmail }) {
       const userLogged = await api.login(username, password)
       const { user } = userLogged

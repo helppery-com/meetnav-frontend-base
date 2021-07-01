@@ -84,3 +84,19 @@ body,
     color: #3d7094
     font-weight: 1000
     font-size: 30px
+
+.pulse
+    animation: pulse 2s infinite
+
+@keyframes pulse
+  0%
+    transform: scale(0.95)
+    box-shadow: 0 0 0 0 rgba($primary, 0.7)
+
+  70%
+    transform: scale(1)
+    box-shadow: 0 0 0 10px rgba($accent, 0.2)
+
+  100%
+    transform: scale(0.95)
+    box-shadow: 0 0 0 0 $accent

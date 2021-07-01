@@ -1,29 +1,52 @@
 <template>
   <div class="q-gutter-xs row">
+    <q-btn flat
+      icon="fas fa-share-alt"
+      text-color="white"
+      :label="roomId"
+      class="col-auto q-ml-md q-mr-md bg-dark" @click="share = true"/>
     <q-btn round outline
       :icon="rtcmuted ? 'fas fa-microphone-alt-slash' : 'fas fa-microphone-alt'"
-      :color="rtcmuted ? 'dark' : 'primary'"
-      class="col-auto" @click="toggleAudio" />
-    <q-icon name="fas fa-sign-out-alt" color="red" class="col-auto btn" @click="leave = true" size="xl"/>
+      :text-color="rtcmuted ? 'red' : 'dark'"
+      class="col-auto bg-grey-3" @click="toggleAudio" />
     <q-btn round outline
       v-for="(camera, ix) in cameras" :key="ix"
       :icon="paused ? 'fas fa-video-slash' : 'fas fa-video'"
-      :color="paused  ? 'dark' : 'primary'"
-      class="col-auto" @click="toggleVideo(ix)">
+      :text-color="paused  ? 'red' : 'dark'"
+      class="col-auto q-ml-xs bg-grey-3" @click="toggleVideo(ix)">
       <q-tooltip>
         {{ camera.label }}
       </q-tooltip>
     </q-btn>
     <q-btn round outline
-      :icon="fullScreen ? 'fas fa-compress' : 'fas fa-expand'"
-      color="dark"
-      class="col-auto" @click="toogleFullScreen"/>
+      :icon="locked ? 'lock' : 'lock_open'"
+      :text-color="locked ? 'red' : 'dark'"
+      class="col-auto q-ml-xl q-ml-xs bg-grey-3" @click="toogleLock"
+      v-if="isAdmin"
+    >
+      <q-tooltip>
+        <div v-if="locked" class="text-h6 text-white">
+          {{ $t('Room is locked, new users will need the password to join') }}
+        </div>
+        <div v-else class="text-h6">
+          {{ $t('Room is open to any user with the room link. Click to lock.') }}
+        </div>
+        <div class="text-h6">{{ $t('Room password: ') + ' ' + roomPassord }}</div>
+      </q-tooltip>
+    </q-btn>
     <q-btn round outline
-      icon="fas fa-share-alt"
-      color="accent"
-      class="col-auto" @click="share = true"/>
-    <q-btn round outline icon="chat" @click="$storex.room.toggleChat()" />
-    <NekoEmotes />
+      :icon="fullScreen ? 'fas fa-compress' : 'fas fa-expand'"
+      text-color="dark"
+      class="col-auto q-ml-xl q-ml-xs bg-grey-3" @click="toogleFullScreen"/>
+    <q-btn round outline
+      text-color="accent"
+      class="col-auto bg-grey-3"
+      icon="chat" @click="$storex.room.toggleChat()" />
+    <q-btn round outline
+      text-color="white"
+      class="col-auto q-ml-xl bg-red"
+      icon="logout"
+      @click="leave = true"/>
     <q-dialog v-model="share" transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-primary" style="width: 600px">
         <q-card-section>
@@ -64,7 +87,7 @@
 
         <q-card-actions align="right" class="bg-white text-teal">
           <q-btn outline color="accent" :label="$t('Exit room')" v-close-popup @click="closeRoom"/>
-          <q-btn outline color="red" :label="$t('Close room')" v-close-popup @click="closeRoom(true)" v-if="isAdmin" />
+          <q-btn outline color="red" :label="$t('Close room')" v-close-popup @click="closeRoom(true)" v-if="isRoomAdmin" />
           <q-btn outline :label="$t('Back')" v-close-popup />
         </q-card-actions>
       </q-card>
@@ -72,26 +95,27 @@
   </div>
 </template>
 <script>
-import { NekoEmotes } from 'neko-client/dist/neko-lib.umd'
 import Social from '../components/Social'
 import { AppFullscreen } from 'quasar'
 
 export default {
   components: {
-    NekoEmotes,
     Social
   },
   data () {
     return {
-      leave: false,
       share: false,
       text: '',
       rating: 0,
       fullScreen: false,
-      chatStatus: this.$storex.room.showChat
+      chatStatus: this.$storex.room.showChat,
+      leave: false
     }
   },
   computed: {
+    isRoomAdmin () {
+      return this.$storex.room.room && this.$storex.room.room.isAdmin
+    },
     nekoConnected () {
       return this.$storex.room.nekoConnected
     },
@@ -154,6 +178,15 @@ export default {
     },
     isAdmin () {
       return this.$storex.room.room && this.$storex.room.room.isAdmin
+    },
+    roomId () {
+      return this.$storex.room.roomId
+    },
+    locked () {
+      return this.$storex.room.room && this.$storex.room.room.passwordProtected
+    },
+    roomPassord () {
+      return this.$storex.room.room && this.$storex.room.room.password
     }
   },
   methods: {
@@ -176,13 +209,6 @@ export default {
       const resolution = this.screens[ix]
       this.$storex.room.neko.video.setResolution(resolution)
       console.log('Set resolution....', this.zoomLabel)
-    },
-    justLeave () {
-      this.$router.push('/')
-    },
-    closeRoom (close) {
-      this.$storex.room.closeRoom(close)
-      this.justLeave()
     },
     notifyChat () {
       console.log('Emit chat')
@@ -207,6 +233,16 @@ export default {
           this.$storex.room.toggleChat()
         }
       }
+    },
+    async toogleLock () {
+      this.$storex.room.room.passwordProtected = !this.$storex.room.room.passwordProtected
+    },
+    justLeave () {
+      this.$router.push('/')
+    },
+    closeRoom (close) {
+      this.$storex.room.closeLiveRoom(close)
+      this.justLeave()
     }
   }
 }

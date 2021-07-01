@@ -70,6 +70,12 @@ class Api {
     return res.data
   }
 
+  async stopRoom (roomId) {
+    const headers = this.headers
+    const res = await axios.delete(this.url(`/nekos/${roomId}/stop`), { headers })
+    return res.data
+  }
+
   async changeLanguage (lang) {
     const headers = this.headers
     const res = await axios.put(this.url('/users/' + this.user.id), { lang }, { headers })
@@ -80,6 +86,9 @@ class Api {
     this.logsBuffer.push(logEntry)
     clearTimeout(this.logsTimer)
     this.logsTimer = setTimeout(() => {
+      if (this.logsBuffer.length === 0) {
+        return
+      }
       const headers = this.headers
       const logs = this.logsBuffer
       this.logsBuffer = []
@@ -90,6 +99,12 @@ class Api {
   async nekotemplates () {
     const headers = this.headers
     const res = await axios.get(this.url('/nekotemplates'), { headers })
+    return res.data
+  }
+
+  async nekoRooms () {
+    const headers = this.headers
+    const res = await axios.get(this.url('/nekos'), { headers })
     return res.data
   }
 

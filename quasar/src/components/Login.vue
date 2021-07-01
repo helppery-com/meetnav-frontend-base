@@ -4,10 +4,14 @@
       <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
         <q-card-section><div class="text-h6 text-blue-grey-8">{{$t('welcomePage.moreLogin.login')}}</div></q-card-section>
         <q-card-section>
-          <q-input color="blue-grey-6" name='username' v-model="user.username" :label="$t('welcomePage.moreLogin.username')" required class="ref-login-username">
+          <q-input color="blue-grey-6" name='username' v-model="user.username"
+            :label="$t('welcomePage.moreLogin.username')" required class="ref-login-username"
+            @keypress.enter="login">
             <template v-slot:prepend><q-icon name="mail" /></template>
           </q-input>
-          <q-input color="blue-grey-6" name='password' type="password" v-model="user.password" :label="$t('welcomePage.moreLogin.password')" required class="ref-login-password">
+          <q-input color="blue-grey-6" name='password' type="password" v-model="user.password"
+          :label="$t('welcomePage.moreLogin.password')" required class="ref-login-password"
+          @keypress.enter="login">
             <template v-slot:prepend><q-icon name="lock" /></template>
           </q-input>
         </q-card-section>

@@ -17,7 +17,6 @@ export default async ({ app, router, Vue, store }) => {
     } catch {}
     next()
   })
-
   Vue.mixin({
     computed: {
       $user () {
@@ -28,4 +27,10 @@ export default async ({ app, router, Vue, store }) => {
       }
     }
   })
+  const { $storex } = new Vue()
+  $storex.user.init()
+  $storex.room.loadUserRooms()
+  if ($storex.user.user) {
+    $storex.live.connect()
+  }
 }

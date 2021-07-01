@@ -87,6 +87,11 @@ export const actions = actionTree(
     },
     async registerGuest ({ state }, email) {
       await api.registerGuest(email)
+    },
+    async updateProfile ({ state }) {
+      const { user, jwt } = state
+      const userData = await api.updateProfile(user)
+      storex.user.setUser({ user: userData.data, jwt })
     }
   }
 )

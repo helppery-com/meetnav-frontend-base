@@ -16,7 +16,7 @@
             label="look more cool with display name"
             class="input q-mb-md"
             :rules="[
-            val => val !== null && val !== '' || 'Please type your display name'
+            val => val !== null && val !== '' || $t('Please type your display name')
             ]"
             />
             <q-btn
@@ -38,7 +38,7 @@
             type="password"
             class="input q-mb-md"
             :rules="[
-            val => val !== null && val !== '' || 'please type your previous password'
+            val => val !== null && val !== '' || $t('please type your previous password')
             ]"
              />
             <q-input
@@ -48,7 +48,7 @@
             label="Enter new password"
             class="input q-mb-md"
             :rules="[
-            val => val !== null && val !== '' || 'please type your new password'
+            val => val !== null && val !== '' || $t('please type your new password')
             ]"
             />
             <q-input
@@ -57,7 +57,7 @@
             type="password"
             class="input q-mb-md"
             :rules="[
-            val => val !== null && val !== '' || 'confirm new password',
+            val => val !== null && val !== '' || $t('confirm new password'),
             val => val === document.getElementById('newPassword').value || 'passwords dont match'
             ]"
             />

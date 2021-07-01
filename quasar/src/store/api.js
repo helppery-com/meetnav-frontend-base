@@ -113,6 +113,12 @@ class Api {
     const res = await axios.post(this.url(`/nekos/${roomId}/chat`), { message }, { headers })
     return res.data
   }
+
+  async updateProfile (user) {
+    const headers = this.headers
+    const res = await axios.put(this.url(`/user/${user.id}`), { user }, { headers })
+    return res.data
+  }
 }
 const api = new Api()
 export default api

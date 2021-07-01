@@ -74,9 +74,9 @@
     v-model="videoConferencePermissions">
      <q-card>
       <q-card-section>
-        <div class="text-h6">{{this.$t('coBrowsePage.permission')}}</div>
+        <div class="text-h6">{{ $t('coBrowsePage.permission') }}</div>
         <p
-         class="text-subtitle2">{{this.$t('coBrowsePage.allowPermission')}}</p>
+         class="text-subtitle2">{{ $t('coBrowsePage.allowPermission') }}</p>
          <ul class="text-subtitle2">
            <li> <a href="https://support.google.com/chrome/answer/2693767?co=GENIE.Platform%3DDesktop&oco=1" target="_blank">Chrome</a></li>
            <li> <a href="https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions" target="_blank">Firefox</a></li>
@@ -161,7 +161,11 @@ export default {
       offlineUserMessage: '',
       sendToChat: false,
       callingOfflineUser: null,
-      termsAccepted: false
+      termsAccepted: false,
+      permisssionDialog: null,
+      cameraPermission: false,
+      micPermission: false,
+      isRoomAlreadyEstablished: false
     }
   },
   computed: {
@@ -239,6 +243,13 @@ export default {
     },
     user () {
       return this.$storex.user.user
+    },
+    videoConferencePermissions () {
+      const condition = this.cameraPermission === false || this.micPermission === false
+      if (!condition && !this.isRoomAlreadyEstablished) {
+        this.roomEstablishment()
+      }
+      return condition
     }
   },
   watch: {

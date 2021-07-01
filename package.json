@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "chai": "^4.3.3",
+    "date-fns": "^2.22.1",
     "mocha": "^8.3.1",
     "sweetalert2": "^10.15.6"
   }

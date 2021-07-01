@@ -124,7 +124,9 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'Cookies',
-        'AppFullscreen'
+        'AppFullscreen',
+        'Dialog',
+        'Notify'
       ]
     },
 

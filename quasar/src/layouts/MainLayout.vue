@@ -22,6 +22,14 @@
               </q-item-section>
               <q-item-section>Logout</q-item-section>
             </q-item>
+            <router-link to="/account">
+            <q-item class="text-black" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="settings" />
+              </q-item-section>
+              <q-item-section>Account Settings</q-item-section>
+            </q-item>
+            </router-link>
           </q-list>
         </q-menu>
       </q-btn>

@@ -1,7 +1,8 @@
 <template>
   <q-layout view="hHh Lpr lff" class="room-layout" ref="layout">
     <GuestLogin v-if="!user" />
-    <q-header elevated class="bg-white header">
+    <q-header
+    elevated class="bg-white header">
       <q-toolbar class="row">
         <q-toolbar-title class="col text-primary text-h5" >
           <UserMenu class="btn"/>
@@ -70,6 +71,9 @@ export default {
     },
     anyUser () {
       return Object.keys(this.$storex.room.streams).length !== 0
+    },
+    permissionState () {
+      return this.$store.permissionState
     },
     debugUserStreams () {
       let debug = this.isDebug

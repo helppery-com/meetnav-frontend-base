@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fff" class="main-layout">
-    <q-header class="main-header row items-center justify-between full-width">
+    <q-header v-if="getPermissionState" class="main-header row items-center justify-between full-width">
     <div class="nav-logo flex justify-center" >
       <p class="text-h2 q-ml-md main-heading">meetnav</p>
     </div>

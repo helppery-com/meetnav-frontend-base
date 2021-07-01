@@ -144,6 +144,19 @@ const routes = [
     ]
   },
   {
+    path: '/account',
+    name: 'account',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/Account.vue'),
+        meta: { userRequired: true }
+      }
+    ],
+    beforeEnter
+  },
+  {
     path: '/navroom',
     name: 'navroom',
     component: () => import('layouts/RoomLayout.vue'),

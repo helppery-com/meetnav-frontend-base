@@ -24,6 +24,23 @@
       <NekoVideo class="rounded-borders" @connected="ref => nekoVideoRef = ref" v-if="connected" />
     </div>
     <q-dialog
+    v-model="videoConferencePermissions">
+     <q-card>
+      <q-card-section>
+        <div class="text-h6">{{this.$t('coBrowsePage.permission')}}</div>
+        <p
+         class="text-subtitle2">{{this.$t('coBrowsePage.allowPermission')}}</p>
+         <ul class="text-subtitle2">
+           <li> <a href="https://support.google.com/chrome/answer/2693767?co=GENIE.Platform%3DDesktop&oco=1" target="_blank">Chrome</a></li>
+           <li> <a href="https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions" target="_blank">Firefox</a></li>
+           <li> <a href="https://support.apple.com/en-gb/guide/safari/ibrwe2159f50/mac" target="_blank">Safari</a></li>
+           <li> <a href="https://www.windowscentral.com/how-manage-site-permissions-new-microsoft-edge" target="_blank">Edge</a></li>
+           </ul>
+      </q-card-section>
+      <q-separator dark />
+    </q-card>
+    </q-dialog>
+    <q-dialog
       v-model="welcome"
       transition-show="scale"
       transition-hide="scale"
@@ -62,7 +79,6 @@ import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
 import UserVideo from '../components/UserVideo'
 import Dish from '../components/Dish'
-
 import '../assets/styles/vendor/_emote.scss'
 
 export default {
@@ -82,7 +98,11 @@ export default {
       welcome: false,
       rating: 0,
       commercialLink: null,
-      userVideoCol: 3
+      userVideoCol: 3,
+      permisssionDialog: null,
+      cameraPermission: false,
+      micPermission: false,
+      isRoomAlreadyEstablished: false
     }
   },
   computed: {
@@ -136,6 +156,13 @@ export default {
     },
     incognito () {
       return this.$storex.room.muted && this.$storex.room.paused
+    },
+    videoConferencePermissions () {
+      const condition = this.cameraPermission === false || this.micPermission === false
+      if (!condition && !this.isRoomAlreadyEstablished) {
+        this.roomEstablishment()
+      }
+      return condition
     }
   },
   watch: {
@@ -149,13 +176,55 @@ export default {
     }
   },
   async created () {
-    if (!this.$storex.user.user) {
-      this.$root.$once('user-logged', () => this.openRoom())
-    } else {
-      this.openRoom()
-    }
+    await this.askForPermission()
+    await this.checkUserPermissions()
   },
   methods: {
+    roomEstablishment () {
+      this.isRoomAlreadyEstablished = true
+      this.welcome = true
+      if (!this.$storex.user.user) {
+        this.$root.$once('user-logged', () => this.openRoom())
+      } else {
+        this.openRoom()
+      }
+    },
+    // ask user for permission
+    async askForPermission () {
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      } catch (e) {
+
+      }
+    },
+    async updatingPermissionStates (permission, state) {
+      switch (permission) {
+        case 'granted': {
+          this.$data[state] = true
+          break
+        }
+        default: {
+          this.$data[state] = false
+        }
+      }
+    },
+    // main method for checking user permission
+    checkUserPermissions () {
+      navigator.permissions.query({ name: 'microphone' }).then(permission => {
+        this.updatingPermissionStates(permission.state, 'micPermission')
+        console.log('init')
+        permission.onchange = (perm) => {
+          this.updatingPermissionStates(perm.srcElement.state, 'micPermission')
+        }
+      })
+      navigator.permissions.query({ name: 'camera' }).then(permission => {
+        this.updatingPermissionStates(permission.state, 'cameraPermission')
+        permission.onchange = (perm) => {
+          console.log(this.isRoomAlreadyEstablished)
+          this.updatingPermissionStates(perm.srcElement.state, 'cameraPermission')
+        }
+      })
+    },
     async openRoom () {
       this.welcome = true
       const { roomId, username } = this.$route.params

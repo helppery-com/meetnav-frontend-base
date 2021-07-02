@@ -1,6 +1,6 @@
 <template>
   <q-page class="navroom-page column">
-    <GuestLogin v-if="!user" />
+    <GuestLogin v-if="isRoomAlreadyEstablished && !user" />
     <div class="col row" v-if="termsAccepted">
       <div
         :class="['users relative-position column', `col-${chatCol}`]"
@@ -71,7 +71,7 @@
       </div>
     </div>
     <q-dialog
-    v-model="videoConferencePermissions">
+    v-model="requestPermissionDlg">
      <q-card>
       <q-card-section>
         <div class="text-h6">{{ $t('coBrowsePage.permission') }}</div>
@@ -165,7 +165,8 @@ export default {
       permisssionDialog: null,
       cameraPermission: false,
       micPermission: false,
-      isRoomAlreadyEstablished: false
+      isRoomAlreadyEstablished: false,
+      requestPermissionDlg: false
     }
   },
   computed: {
@@ -243,13 +244,6 @@ export default {
     },
     user () {
       return this.$storex.user.user
-    },
-    videoConferencePermissions () {
-      const condition = this.cameraPermission === false || this.micPermission === false
-      if (!condition && !this.isRoomAlreadyEstablished) {
-        this.roomEstablishment()
-      }
-      return condition
     }
   },
   watch: {
@@ -267,13 +261,11 @@ export default {
     }
   },
   async created () {
-    await this.askForPermission()
     await this.checkUserPermissions()
   },
   methods: {
     roomEstablishment () {
       this.isRoomAlreadyEstablished = true
-      this.welcome = true
       if (!this.$storex.user.user) {
         this.$root.$once('user-logged', () => this.openRoom())
       } else {
@@ -288,7 +280,7 @@ export default {
 
       }
     },
-    async updatingPermissionStates (permission, state) {
+    updatingPermissionStates (permission, state) {
       switch (permission) {
         case 'granted': {
           this.$data[state] = true
@@ -298,23 +290,30 @@ export default {
           this.$data[state] = false
         }
       }
+      if (this.cameraPermission && this.micPermission) {
+        this.requestPermissionDlg = false
+        this.roomEstablishment()
+      }
     },
     // main method for checking user permission
-    checkUserPermissions () {
-      navigator.permissions.query({ name: 'microphone' }).then(permission => {
-        this.updatingPermissionStates(permission.state, 'micPermission')
-        console.log('init')
-        permission.onchange = (perm) => {
-          this.updatingPermissionStates(perm.srcElement.state, 'micPermission')
-        }
-      })
-      navigator.permissions.query({ name: 'camera' }).then(permission => {
-        this.updatingPermissionStates(permission.state, 'cameraPermission')
-        permission.onchange = (perm) => {
-          console.log(this.isRoomAlreadyEstablished)
-          this.updatingPermissionStates(perm.srcElement.state, 'cameraPermission')
-        }
-      })
+    async checkUserPermissions () {
+      await this.askForPermission()
+      const micPermission = navigator.permissions.query({ name: 'microphone' })
+        .then(permission => {
+          this.updatingPermissionStates(permission.state, 'micPermission')
+          permission.onchange = (perm) => {
+            this.updatingPermissionStates(perm.srcElement.state, 'micPermission')
+          }
+        })
+      const cameraPermission = navigator.permissions.query({ name: 'camera' })
+        .then(permission => {
+          this.updatingPermissionStates(permission.state, 'cameraPermission')
+          permission.onchange = (perm) => {
+            this.updatingPermissionStates(perm.srcElement.state, 'cameraPermission')
+          }
+        })
+      await Promise.all([micPermission, cameraPermission])
+      this.requestPermissionDlg = !this.micPermission || !this.cameraPermission
     },
     async openRoom () {
       this.welcome = true

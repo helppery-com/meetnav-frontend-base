@@ -3,7 +3,7 @@
 
     <q-header class="main-header full-width">
       <div class="float-left">
-        <p class="text-h2 q-ml-md main-heading">meetnav</p>
+        <p class="text-h2 q-ml-md main-heading" @clik="goHome">meetnav</p>
       </div>
       <q-separator />
       <div v-if="user" class="row justify-end">
@@ -78,6 +78,11 @@ export default {
     logout () {
       this.$storex.user.logout()
       location.reload()
+    },
+    goHome () {
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
     }
   },
   computed: {

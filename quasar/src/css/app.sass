@@ -14,7 +14,7 @@ h1, h2, h3, .text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6
   font-family: Seravek Basic
 
 body
-  color: $dark
+  color: $primary
 
 .btn
   cursor: pointer
@@ -76,12 +76,12 @@ body,
 
 // app global css in Sass form
 .main-heading
-  color: #3d7094
+  color: $accent
   font-weight: 1000
 
 @media screen and (max-width: 500px)
   .main-heading
-    color: #3d7094
+    color: $primary
     font-weight: 1000
     font-size: 30px
 
@@ -100,3 +100,19 @@ body,
   100%
     transform: scale(0.95)
     box-shadow: 0 0 0 0 $accent
+
+.bounce
+    animation-name: bounce
+    animation-timing-function: ease
+    animation-duration: 2s
+    animation-iteration-count: infinite
+
+@keyframes bounce
+    0%
+      transform: translateY(0)
+    30%
+      transform: translateY(-10px)
+    50%
+      transform: translateY(0)
+    100%
+      transform: translateY(0)

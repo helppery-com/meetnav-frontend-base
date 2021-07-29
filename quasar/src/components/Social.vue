@@ -1,57 +1,67 @@
 <template>
-  <div class="social">
-    <div class="text-bold q-mb-md text-h6 btn" @click="shareBy('copy')">
-      <icon name="copy" scale="1.5" @click="shareBy('copy')" class="q-mr-md"/>
-      {{ url }}
-      <q-tooltip>
-        {{ $t('Copy to clipboard') }}
-      </q-tooltip>
-    </div>
-    <div class="row full-width justify-center">
-      <div class="col">
-      <img src="/gmail.png" class="btn" width="32px" @click="gmail()"/>
-        <q-tooltip>
-          {{ $t('Send by gmail') }}
-        </q-tooltip>
-      </div>
-      <div class="col">
-        <email :url="url" :title="title" scale="1.5" @click="shareBy('google')"/>
-        <q-tooltip>
-          {{ $t('Send by email') }}
-        </q-tooltip>
-      </div>
-      <div class="col">
-        <facebook :url="url" :title="title" scale="1.5"/>
-        <q-tooltip>
-          {{ $t('Post on facebook') }}
-        </q-tooltip>
-      </div>
-      <div class="col">
-        <twitter :url="url" :title="title"  scale="1.5" @click="shareBy('twitter')"/>
-        <q-tooltip>
-          {{ $t('Post on twitter') }}
-        </q-tooltip>
-      </div>
-      <div class="col">
-        <linkedin :url="url" :title="title" scale="1.5" @click="shareBy('linkedin')"/>
-        <q-tooltip>
-          {{ $t('Post on linkedin') }}
-        </q-tooltip>
-      </div>
-      <div class="col">
-        <whats-app :url="url" :title="title"  scale="1.5" @click="shareBy('whatsapp')"/>
-        <q-tooltip>
-          {{ $t('Send by whatsapp') }}
-        </q-tooltip>
-      </div>
-      <div class="col">
-        <telegram :url="url" :title="title" scale="1.5" @click="shareBy('google')"/>
-        <q-tooltip>
-          {{ $t('Send by telegram') }}
-        </q-tooltip>
-      </div>
-    </div>
-  </div>
+  <q-card
+      class="chat-popup column"
+      style="width: 400px; height: 400px"
+    >
+      <q-card-section class="col">
+        <div class="social">
+          <div class="text-bold q-mb-md text-h6 btn" @click="shareBy('copy')">
+            <icon name="copy" scale="1.5" @click="shareBy('copy')" class="q-mr-md"/>
+            {{ url }}
+            <q-tooltip>
+              {{ $t('Copy to clipboard') }}
+            </q-tooltip>
+          </div>
+          <div class="row full-width justify-center">
+            <div class="col">
+            <img src="/gmail.png" class="btn" width="32px" @click="gmail()"/>
+              <q-tooltip>
+                {{ $t('Send by gmail') }}
+              </q-tooltip>
+            </div>
+            <div class="col">
+              <email :url="url" :title="title" scale="1.5" @click="shareBy('google')"/>
+              <q-tooltip>
+                {{ $t('Send by email') }}
+              </q-tooltip>
+            </div>
+            <div class="col">
+              <facebook :url="url" :title="title" scale="1.5"/>
+              <q-tooltip>
+                {{ $t('Post on facebook') }}
+              </q-tooltip>
+            </div>
+            <div class="col">
+              <twitter :url="url" :title="title"  scale="1.5" @click="shareBy('twitter')"/>
+              <q-tooltip>
+                {{ $t('Post on twitter') }}
+              </q-tooltip>
+            </div>
+            <div class="col">
+              <linkedin :url="url" :title="title" scale="1.5" @click="shareBy('linkedin')"/>
+              <q-tooltip>
+                {{ $t('Post on linkedin') }}
+              </q-tooltip>
+            </div>
+            <div class="col">
+              <whats-app :url="url" :title="title"  scale="1.5" @click="shareBy('whatsapp')"/>
+              <q-tooltip>
+                {{ $t('Send by whatsapp') }}
+              </q-tooltip>
+            </div>
+            <div class="col">
+              <telegram :url="url" :title="title" scale="1.5" @click="shareBy('google')"/>
+              <q-tooltip>
+                {{ $t('Send by telegram') }}
+              </q-tooltip>
+            </div>
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-actions class="col-auto" align="right">
+        <q-btn :label="$t('Close')" color="red" v-close-popup />
+    </q-card-actions>
+  </q-card>
 </template>
 <script>
 import { copyToClipboard } from 'quasar'

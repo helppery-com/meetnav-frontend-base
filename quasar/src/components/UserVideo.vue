@@ -1,36 +1,57 @@
 <template>
-  <q-card
-    class="connecting-card relative-position fit"
-    v-if="connecting || paused">
-    <img :src="user.avatar" class="bg-blur" />
-    <q-card-section class="fit">
-      <div class="column justify-center fit">
-        <q-avatar class="col-auto self-center pulse">
-          <img :src="user.avatar" />
-        </q-avatar>
-        <div class="col-auto self-center text-h6 text-accent" v-if="connecting">
-          {{ $t('Connecting...') }}
+  <div class="user-video relative-position">
+    <SoundBars
+      :sound="speaking"
+      :muted="muted"
+      v-if="false"
+    /><!-- Disabled -->
+    <div
+      class="video-container fit"
+    >
+      <video ref="video" autoplay :muted="isLocal" />
+      <div class="user-info row">
+        <div class="col-auto q-pa-md">{{ `@${displayName}`}}</div>
+        <div class="col controls">
+          <q-separator />
+          <q-btn flat round
+            :icon="room.me.paused ? 'fas fa-video-slash' : 'fas fa-video'"
+            @click="room.toggleVideo()"
+            size="md"
+            v-if="isLocal"
+          />
+          <q-btn flat round
+            :icon="room.me.muted ? 'fas fa-microphone-alt-slash' : 'fas fa-microphone-alt'"
+            @click="room.toggleAudio()"
+            size="md"
+            v-if="isLocal"
+          />
         </div>
       </div>
-    </q-card-section>
-  </q-card>
-  <div
-    v-else
-    ref="v" :class="[
-    paused ? 'paused' : '',
-    isLocal ? 'me' : '',
-    'user-video relative-position'
-    ]">
-    <div :class="{ 'user-info': true, hasControl }" v-if="showUserInfo" :dummy="updatedAt">
-      <q-icon name="fas fa-mouse-pointer" color="white" v-if="hasControl"/>
-      <q-icon name="mic_off" color="red" v-if="muted" />
-      {{ `@${displayName}` }}
     </div>
+    <q-card
+      class="connecting-card relative-position fit"
+      v-if="connecting || paused">
+      <img :src="user.avatar" class="bg-blur" />
+      <q-card-section class="fit">
+        <div class="column justify-center fit">
+          <q-avatar class="col-auto self-center pulse">
+            <img :src="user.avatar" />
+          </q-avatar>
+          <div class="col-auto self-center text-h6 text-accent" v-if="connecting">
+            {{ $t('Connecting...') }}
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 <script>
+import SoundBars from './SoundBars'
 export default {
-  props: ['stream', 'controls', 'poster', 'showUserInfo', 'videoClass'],
+  components: {
+    SoundBars
+  },
+  props: ['stream'],
   data () {
     return {
       connecting: true
@@ -42,9 +63,6 @@ export default {
     },
     mainStream () {
       return this.stream[0]
-    },
-    updatedAt () {
-      return this.mainStream.updatedAt
     },
     paused () {
       return this.isLocal ? this.$storex.room.paused : this.mainStream.extra.paused
@@ -63,6 +81,26 @@ export default {
     },
     user () {
       return this.mainStream.extra
+    },
+    speaking () {
+      return this.user.speaking
+    },
+    room () {
+      return this.$storex.room
+    },
+    srcObject () {
+      return this.mainStream.stream
+    },
+    controlIncon () {
+      if (this.isLocal) {
+        return null
+      }
+      return this.hasControl ? 'fas fa-mouse-pointer' : 'fas fa-eye'
+    }
+  },
+  watch: {
+    connecting (val) {
+      this.$emit('connecting', val)
     }
   },
   mounted () {
@@ -72,16 +110,11 @@ export default {
     initVideo () {
       this.connecting = false
       requestAnimationFrame(() => {
-        const video = this.mainStream.mediaElement
-        video.controls = this.controls
-        if (this.muted) {
+        const { video } = this.$refs
+        video.srcObject = this.srcObject
+        if (this.muted || this.isLocal) {
           video.volumen = 0
         }
-        video.setAttribute('autoplay', true)
-        if (this.videoClass) {
-          video.className = this.videoClass
-        }
-        this.$refs.v.appendChild(video)
       })
     },
     releaseControl () {
@@ -94,10 +127,18 @@ export default {
   .user-video
     width: 100%
     height: 100%
+    .video-container
+      position: relative
+    .connecting-card
+      min-height: 200px
+      min-width: 100%
     video
       width: 100%
       height: 100%
       object-fit: cover
+      transform: rotateY(180deg)
+      -webkit-transform:rotateY(180deg) /* Safari and Chrome */
+      -moz-transform:rotateY(180deg) /* Firefox */
     &.paused
       background-image: url('/incognito-mode.png')
       background-size: cover
@@ -105,21 +146,15 @@ export default {
       video
         opacity: 0
 
-      .user-info
-        color: $dark
-
     .user-info
       position: absolute
-      z-index: 1
-      padding: 10px
-      width: 100%
-      font-weight: bold
-      color: white
-      bottom: 0
       background-color: #171616d4
-      height: 10%
-      &.hasControl
-        background-color: $accent
+      color: white
+      z-index: 1
+      width: 100%
+      bottom: 0
+      .controls
+        text-align: right
   .bg-blur
     position: absolute
     left: 0
@@ -128,4 +163,15 @@ export default {
     bottom: 0
     filter: blur(10px)
     height: 100%
+  .connecting-card
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+  .sound-bars
+    position: absolute
+    z-index: 1
+    left: 10px
+    bottom: 5px
 </style>

@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import { getterTree, mutationTree, actionTree } from 'typed-vuex'
-import { storex } from '../index'
+import { storex, store } from '../index'
 import api from '../api'
 import neko from 'neko-client/dist/neko-lib.umd'
 import io from 'socket.io-client'
 import RTCNavroom from '../../assets/RTCMultiConnectionClient'
 import { i18n } from '../../boot/i18n'
+import { Cookies } from 'quasar'
 
 export const namespaced = true
 
@@ -14,7 +15,6 @@ Vue.prototype.$accessor = neko
 window.$neko = neko
 
 // Hack neko chat
-
 const _sendMessage = neko.chat.sendMessage
 neko.chat.sendMessage = function (...args) {
   _sendMessage.apply(neko, args)
@@ -28,7 +28,7 @@ export const state = () => ({
   nekoConnected: false,
   rtc: null,
   room: null,
-  streams: {},
+  guestStreams: {},
   pointers: {},
   paused: false,
   muted: false,
@@ -38,8 +38,16 @@ export const state = () => ({
   host: null,
   autoReconnect: null,
   showChat: false,
-  nekoRooms: []
+  nekoRooms: [],
+  fullScreen: false,
+  members: {},
+  cameraId: Cookies.get('camera_id'),
+  micId: Cookies.get('microphone_id'),
+  lastMessageSeen: new Date(),
+  chatMessages: []
 })
+
+let newChatMessagesWatcher = false
 
 // Computed state
 export const getters = getterTree(state, {
@@ -52,7 +60,13 @@ export const getters = getterTree(state, {
   uploadHeaders: () => api.headers,
   mediaUrl: () => api.mediaUrl,
   nekoTemplates: () => api.user ? api.nekotemplates() : [],
-  neko: () => neko
+  neko: () => neko,
+  incognito: state => state.rtc ? state.rtc.extra.dataOnly : false,
+  users: state => state.rtcConnected ? state.rtc.users : {},
+  cameraConnected: state => !!state.userStream,
+  me: state => (state.members[storex.user.user.id] || {}),
+  memberCount: state => state.rtcConnected ? Object.keys(state.rtc.users).length : 0,
+  liveVideoChat: state => state.rtcConnected ? state.rtc.liveVideoChat : false
 })
 
 // Change state
@@ -61,20 +75,40 @@ export const mutations = mutationTree(state, {
     state.room = room
   },
   addStream (state, stream) {
-    const ss = state.streams[stream.userid] || []
-    ss.push(stream)
-    state.streams = {
-      ...state.streams,
-      [stream.userid]: ss
+    const { userid, extra } = stream
+    if (extra.id === storex.user.user.id) {
+      const ss = state.userStream || []
+      ss.push(stream)
+      state.userStream = ss
+    } else {
+      const ss = state.guestStreams[userid] || []
+      ss.push(stream)
+      state.guestStreams = {
+        ...state.guestStreams,
+        [stream.userid]: ss
+      }
     }
-    if (stream.extra.id === storex.user.user.id) {
-      state.userStream = stream
+    if (!state.members[extra.id]) {
+      state.members = {
+        ...state.members,
+        [stream.extra.id]: stream.extra
+      }
+    }
+  },
+  onStreamChange (state, stream) {
+    state.members = {
+      ...state.members,
+      [stream.extra.id]: stream.extra
     }
   },
   removeStream (state, event) {
-    delete state.streams[event.userid]
-    state.streams = {
-      ...state.streams
+    delete state.guestStreams[event.userid]
+    state.guestStreams = {
+      ...state.guestStreams
+    }
+    delete state.members[event.extra.id]
+    state.members = {
+      ...state.members
     }
     if (event.extra.id === storex.user.user.id) {
       state.userStream = null
@@ -93,6 +127,8 @@ export const mutations = mutationTree(state, {
     if (connected) {
       state.autoReconnect = setInterval(() => storex.room.reconnect(), 5000)
     }
+    state.lastMessageSeen = new Date()
+    storex.room.updateChatMessages()
   },
   updateHost (state) {
     setTimeout(() => {
@@ -114,7 +150,7 @@ export const mutations = mutationTree(state, {
     state.nekoConnected = false
     state.rtc = null
     state.room = null
-    state.streams = {}
+    state.guestStreams = {}
   },
   setPaused (state, paused) {
     state.paused = paused
@@ -124,6 +160,7 @@ export const mutations = mutationTree(state, {
   },
   setControl (state, value) {
     state.hasControl = value
+    state.rtc.setExtra({ hasControl: value })
   },
   setRoomStyle (state, style) {
     state.room.style = style
@@ -133,23 +170,25 @@ export const mutations = mutationTree(state, {
   },
   setRooms (state, rooms) {
     state.nekoRooms = rooms
+  },
+  setFullScreen (state, value) {
+    state.fullScreen = value
+  },
+  setCamera (state, id) {
+    state.cameraId = id
+    Cookies.set('camera_id', id)
+  },
+  setMicrophone (state, id) {
+    state.micId = id
+    Cookies.set('microphone_id', id)
+  },
+  resetLastMessage (state) {
+    state.lastMessageSeen = new Date()
+  },
+  updateChatMessages (state) {
+    state.chatMessages = neko.chat.history.filter(m => m.type !== 'event')
   }
 })
-
-async function connectRTC (roomId, incognito) {
-  const rtc = new RTCNavroom({
-    id: storex.user.user.id,
-    username: storex.user.displayName,
-    email: storex.user.email,
-    avatar: storex.user.user.avatar
-  })
-  rtc.onUserConnected = storex.room.addStream.bind(this)
-  rtc.onUserDisconnected = storex.room.removeStream.bind(storex)
-  rtc.onMessage = storex.room.onRoomMessage.bind(storex)
-  const settings = { withCamera: !incognito, withMic: !incognito }
-  rtc.connect(roomId, settings)
-  return rtc
-}
 
 // Module logic
 export const actions = actionTree(
@@ -159,7 +198,13 @@ export const actions = actionTree(
       if (state.showChat) {
         storex.room.toogleChat()
       }
-      const { template, roomId, username, calling, email, incognito } = settings
+      const {
+        template,
+        roomId,
+        username,
+        calling,
+        email
+      } = settings
       let room = null
       if (calling) {
         room = await api.waitRoom(storex.user.user, username, template, email)
@@ -169,8 +214,8 @@ export const actions = actionTree(
         room = await api.joinRoom(roomId, template)
       }
       if (room) {
-        const rtc = await connectRTC(room.roomId, incognito)
-        storex.room.setRTC(rtc)
+        const { roomId } = room
+        await storex.room.connectRTC({ roomId })
         await storex.room.connect(room)
         neko.settings.setScroll(5)
         storex.room.setRoom(room)
@@ -211,6 +256,52 @@ export const actions = actionTree(
         type: 'text'
       }))
       messages.forEach(m => neko.chat.addMessage(m))
+      if (!newChatMessagesWatcher) {
+        newChatMessagesWatcher = store.watch(() => neko.chat.history, () => storex.room.updateChatMessages())
+      }
+    },
+    async connectRTC ({ state }, { roomId, withCamera, withMic }) {
+      let { rtc } = state
+      if (rtc) {
+        await rtc.leave()
+      }
+      rtc = new RTCNavroom({
+        id: storex.user.user.id,
+        username: storex.user.displayName,
+        email: storex.user.email,
+        avatar: storex.user.user.avatar
+      })
+      rtc.onUserConnected = storex.room.addStream.bind(this)
+      rtc.onUserDisconnected = storex.room.removeStream.bind(storex)
+      rtc.onUserChanged = storex.room.onStreamChange.bind(storex)
+      rtc.onMessage = storex.room.onRoomMessage.bind(storex)
+      const settings = { withCamera, withMic }
+      await rtc.connect(roomId, settings)
+      if (!state.cameraId) {
+        const cameras = await rtc.cameras
+        storex.room.setCamera(cameras[0].id)
+      }
+      if (!state.micId) {
+        const microphones = await rtc.microphones
+        storex.room.setMicrophone(microphones[0].id)
+      }
+      storex.room.setRTC(rtc)
+    },
+    async connectVideoChat ({ state }) {
+      const { roomId } = state.room
+      const { cameraId: withCamera, micId: withMic } = state
+      await storex.room.connectRTC({ roomId, withCamera, withMic })
+    },
+    async disConnectVideoChat ({ state }) {
+      const { roomId } = state.room
+      await storex.room.connectRTC({ roomId, withCamera: false, withMic: false })
+    },
+    async toggleVideoChat ({ state }) {
+      if (storex.room.cameraConnected) {
+        storex.room.disConnectVideoChat()
+      } else {
+        storex.room.connectVideoChat()
+      }
     },
     async connect ({ state }, { wurl, password }) {
       const user = storex.user.user
@@ -289,7 +380,8 @@ export const actions = actionTree(
       storex.room.loadUserRooms()
     },
     sendRoomMessage ({ state }, message) {
-      state.rtc.send({
+      const { rtc } = state
+      rtc && rtc.send({
         ...message,
         _ts: new Date().getTime()
       })
@@ -337,6 +429,13 @@ export const actions = actionTree(
       state.rtc.toggleAudio()
       storex.room.setMuted(state.rtc.muted)
     },
+    toggleControls () {
+      if (neko.remote.hosting) {
+        storex.room.releaseControls()
+      } else {
+        storex.room.requestControls()
+      }
+    },
     requestControls ({ state }) {
       if (neko.remote.hosting) {
         return
@@ -348,7 +447,7 @@ export const actions = actionTree(
         let attempts = 10
         const waitControl = () => {
           if (attempts-- && neko.remote.hosted) {
-            setTimeout(() => waitControl(), 500)
+            setTimeout(() => waitControl(), 1000)
           } else {
             neko.remote.request()
           }
@@ -381,6 +480,9 @@ export const actions = actionTree(
         rooms = await api.nekoRooms()
       }
       storex.room.setRooms(rooms)
+    },
+    async toggleFullScreen ({ state }) {
+      storex.room.setFullScreen(!state.fullScreen)
     }
   }
 )

@@ -2,12 +2,14 @@
   <q-layout view="hHh lpR fff" class="main-layout">
 
     <q-header class="main-header full-width">
-      <div class="float-left">
-        <p class="text-h2 q-ml-md main-heading" @clik="goHome">meetnav</p>
+      <div class="row float-left main-heading" @clik="goHome">
+        <div class="col-auto q-pl-md q-py-md q-pr-xs">
+          <img src="/logo.png" width="40px" />
+        </div>
+        <div class="col-auto text-h2">meetnav</div>
       </div>
       <q-separator />
       <div v-if="user" class="row justify-end">
-        <NekoRooms />
         <q-btn round class="col-auto q-mt-md nav-button ref-user-menu">
           <q-avatar size="42px">
             <img :src="avatar">
@@ -38,9 +40,9 @@
       </div>
       <div v-else class="float-right">
         <!-- Login button -->
-        <login-btn />
+        <Login />
         <!-- Registration button -->
-        <register-btn />
+        <Registration />
       </div>
     </q-header>
 
@@ -56,14 +58,12 @@
 import SharedFooter from 'components/SharedFooter'
 import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
-import NekoRooms from '../components/NekoRooms.vue'
 
 export default {
   components: {
-    LoginBtn: Login,
-    RegisterBtn: Registration,
-    SharedFooter,
-    NekoRooms
+    Login,
+    Registration,
+    SharedFooter
   },
   data () {
     return {

@@ -1,9 +1,9 @@
 {
-  "name": "quasar",
+  "name": "meetnav",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
-  "author": "gbrian <gustavo.brian@gmail.com>",
+  "description": "meetnav - meet&navigate",
+  "productName": "meetnav",
+  "author": "gbrian <meetme@meetnav.com>",
   "private": true,
   "scripts": {
     "help": "quasar serve --help",
@@ -16,12 +16,14 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@quasar/extras": "^1.0.0",
+    "@quasar/icongenie": "^2.4.0",
     "@webzlodimir/vue-bottom-sheet": "^1.2.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "date-fns": "^2.22.1",
     "easytimer.js": "^4.3.2",
     "emoji-datasource": "^5.0.1",
+    "hark": "^1.2.3",
     "has-binary2": "^2.0.0",
     "isarray": "^2.0.5",
     "neko-client": "file:../../neko/client",

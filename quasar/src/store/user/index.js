@@ -22,7 +22,8 @@ export const getters = getterTree(state, {
   displayName: state => state.user ? state.user.displayName || state.user.username : '',
   isGuest: state => state.user && state.user.license.max_daily === 0,
   email: state => storex.user.isGuest ? state.user.guestEmail : state.user.email,
-  id: state => state.user ? state.user.id : null
+  id: state => state.user ? state.user.id : null,
+  atname: state => `@${state.user.username}`
 })
 
 // Change state
@@ -78,6 +79,12 @@ export const actions = actionTree(
         user.email = email
       }
       storex.user.setUser(userLogged)
+    },
+    async forgotPassword ({ state }, { email }) {
+      await api.forgotPassword(email)
+    },
+    async resetPassword ({ state }, { code, password }) {
+      await api.resetPassword(code, password)
     },
     logout () {
       storex.user.setUser({ user: null, jwt: null })

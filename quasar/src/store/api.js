@@ -38,6 +38,14 @@ class Api {
     return res.data
   }
 
+  async forgotPassword (email) {
+    await axios.post(this.url('/auth/forgot-password'), { email })
+  }
+
+  async resetPassword (code, password) {
+    await axios.post(this.url('/auth/reset-password'), { code, password, passwordConfirmation: password })
+  }
+
   async register (username, email, password) {
     await axios.post(this.url('/auth/local/register'), { username, email, password })
   }

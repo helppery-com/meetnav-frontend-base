@@ -6,7 +6,7 @@
         :color="hasControl ? 'primary' : 'dark'"
         class="text-white"
         v-if="me && !hasControl"
-      >{{ hasControl ? 'You!' : 'You, click to control!' }}</q-chip>
+      >{{ hasControl ? 'You!' : 'Click to control!' }}</q-chip>
     </div>
     <div v-for="(pointer, ix) in pointers"
       :key="ix"

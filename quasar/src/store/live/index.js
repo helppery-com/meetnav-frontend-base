@@ -28,7 +28,7 @@ export const actions = actionTree(
   { state, getters, mutations },
   {
     async connect ({ state }) {
-      if (storex.user.isGuest) {
+      if (parseInt('1') === 1 || storex.user.isGuest) {
         return
       }
       const user = {

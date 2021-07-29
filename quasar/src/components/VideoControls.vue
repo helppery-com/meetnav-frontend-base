@@ -37,7 +37,7 @@
     <q-btn round outline
       :icon="fullScreen ? 'fas fa-compress' : 'fas fa-expand'"
       text-color="dark"
-      class="col-auto q-ml-xl q-ml-xs bg-grey-3" @click="toogleFullScreen"/>
+      class="col-auto q-ml-xl q-ml-xs bg-grey-3" @click="toggleFullScreen"/>
     <q-btn round outline
       text-color="accent"
       class="col-auto bg-grey-3"
@@ -96,7 +96,6 @@
 </template>
 <script>
 import Social from '../components/Social'
-import { AppFullscreen } from 'quasar'
 
 export default {
   components: {
@@ -107,7 +106,6 @@ export default {
       share: false,
       text: '',
       rating: 0,
-      fullScreen: false,
       chatStatus: this.$storex.room.showChat,
       leave: false
     }
@@ -187,6 +185,9 @@ export default {
     },
     roomPassord () {
       return this.$storex.room.room && this.$storex.room.room.password
+    },
+    fullScreen () {
+      return this.$storex.room.fullScreen
     }
   },
   methods: {
@@ -218,16 +219,14 @@ export default {
       this.$emit('message', this.text)
       this.text = null
     },
-    async toogleFullScreen () {
-      if (this.fullScreen) {
-        await AppFullscreen.exit()
-        this.fullScreen = false
+    async toggleFullScreen () {
+      const fullScreen = this.fullScreen
+      await this.$storex.room.toggleFullScreen()
+      if (fullScreen) {
         if (this.chatStatus !== this.$storex.room.showChat) {
           this.$storex.room.toggleChat()
         }
       } else {
-        await AppFullscreen.request()
-        this.fullScreen = true
         this.chatStatus = this.$storex.room.showChat
         if (this.chatStatus) {
           this.$storex.room.toggleChat()
@@ -250,4 +249,10 @@ export default {
 <style lang="sass">
   .emotes .fas.fa-grin-beam
     color: #ffc107
+  .absolute-fullScreen
+    position: absolute
+    z-index: 100
+    top: 2px
+    right: 2px
+    opacity: 0.5
 </style>

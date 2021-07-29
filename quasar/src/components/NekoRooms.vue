@@ -1,58 +1,54 @@
 <template>
-  <div v-if="rooms.length" class="col-auto">
-    <q-btn-dropdown auto-close stretch flat
+  <div v-if="rooms.length" class="col q-mr-md" style="text-align: right">
+    <q-btn
+      flat
       color="primary q-mr-md q-mt-md"
-      :label="$t('Rooms')">
-      <q-list>
-        <q-item
-          v-for="(room, ix) in roomAndPeriod" :key="ix"
-        >
-          <q-item-section v-if="room._period">
-            {{ room._period }}
-          </q-item-section>
-          <q-item-section v-else>
-            <div class="row q-gutter-md">
-              <q-badge rounded class="col-auto" :color="room.running ? 'green' : 'dark' " />
-              <router-link
-                :to="`/navroom/${room.roomId}`"
-                class="col"
-              >
-                {{ `@${room.owner}/${room.roomId}` }}
-              </router-link>
-              <q-btn icon="incognito" @click="$router.push({ path: `/navroom/${room.roomId}`, query: { incognito: true }})" />
-              <q-avatar v-for="(user, iu) in room.users" :key="iu">
-                <img :src="user.avatar" style="margin-right: -10px" :title="`@${user.username}`"/>
-              </q-avatar>
-              <q-btn
-                class="col-auto"
-                icon="stop"
-                color="red"
-                v-if="room.running && isOwnerRoom(room) && canDelete(room)"
-                @click="stopRoom(room)"
-              />
-              <q-btn
-                class="col-auto"
-                icon="delete"
-                color="dark"
-                v-if="isOwnerRoom(room) && canDelete(room)"
-                @click="deleteRoom(room)"
-              />
-            </div>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-btn-dropdown>
-    <q-badge color="orange" text-color="white" :label="rooms.length"
-      style="margin-left: -75px;margin-right: 30px;"/>
+      :label="$t('Open rooms')"
+      >
+      <q-menu>
+        <q-list>
+          <q-item
+            v-for="(room, ix) in roomAndPeriod" :key="ix"
+          >
+            <q-item-section v-if="room._period">
+              {{ room._period }}
+            </q-item-section>
+            <q-item-section v-else>
+              <div class="row">
+                <q-badge rounded class="col-auto q-mr-xs" :color="room.running ? 'green' : 'dark' " />
+                <router-link
+                  :to="`/navroom/${room.roomId}`"
+                  class="col q-mr-xs"
+                >
+                  {{ `@${room.owner}/${room.roomId}` }}
+                </router-link>
+                <q-avatar v-for="(user, iu) in room.users" :key="iu">
+                  <img :src="user.avatar" style="margin-right: -10px" :title="`@${user.username}`"/>
+                </q-avatar>
+                <q-btn rounded color="white" class=" q-mx-xs bg-red" round icon="fas fa-sign-out-alt" size="md" @click="showLeaveRoom = true" />
+                <q-dialog v-model="showLeaveRoom">
+                  <LeaveRoom />
+                </q-dialog>
+              </div>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
+    </q-btn>
   </div>
 </template>
 <script>
 import { formatRelative, parseISO } from 'date-fns'
+import LeaveRoom from './LeaveRoom.vue'
 
 export default {
+  components: {
+    LeaveRoom
+  },
   data () {
     return {
-      rooms: []
+      rooms: [],
+      showLeaveRoom: false
     }
   },
   watch: {

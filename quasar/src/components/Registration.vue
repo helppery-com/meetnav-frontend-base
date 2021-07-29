@@ -3,8 +3,12 @@
     <q-dialog v-model="openRegisterDialog" persistent transition-show="scale" transition-hide="scale">
       <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
         <form v-if="!createSuccessfull" method="post" @submit.prevent="register">
-          <q-card-section><div class="text-h6 text-blue-grey-8">{{$t('welcomePage.moreSignup.register')}}</div></q-card-section>
+          <q-card-section><div class="text-h4 text-blue-grey-8">{{$t('Register')}}</div></q-card-section>
           <q-card-section>
+              <q-input name="username" color="blue-grey-6" v-model="newUser.username"
+                :label="$t('User name')" required>
+                <template v-slot:prepend><q-icon name="person" /></template>
+              </q-input>
               <q-input name="email" type="email" color="blue-grey-6" v-model="newUser.email" :label="$t('welcomePage.moreSignup.email')" required>
                 <template v-slot:prepend><q-icon name="mail" /></template>
               </q-input>
@@ -15,7 +19,7 @@
                 <template v-slot:prepend><q-icon name="lock" /></template>
               </q-input>
           </q-card-section>
-          <q-card-section class="message__panel">
+          <q-card-section class="message__panel text-red text-h6">
             <div class="error">{{ message }}</div>
           </q-card-section>
           <q-card-actions align="right">
@@ -39,7 +43,7 @@ export default {
   data () {
     return {
       newUser: { email: '', password: '', rePassword: '' },
-      openRegisterDialog: false,
+      openRegisterDialog: !!this.$route.query.register,
       loading: false,
       createSuccessfull: false,
       message: ''
@@ -48,6 +52,7 @@ export default {
   methods: {
     async register (credentials) {
       const email = credentials.target.email.value
+      const username = credentials.target.username.value
       const password = credentials.target.password.value
       const rePassword = credentials.target.rePassword.value
       if (!password || password !== rePassword) {
@@ -56,12 +61,11 @@ export default {
       }
       this.loading = true
       try {
-        const username = email.split('@')[0]
         await this.$storex.user.register({ username, email, password })
         this.createSuccessfull = true
         this.openLoginDialog = false
       } catch (error) {
-        this.message = error.message
+        this.message = error.response.data.message[0].messages[0].message
       } finally {
         this.loading = false
       }
@@ -69,6 +73,7 @@ export default {
     openDialog () {
       this.openRegisterDialog = true
       this.newUser.email = ''
+      this.newUser.username = ''
       this.newUser.password = ''
       this.newUser.rePassword = ''
     },
@@ -77,6 +82,7 @@ export default {
       this.newUser.email = ''
       this.newUser.password = ''
       this.newUser.rePassword = ''
+      this.newUser.username = ''
     }
   }
 }

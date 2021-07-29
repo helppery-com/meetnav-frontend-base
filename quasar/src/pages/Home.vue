@@ -19,10 +19,13 @@
               v-bind:label="$t('homePage.navigateTogether')"
               square
               :disabled="!canCreateRoom"
+              @click="newRoom('standard')"
             >
               <q-menu fit
                 anchor="center middle"
-                self="center middle">
+                self="center middle"
+                v-if="false"
+              >
                 <q-list style="min-width: 100px">
                   <q-item clickable v-close-popup @click="openMyRoom">
                     <q-item-section avatar>
@@ -63,8 +66,23 @@
               </template>
             </q-input>
           </div>
+          <div class="q-py-md">
+            <q-btn outline
+              rounded
+              v-for="(room, ix) in openRooms" :key="ix"
+              @click="$router.push(`/navroom/${room.roomId}`)"
+              icon="cast"
+              :label="room.roomId"
+              class="q-mr-xs"
+            />
+          </div>
           <hr class="q-mt-lg">
-          <p class="q-mt-lg sm-hide xs-hide" ><span class="text-purple-7"> {{ $t('homePage.learnMore') }} </span> {{ $t('homePage.about') }} meetnav</p>
+          <p class="q-mt-lg sm-hide xs-hide" >
+            <span class="text-purple-7">
+              {{ $t('homePage.learnMore') }}
+            </span>
+            <a href="https://web.meetnav.com/">{{ $t('homePage.about') }} meetnav</a>
+          </p>
         </div>
       </div>
       <!-- carousel section -->
@@ -78,62 +96,23 @@
           padding
           class="fit rounded-borders"
           control-color="grey-8"
-          :autoplay="true"
+          :autoplay="10000"
           infinite
         >
-          <q-carousel-slide name="style" class="column no-wrap flex-center">
+          <q-carousel-slide
+            class="column no-wrap flex-center"
+            v-for="(slice, ix) in carousel" :key="ix"
+            :name="slice.title"
+            >
             <img
-              src="/meetnav-browser.png"
+              :src="slice.img"
               class="q-mt-md"
             />
             <div class="text-center " style="margin-top: 50px; width: 350px">
-              <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
-              <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
+              <span class="text-h5">{{ $t(slice.title) }}</span>
+              <p>{{ $t(slice.desc) }}</p>
             </div>
           </q-carousel-slide>
-          <q-carousel-slide name="watch" class="column no-wrap flex-center">
-            <img
-              src="/meetnav-browser-music.png"
-              class="q-mt-md"
-            />
-            <div class="text-center " style="margin-top: 50px; width: 350px">
-              <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
-              <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
-            </div>
-          </q-carousel-slide>
-          <!--q-carousel-slide name="tv" class="column no-wrap flex-center">
-            <q-img
-              src="/meetnav-browser.png"
-              class="q-mt-md"
-              style="width: 500px; height: 650px"
-            />
-            <div class="text-center " style="margin-top: 50px; width: 350px">
-              <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
-              <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
-            </div>
-          </q-carousel-slide>
-          <q-carousel-slide name="pc" class="column no-wrap flex-center">
-            <q-img
-              src="/meetnav-browser.png"
-              class="q-mt-md"
-              style="width: 500px; height: 650px"
-            />
-            <div class="text-center " style="margin-top: 50px; width: 350px">
-              <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
-              <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
-            </div>
-          </q-carousel-slide>
-          <q-carousel-slide name="linux" class="column no-wrap flex-center">
-            <q-img
-              src="/meetnav-browser.png"
-              class="q-mt-md"
-              style="width: 500px; height: 650px"
-            />
-            <div class="text-center " style="margin-top: 50px; width: 350px">
-              <span class="text-h5">{{ $t('homePage.carouselHeading') }}</span>
-              <p>{{ $t('homePage.carouselHeadingCaption') }}</p>
-            </div>
-          </q-carousel-slide-->
         </q-carousel>
       </div>
     </div>
@@ -146,9 +125,29 @@ export default {
   name: 'Home',
   data () {
     return {
-      slide: 'style',
+      slide: 'meetnav',
       code: '',
-      templates: []
+      templates: [],
+      carousel: [{
+        img: 'https://web.meetnav.com/web/image/317-61f61eab/meetnav_travel.png',
+        title: 'meetnav',
+        desc: 'Meet and navigate internet together!'
+      },
+      {
+        img: 'https://web.meetnav.com/web/image/299-ccad1279/meetnav_shopping.png',
+        title: 'Shopping',
+        desc: 'Call your fiends and go online shopping together!'
+      },
+      {
+        img: 'https://web.meetnav.com/web/image/300-0ee821cc/meetnav_social.png',
+        title: 'Socializing',
+        desc: 'Enjoy meeting and going social. Comment, share, discover.'
+      },
+      {
+        img: 'https://web.meetnav.com/web/image/301-2e6b8168/meetnav_kids.png',
+        title: 'Learning',
+        desc: 'he best way for the new internet users to navigate internet in safe and funny way.'
+      }]
     }
   },
   async created () {
@@ -160,6 +159,9 @@ export default {
     },
     canCreateRoom () {
       return this.user && !this.$isGuest
+    },
+    openRooms () {
+      return this.$storex.room.nekoRooms
     }
   },
   methods: {

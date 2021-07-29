@@ -16,7 +16,7 @@
 <script>
 // https://github.com/Alicunde/Videoconference-Dish-CSS-JS
 export default {
-  props: ['cameras', 'margin', 'colSize'],
+  props: ['cameras'],
   data () {
     return {
       width: null,
@@ -32,9 +32,6 @@ export default {
     window.removeEventListener('resize', this.onResize)
   },
   watch: {
-    colSize () {
-      this.dish()
-    },
     cameras () {
       setTimeout(() => this.dish(), 100)
     }
@@ -44,7 +41,7 @@ export default {
       return this.width ? `${this.width}px` : '100%'
     },
     getMargin () {
-      return `${this.$props.margin || 2}px`
+      return '2px'
     },
     getHeight () {
       return this.width ? `${this.width * 0.75}px` : '100%'
@@ -67,7 +64,7 @@ export default {
       return increment
     },
     dish () {
-      const margin = this.margin || 2
+      const margin = 2
       const scenary = this.$refs.dish
       const width = scenary.offsetWidth - margin * 2
       const height = scenary.offsetHeight - margin * 2

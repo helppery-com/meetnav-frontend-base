@@ -144,9 +144,9 @@ module.exports = function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
-        description: 'A Quasar Framework app',
+        name: 'meetnav - meet&navigate',
+        short_name: 'meetnav',
+        description: 'meet & navigate',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

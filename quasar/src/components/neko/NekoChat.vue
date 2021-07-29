@@ -40,8 +40,9 @@ export default {
     li.event
       display: none !important
     .content
-      .content-body
-        color: $dark !important
+      .content-body,
+      span.timestamp
+        color: white !important
     .text-container
       background-color: #9e9e9e !important
       color: white !important

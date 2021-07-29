@@ -1,5 +1,5 @@
 <template>
-  <q-page class="navroom-page column">
+  <q-page class="navroom-page column bg-black q-pa-md">
     <GuestLogin v-if="isRoomAlreadyEstablished && !user" />
     <div class="col row" v-if="termsAccepted">
       <div
@@ -15,59 +15,13 @@
         </div>
       </div>
       <div class="col column">
-        <NekoVideo :class="['col rounded-borders q-py-md q-px-xs']" @connected="ref => nekoVideoRef = ref" v-if="connected" />
-        <div class="col-auto row q-pb-md">
-          <VideoControls class="col-auto video-controls" v-if="connected"/>
-        </div>
+        <NekoVideo :class="['col rounded-borders', fullScreen  ? '' : '']"
+          @connected="ref => nekoVideoRef = ref" v-if="connected" />
       </div>
       <div
-        :class="['users relative-position column', `col-${userVideoCol}`]">
-        <q-card :class="['col column', ix ? 'q-mt-xs' : '']" v-for="(camera, ix) in cameras" :key="ix">
-          <UserVideo
-              class="col"
-              :stream="camera"
-              :showUserInfo="true"
-            />
-        </q-card>
-        <div class="col-auto column q-py-xs">
-          <q-card class="col-auto q-pa-xs" v-for="(offlineUser, ix) in offlineUsers" :key="ix">
-            <q-card-section class="row q-pa-xs ">
-              <q-avatar class="col-auto">
-                <img :src="offlineUser.avatar" />
-              </q-avatar>
-              <div class="col column q-ml-md">
-                <div class="col text-h6">{{ $t('Offline') }}</div>
-                <div class="col">{{ offlineUser.username }}</div>
-              </div>
-              <div class="col-auto row q-gutter-xs">
-                <q-btn color="accent" :class="['col', callingOfflineUser ? 'pulse' : '']" icon="call" @click="callOfflineUser(offlineUser)" />
-                <q-btn color="primary" class="col" icon="send" @click="openSendDlg(offlineUser)" />
-                <q-dialog v-model="openSend" persistent>
-                  <q-card style="min-width: 350px">
-                    <q-card-section>
-                      <div class="text-h6" v-if="offlineUserSendMessage">{{ `${$t('Write your message for')} @${offlineUserSendMessage.username}`}}</div>
-                    </q-card-section>
-
-                    <q-card-section class="q-pt-none">
-                      <q-input dense v-model="offlineUserMessage" autofocus @keyup.enter="prompt = false" />
-                      <q-toggle
-                        v-model="sendToChat"
-                        color="pink"
-                        icon="chat"
-                        :label="$t('Send message to room\'s chat as well')"
-                    />
-                    </q-card-section>
-
-                    <q-card-actions align="right" class="text-primary">
-                      <q-btn flat color="accent" :label="$t('Send')" v-close-popup @click="sendOfflineUserMessage"/>
-                      <q-btn :label="$t('Cancel')" color="red" v-close-popup />
-                    </q-card-actions>
-                  </q-card>
-                </q-dialog>
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
+        :class="['users relative-position column q-ml-md', `col-${userVideoCol}`]"
+      >
+        <NavroomUsers class="rounded-borders"/>
       </div>
     </div>
     <q-dialog
@@ -92,6 +46,7 @@
       transition-show="scale"
       transition-hide="scale"
       :persistent="!isAdmin"
+      @hide="onTermsAndCondsAccepted"
     >
       <q-card class="bg-primary text-white" style="width: 300px">
         <q-card-section>
@@ -100,7 +55,17 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <Commercial @end="lnk => commercialLink = lnk" />
+          <Commercial @end="lnk => commercialLink = lnk" style="opacity:0.6" />
+            <div class="ad-text fit">
+              <a
+                class="fit"
+                href="/contact"
+                target="blank"
+              >
+                <div class="text-h4">{{ $t('Space available for your advertising.') }}</div>
+                <div class="text-h6">{{ $t('Click here!') }}</div>
+              </a>
+            </div>
         </q-card-section>
         <q-card-section class="bg-white">
           <a href="" target="_blank">
@@ -109,7 +74,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-teal" v-if="connected && commercialLink">
-          <q-btn outline color="primary" :label="$t('OK')" v-close-popup class="ref-navroom-ready" @click="termsAccepted = true" />
+          <q-btn outline color="primary" :label="$t('OK')" v-close-popup class="ref-navroom-ready" />
           <q-btn outline icon="fas fa-external-link-alt" color="accent" :label="$t('Visit sponsor')" @click="openCommercial" class="ref-navroom-sponsor-link" />
         </q-card-actions>
         <q-card-actions align="right" class="bg-white text-teal" v-else>
@@ -125,10 +90,9 @@
 <script>
 import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
-import UserVideo from '../components/UserVideo'
-import VideoControls from '../components/VideoControls.vue'
 import NekoChat from '../components/neko/NekoChat'
 import GuestLogin from '../components/GuestLogin.vue'
+import NavroomUsers from '../components/NavroomUsers.vue'
 
 import '../assets/styles/vendor/_emote.scss'
 
@@ -136,10 +100,9 @@ export default {
   components: {
     NekoVideo,
     Commercial,
-    UserVideo,
-    VideoControls,
     NekoChat,
-    GuestLogin
+    GuestLogin,
+    NavroomUsers
   },
   data () {
     return {
@@ -151,10 +114,7 @@ export default {
       welcome: false,
       rating: 0,
       commercialLink: null,
-      userVideoCol: 3,
       chatCol: 2,
-      myCam: null,
-      guestCams: null,
       openChat: false,
       openSend: false,
       offlineUserSendMessage: null,
@@ -170,20 +130,6 @@ export default {
     }
   },
   computed: {
-    myCamera () {
-      const myCams = this.cameras.filter(c => c[0].extra.id === this.$storex.user.user.id)
-      return myCams.length ? myCams[0] : null
-    },
-    guestCameras () {
-      const cams = this.cameras.filter(c => c[0].extra.id !== this.$storex.user.user.id)
-      return cams.length ? cams : null
-    },
-    cameras () {
-      return Object.keys(this.users).map(k => this.users[k])
-    },
-    isDebug () {
-      return this.$route.query.debug
-    },
     connected () {
       return this.$storex.room.nekoConnected
     },
@@ -199,11 +145,11 @@ export default {
       }
       return '100%'
     },
-    userCount () {
-      return Object.keys(this.users).length
-    },
     users () {
       return this.isDebug ? this.debugUserStreams : this.$storex.room.streams
+    },
+    isDebug () {
+      return this.$route.query.debug
     },
     debugUserStreams () {
       let debug = this.isDebug
@@ -222,17 +168,11 @@ export default {
       }
       return res
     },
-    anyUser () {
-      return !this.incognito || this.cameras.length > 1
-    },
     incognito () {
-      return this.$storex.room.muted && this.$storex.room.paused
+      return this.$storex.room.incognito
     },
     isAdmin () {
       return this.$storex.user.user && this.$storex.user.user.role.description === 'administrator'
-    },
-    onlineUsers () {
-      return Object.keys(this.users).map(k => this.users[k][0].extra)
     },
     offlineUsers () {
       const onlineUserIds = this.onlineUsers.map(u => u.id)
@@ -244,6 +184,12 @@ export default {
     },
     user () {
       return this.$storex.user.user
+    },
+    fullScreen () {
+      return this.$storex.room.fullScreen
+    },
+    userVideoCol () {
+      return 3
     }
   },
   watch: {
@@ -254,14 +200,11 @@ export default {
     },
     connected () {
       console.log('Connected')
-    },
-    cameras () {
-      this.myCam = this.myCamera
-      this.guestCams = this.guestCameras
     }
   },
   async created () {
     await this.checkUserPermissions()
+    this.$root.$once('user-login-cancel', () => this.redirectToError())
   },
   methods: {
     roomEstablishment () {
@@ -316,19 +259,26 @@ export default {
       this.requestPermissionDlg = !this.micPermission || !this.cameraPermission
     },
     async openRoom () {
-      this.welcome = true
-      const { roomId, username } = this.$route.params
-      const calling = this.$route.path.endsWith('/call')
-      await this.$storex.room.openOrJoin({ ...this.$route.query, roomId, username, calling })
+      try {
+        this.welcome = true
+        const { roomId, username } = this.$route.params
+        const calling = this.$route.path.endsWith('/call')
+        const settings = { ...this.$route.query, roomId, username, calling }
+        await this.$storex.room.openOrJoin(settings)
+        if (settings.fullScreen) {
+          this.$storex.room.setFullScreen(true)
+        }
+      } catch (ex) {
+        console.error(ex)
+        this.redirectToError()
+      }
+    },
+    redirectToError () {
+      const errorUrl = 'https://web.meetnav.com/error'
+      window.location.href = this.$route.query.errorUrl || errorUrl
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')
-    },
-    userVideoHeight () {
-      const { minHeight } = this.$el.style
-      const height = parseInt(minHeight.replace('px', ''))
-      const userCount = this.userCount
-      return `${parseInt(height / userCount)}px`
     },
     openSendDlg (offlineUser) {
       this.openSend = true
@@ -342,6 +292,9 @@ export default {
     callOfflineUser (offlineUser) {
       this.callingOfflineUser = offlineUser
       setTimeout(() => { this.callingOfflineUser = null }, 40000)
+    },
+    onTermsAndCondsAccepted () {
+      this.termsAccepted = true
     }
   },
   beforeDestroy () {
@@ -353,8 +306,6 @@ export default {
   body
     overflow: hidden
   .navroom-page
-    .neko-video
-      opacity: 0.9
     .footer
       height: 45px
     ul.video-menu.bottom,
@@ -404,6 +355,61 @@ export default {
         width: 100% !important
       .message
         margin-top: 3px
-        background-color: #ffffffe0 !important
+        background-color: #607d8b !important
         border-radius: 5px !important
+        .timestamp,
+        .content-body
+          color: white !important
+      .chat-history
+        height: 250px !important
+        flex: none !important
+
+    .controls.fullScreen
+        position: absolute
+        bottom: -42px
+        width: 100%
+        &:hover
+          -webkit-animation: appearEffect 1s forwards
+          -moz-animation: appearEffect 1s forwards
+          -ms-animation: appearEffect 1s forwards
+          -o-animation: appearEffect 1s forwards
+          animation: appearEffect 1s forwards
+  .ad-text
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    text-align: center
+    padding: 10%
+    display:block
+    text-shadow: 2px 2px 1px #906326
+    a
+      color: white !important
+  @keyframes appearEffect
+    from
+      bottom: -42px
+    to
+      bottom: 5px
+
+  /* Firefox < 16 */
+  @-moz-keyframes appearEffect
+    from
+      bottom: -42px
+    to
+      bottom: 5px
+
+  /* Safari, Chrome and Opera > 12.1 */
+  @-webkit-keyframes appearEffect
+    from
+      bottom: -42px
+    to
+      bottom: 5px
+
+  /* Internet Explorer */
+  @-ms-keyframes appearEffect
+    from
+      bottom: -42px
+    to
+      bottom: 5px
 </style>

@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh Lpr lff" class="room-layout" ref="layout">
-    <q-header elevated class="bg-white header">
+    <q-header elevated class="bg-white header" v-if="!fullScreen && false">
       <q-toolbar class="row">
         <q-toolbar-title class="col text-primary text-h5" >
           <span>meetnav</span>
@@ -82,6 +82,9 @@ export default {
     },
     roomId () {
       return this.$route.path.split('/').reverse()[0]
+    },
+    fullScreen () {
+      return this.$storex.room.fullScreen
     }
   },
   watch: {
@@ -111,32 +114,4 @@ export default {
 }
 </script>
 <style lang="sass">
-.room-layout
-  .q-scrollarea
-    .absolute.full-width
-      height: 100% !important
-
-  .neko-chat
-    .neko-emoji
-      width: 100% !important
-    .message
-      margin-top: 3px
-      background-color: #ffffffe0 !important
-      border-radius: 5px !important
-
-  .emotes
-    > ul
-      padding-inline-start: 0px
-      > li
-        display: none
-        &:last-child
-          display: inherit
-    ul.context
-      background-color: white !important
-      li
-        display: inherit
-  .q-drawer
-    background: transparent
-
-@import url(/layouts/standard.css)
 </style>

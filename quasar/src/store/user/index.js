@@ -80,7 +80,7 @@ export const actions = actionTree(
       }
       storex.user.setUser(userLogged)
     },
-    async forgotPassword ({ state }, { email }) {
+    async forgotPassword ({ state }, email) {
       await api.forgotPassword(email)
     },
     async resetPassword ({ state }, { code, password }) {

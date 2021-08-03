@@ -12,15 +12,6 @@
           ]"
         @click="room.toggleVideoChat()"
       >
-        <q-badge color="green"
-          class="shadow-2"
-          floating
-          v-if="room.liveVideoChat && !room.cameraConnected">
-          <q-spinner-radio
-            color="white"
-            size="10px"
-          />
-        </q-badge>
         <q-tooltip>
           <div v-if="room.liveVideoChat && !room.cameraConnected">{{ $t('Live video chat session is going on, click to join!') }}</div>
           <div v-else>{{ $t(room.cameraConnected ? 'Leave video chat' : 'Start video chat') }}</div>
@@ -39,7 +30,10 @@
           <div v-else>{{ $t('You don\'t the control. Click here to take it.')}}</div>
         </q-tooltip>
       </q-btn>
-      <q-btn flat round color="accent" class="bg-white shadow-2" icon="fas fa-question-circle" @click="toggleMode('support')">
+      <q-btn flat round color="accent" class="bg-white shadow-2"
+        icon="fas fa-question-circle" @click="toggleMode('support')"
+        v-if="false"
+      >
         <q-tooltip>
           {{ $t('Click for help, suggestions or contact support.') }}
         </q-tooltip>
@@ -77,6 +71,12 @@
                 <q-badge floating v-if="member.extra.hasControl">
                   <q-icon name="fas fa-mouse-pointer" />
                 </q-badge>
+                <q-badge floating
+                  class="bounce"
+                  color="accent" text-color="white"
+                  v-if="member.extra.camera && member.extra.camera.id">
+                  <q-icon name="duo" />
+                </q-badge>
               </q-avatar>
             </div>
           </div>
@@ -97,7 +97,7 @@
         <div class="ad-text fit">
           <a
             class="fit"
-            href="/contact"
+            href="https://web.meetnav.com/advertising"
             target="blank"
           >
             <div class="text-h4">{{ $t('Space available for your advertising.') }}</div>
@@ -137,7 +137,7 @@
       <OnlineUsers v-if="showUsers"/>
       <Wallet v-if="showWallet" />
       <LeaveRoom v-if="showLeaveRoom" />
-      <VideoSettings v-if="showSettings" />
+      <RoomSettings v-if="showSettings" />
     </q-dialog>
   </div>
 </template>
@@ -146,7 +146,7 @@ import UserVideo from '../components/UserVideo.vue'
 import OnlineUsers from '../components/OnlineUsers'
 import Wallet from '../components/Wallet'
 import LeaveRoom from './LeaveRoom'
-import VideoSettings from './VideoSettings'
+import RoomSettings from './RoomSettings'
 import ChatPopup from './ChatPopup'
 
 export default {
@@ -155,7 +155,7 @@ export default {
     OnlineUsers,
     Wallet,
     LeaveRoom,
-    VideoSettings,
+    RoomSettings,
     ChatPopup
   },
   data () {
@@ -253,7 +253,7 @@ export default {
   .navroom-users
     .main-profile
       border-radius: 5px
-      background-image: linear-gradient(#5b7e96, #2a455d, #151c23)
+      background-image: linear-gradient(transparent, #2c3e5054, #3a5169)
     .top-left
       position: absolute
       left: 12px

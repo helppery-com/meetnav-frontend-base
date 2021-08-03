@@ -66,7 +66,8 @@ export const getters = getterTree(state, {
   cameraConnected: state => !!state.userStream,
   me: state => (state.members[storex.user.user.id] || {}),
   memberCount: state => state.rtcConnected ? Object.keys(state.rtc.users).length : 0,
-  liveVideoChat: state => state.rtcConnected ? state.rtc.liveVideoChat : false
+  liveVideoChat: state => state.rtcConnected ? state.rtc.liveVideoChat : false,
+  configurations: () => neko.video.configurations.filter(c => c.rate === 60)
 })
 
 // Change state
@@ -96,9 +97,11 @@ export const mutations = mutationTree(state, {
     }
   },
   onStreamChange (state, stream) {
-    state.members = {
-      ...state.members,
-      [stream.extra.id]: stream.extra
+    if (stream) {
+      state.members = {
+        ...state.members,
+        [stream.extra.id]: stream.extra
+      }
     }
   },
   removeStream (state, event) {

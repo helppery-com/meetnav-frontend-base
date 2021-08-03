@@ -1,27 +1,15 @@
 <template>
-  <q-page class="navroom-page column bg-black q-pa-md">
+  <q-page class="navroom-page column">
     <GuestLogin v-if="isRoomAlreadyEstablished && !user" />
-    <div class="col row" v-if="termsAccepted">
-      <div
-        :class="['users relative-position column', `col-${chatCol}`]"
-        v-if="$storex.room.showChat"
-      >
-        <div class="col column relative-position">
-          <q-scroll-area class="col fit chat" v-if="connected">
-            <div class="q-pa-sm fit">
-              <NekoChat />
-            </div>
-          </q-scroll-area>
-        </div>
-      </div>
-      <div class="col column">
+    <div class="col row">
+      <div class="col column q-py-md q-pl-md q-pr-xs" ref="videoContainer">
         <NekoVideo :class="['col rounded-borders', fullScreen  ? '' : '']"
-          @connected="ref => nekoVideoRef = ref" v-if="connected" />
+          @connected="ref => nekoVideoRef = ref" v-if="connected && termsAccepted" />
       </div>
       <div
-        :class="['users relative-position column q-ml-md', `col-${userVideoCol}`]"
+        :class="['users relative-position column q-ml-md q-mr-md', `col-${userVideoCol}`]"
       >
-        <NavroomUsers class="rounded-borders"/>
+        <NavroomUsers class="rounded-borders q-my-md relative-position" v-if="connected && termsAccepted"/>
       </div>
     </div>
     <q-dialog
@@ -59,7 +47,7 @@
             <div class="ad-text fit">
               <a
                 class="fit"
-                href="/contact"
+                href="https://web.meetnav.com/advertising"
                 target="blank"
               >
                 <div class="text-h4">{{ $t('Space available for your advertising.') }}</div>
@@ -68,7 +56,7 @@
             </div>
         </q-card-section>
         <q-card-section class="bg-white">
-          <a href="" target="_blank">
+          <a href="https://web.meetnav.com/termsandconds" target="_blank">
             {{ $t('By joining this room you accept terms and conditions.') }}
           </a>
         </q-card-section>
@@ -90,7 +78,6 @@
 <script>
 import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
-import NekoChat from '../components/neko/NekoChat'
 import GuestLogin from '../components/GuestLogin.vue'
 import NavroomUsers from '../components/NavroomUsers.vue'
 
@@ -100,7 +87,6 @@ export default {
   components: {
     NekoVideo,
     Commercial,
-    NekoChat,
     GuestLogin,
     NavroomUsers
   },
@@ -190,6 +176,10 @@ export default {
     },
     userVideoCol () {
       return 3
+    },
+    videoMaxWidth () {
+      const w = this.$refs.videoContainer.clientWidth + 100
+      return Math.max(w, 1280)
     }
   },
   watch: {
@@ -202,7 +192,7 @@ export default {
       console.log('Connected')
     }
   },
-  async created () {
+  async mounted () {
     await this.checkUserPermissions()
     this.$root.$once('user-login-cancel', () => this.redirectToError())
   },
@@ -263,14 +253,20 @@ export default {
         this.welcome = true
         const { roomId, username } = this.$route.params
         const calling = this.$route.path.endsWith('/call')
-        const settings = { ...this.$route.query, roomId, username, calling }
+        const settings = {
+          ...this.$route.query,
+          roomId,
+          username,
+          calling
+        }
         await this.$storex.room.openOrJoin(settings)
+        this.updateResolution()
         if (settings.fullScreen) {
           this.$storex.room.setFullScreen(true)
         }
       } catch (ex) {
         console.error(ex)
-        this.redirectToError()
+        // this.redirectToError()
       }
     },
     redirectToError () {
@@ -295,6 +291,15 @@ export default {
     },
     onTermsAndCondsAccepted () {
       this.termsAccepted = true
+    },
+    updateResolution () {
+      const maxWidth = this.videoMaxWidth
+      const neko = this.$storex.room.neko
+      const confs = neko.video.configurations
+      const r = confs.filter(r => r.width <= maxWidth).sort((a, b) => a.width > b.width ? -1 : 1)
+      if (r.length) {
+        neko.video.screenSet(r[0])
+      }
     }
   },
   beforeDestroy () {
@@ -306,6 +311,8 @@ export default {
   body
     overflow: hidden
   .navroom-page
+    background-color: #000000
+    background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%)
     .footer
       height: 45px
     ul.video-menu.bottom,

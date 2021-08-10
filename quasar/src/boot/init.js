@@ -1,4 +1,5 @@
 import gtm from 'src/gtm'
+import consentMng from 'src/consent'
 import { initLogging, logging } from 'src/logging'
 
 export default async ({ app, router, Vue, store }) => {
@@ -6,7 +7,13 @@ export default async ({ app, router, Vue, store }) => {
   router.afterEach((to, from) => {
     gtm.logPage(to.path)
   })
-  router.beforeEach((to, from, next) => {
+
+  router.beforeEach(async (to, from, next) => {
+    consentMng.onConsent(consent => {
+      if (consent && consent.analytics) {
+        gtm.init()
+      }
+    })
     try {
       logging.info('route event', {
         event: 'navigate',
@@ -15,7 +22,18 @@ export default async ({ app, router, Vue, store }) => {
         to: to.fullPath
       })
     } catch {}
-    next()
+    const consent = await consentMng.getConsent()
+    if (consent || to.path === '/consent') {
+      next()
+    } else {
+      const { path, query } = to
+      next({
+        query: {
+          back: { path, query }
+        },
+        path: '/consent'
+      })
+    }
   })
   Vue.mixin({
     computed: {
@@ -27,7 +45,7 @@ export default async ({ app, router, Vue, store }) => {
       }
     }
   })
-  const { $storex } = new Vue()
+  const { $storex } = window
   $storex.user.init()
   $storex.room.loadUserRooms()
   if ($storex.user.user) {

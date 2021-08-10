@@ -22,6 +22,11 @@
           <q-card-section class="message__panel text-red text-h6">
             <div class="error">{{ message }}</div>
           </q-card-section>
+          <q-card-section class="message__panel text-subtitle">
+            {{ $t('We use this information to manage your account') }}
+            <a href="https://web.meetnav.com/termsandconds" target="blank">{{ $t('Terms of Use and Privacy')}}</a>
+
+          </q-card-section>
           <q-card-actions align="right">
             <q-btn type="submit" :loading="loading" :label="$t('welcomePage.moreSignup.register')" class="q-mt-md nav-button" color="blue-grey-6"></q-btn>
             <q-btn :label="$t('welcomePage.moreSignup.cancel')" class="q-mt-md nav-button" color="red" v-close-popup></q-btn>
@@ -60,6 +65,7 @@ export default {
         return
       }
       this.loading = true
+      this.message = null
       try {
         await this.$storex.user.register({ username, email, password })
         this.createSuccessfull = true

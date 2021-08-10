@@ -22,7 +22,7 @@ export default {
         password: 'Password',
         repeatPassword: 'Reapeat password',
         cancel: 'Cancel',
-        successMessage: 'Please check your email to confirm your account',
+        successMessage: 'Please check your email to confirm your account. (Check spam folder as well)',
         ok: 'Ok'
       },
       message: 'Welcome to meetnav,the web made easy and powered by people',

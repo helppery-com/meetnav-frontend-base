@@ -21,7 +21,7 @@
         </template>
       </q-select>
     </q-card-section>
-    <q-card-section class="p-pl-md">
+    <q-card-section class="p-pl-md" v-if="isAdmin">
        <div class="text-h6">
         {{ $t('Browser settings') }}
       </div>
@@ -62,6 +62,9 @@ export default {
     currentResId () {
       const { w, h } = this.$storex.room.neko.video.resolution
       return `${w}x${h}`
+    },
+    isAdmin () {
+      return this.$storex.room.room.isAdmin
     }
   },
   async created () {

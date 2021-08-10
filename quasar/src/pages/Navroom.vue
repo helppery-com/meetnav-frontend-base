@@ -1,15 +1,33 @@
 <template>
   <q-page class="navroom-page column">
+    <analytics-cookies v-if="analyticsEnabled" />
     <GuestLogin v-if="isRoomAlreadyEstablished && !user" />
     <div class="col row">
       <div class="col column q-py-md q-pl-md q-pr-xs" ref="videoContainer">
         <NekoVideo :class="['col rounded-borders', fullScreen  ? '' : '']"
-          @connected="ref => nekoVideoRef = ref" v-if="connected && termsAccepted" />
+          @connected="ref => nekoVideoRef = ref" v-if="connected && termsAccepted && !expired" />
+        <img src="/images/expired_room.png" v-if="connected && expired" />
+        <div class="col-auto row" v-if="connected && termsAccepted">
+          <q-linear-progress
+            :value="timeout"
+            rounded
+            dark
+            size="10px"
+            :color="timeLeft > 10 ? 'primary' : 'negative'"
+            class="col q-mx-md q-mt-sm"
+            />
+          <span :class="['col-auto', timeLeft > 10 ? 'text-white' : 'text-red']">
+            {{ $t(`${timeLeft} mins left`) }}
+          </span>
+        </div>
       </div>
       <div
         :class="['users relative-position column q-ml-md q-mr-md', `col-${userVideoCol}`]"
       >
-        <NavroomUsers class="rounded-borders q-my-md relative-position" v-if="connected && termsAccepted"/>
+        <NavroomUsers
+          class="rounded-borders q-my-md relative-position"
+          :timeLeft="timeLeft"
+          v-if="connected && termsAccepted"/>
       </div>
     </div>
     <q-dialog
@@ -37,11 +55,17 @@
       @hide="onTermsAndCondsAccepted"
     >
       <q-card class="bg-primary text-white" style="width: 300px">
-        <q-card-section>
-          <div class="text-h6">
-            {{ $t('Room is begin created') }}
-          </div>
-        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal" v-if="connected && commercialLink">
+          <q-btn outline color="primary" :label="$t('Enter')" v-close-popup class="ref-navroom-ready" />
+          <q-btn outline icon="fas fa-external-link-alt" color="accent" :label="$t('Visit sponsor')" @click="openCommercial" class="ref-navroom-sponsor-link" />
+        </q-card-actions>
+        <q-card-actions align="right" class="bg-white text-teal" v-else>
+          {{ $t('navroom is being created...')}}
+          <q-spinner-pie
+            color="primary"
+            size="2em"
+          />
+        </q-card-actions>
         <q-card-section>
           <Commercial @end="lnk => commercialLink = lnk" style="opacity:0.6" />
             <div class="ad-text fit">
@@ -55,22 +79,6 @@
               </a>
             </div>
         </q-card-section>
-        <q-card-section class="bg-white">
-          <a href="https://web.meetnav.com/termsandconds" target="_blank">
-            {{ $t('By joining this room you accept terms and conditions.') }}
-          </a>
-        </q-card-section>
-
-        <q-card-actions align="right" class="bg-white text-teal" v-if="connected && commercialLink">
-          <q-btn outline color="primary" :label="$t('OK')" v-close-popup class="ref-navroom-ready" />
-          <q-btn outline icon="fas fa-external-link-alt" color="accent" :label="$t('Visit sponsor')" @click="openCommercial" class="ref-navroom-sponsor-link" />
-        </q-card-actions>
-        <q-card-actions align="right" class="bg-white text-teal" v-else>
-          <q-spinner-pie
-            color="primary"
-            size="2em"
-          />
-        </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
@@ -80,15 +88,19 @@ import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
 import GuestLogin from '../components/GuestLogin.vue'
 import NavroomUsers from '../components/NavroomUsers.vue'
+import consentMgm from '../consent'
 
 import '../assets/styles/vendor/_emote.scss'
+import AnalyticsCookies from '../components/AnalyticsCookies.vue'
+import moment from 'moment'
 
 export default {
   components: {
     NekoVideo,
     Commercial,
     GuestLogin,
-    NavroomUsers
+    NavroomUsers,
+    AnalyticsCookies
   },
   data () {
     return {
@@ -112,7 +124,10 @@ export default {
       cameraPermission: false,
       micPermission: false,
       isRoomAlreadyEstablished: false,
-      requestPermissionDlg: false
+      requestPermissionDlg: false,
+      timeout: 0.20,
+      timeLeft: null,
+      clockTout: null
     }
   },
   computed: {
@@ -180,6 +195,9 @@ export default {
     videoMaxWidth () {
       const w = this.$refs.videoContainer.clientWidth + 100
       return Math.max(w, 1280)
+    },
+    expired () {
+      return this.timeLeft <= 0
     }
   },
   watch: {
@@ -190,11 +208,13 @@ export default {
     },
     connected () {
       console.log('Connected')
+      this.updateClock()
     }
   },
   async mounted () {
     await this.checkUserPermissions()
     this.$root.$once('user-login-cancel', () => this.redirectToError())
+    this.clockTout = window.setInterval(() => this.updateClock(), 60000)
   },
   methods: {
     roomEstablishment () {
@@ -260,18 +280,18 @@ export default {
           calling
         }
         await this.$storex.room.openOrJoin(settings)
-        this.updateResolution()
         if (settings.fullScreen) {
           this.$storex.room.setFullScreen(true)
         }
       } catch (ex) {
         console.error(ex)
-        // this.redirectToError()
+        this.redirectToError()
       }
     },
     redirectToError () {
-      const errorUrl = 'https://web.meetnav.com/error'
+      /* const errorUrl = 'https://web.meetnav.com/error'
       window.location.href = this.$route.query.errorUrl || errorUrl
+      */
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')
@@ -292,18 +312,24 @@ export default {
     onTermsAndCondsAccepted () {
       this.termsAccepted = true
     },
-    updateResolution () {
-      const maxWidth = this.videoMaxWidth
-      const neko = this.$storex.room.neko
-      const confs = neko.video.configurations
-      const r = confs.filter(r => r.width <= maxWidth).sort((a, b) => a.width > b.width ? -1 : 1)
-      if (r.length) {
-        neko.video.screenSet(r[0])
+    updateClock () {
+      if (!this.$storex.room.room) {
+        return
       }
+      const { openedAt, expiresAt } = this.$storex.room.room
+      const totalMins = expiresAt.diff(openedAt, 'minutes')
+      const currentMins = moment().diff(openedAt, 'minutes')
+      this.timeLeft = Math.max(totalMins - currentMins, 0)
+      this.timeout = 1 / totalMins * currentMins
+    },
+    async analyticsEnabled () {
+      const consent = await consentMgm.getConsent()
+      return consent.analytics
     }
   },
   beforeDestroy () {
     this.$storex.room.leave()
+    window.clearInterval(this.clockTout)
   }
 }
 </script>

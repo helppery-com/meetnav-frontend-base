@@ -7,6 +7,7 @@ import io from 'socket.io-client'
 import RTCNavroom from '../../assets/RTCMultiConnectionClient'
 import { i18n } from '../../boot/i18n'
 import { Cookies } from 'quasar'
+import moment from 'moment'
 
 export const namespaced = true
 
@@ -41,8 +42,8 @@ export const state = () => ({
   nekoRooms: [],
   fullScreen: false,
   members: {},
-  cameraId: Cookies.get('camera_id'),
-  micId: Cookies.get('microphone_id'),
+  cameraId: Cookies.get('meetnav_camera_id'),
+  micId: Cookies.get('meetnav_microphone_id'),
   lastMessageSeen: new Date(),
   chatMessages: []
 })
@@ -67,7 +68,8 @@ export const getters = getterTree(state, {
   me: state => (state.members[storex.user.user.id] || {}),
   memberCount: state => state.rtcConnected ? Object.keys(state.rtc.users).length : 0,
   liveVideoChat: state => state.rtcConnected ? state.rtc.liveVideoChat : false,
-  configurations: () => neko.video.configurations.filter(c => c.rate === 60)
+  configurations: () => neko.video.configurations.filter(c => c.rate === 60),
+  expired: state => state.room ? state.room.expiresAt < new Date() : false
 })
 
 // Change state
@@ -179,11 +181,11 @@ export const mutations = mutationTree(state, {
   },
   setCamera (state, id) {
     state.cameraId = id
-    Cookies.set('camera_id', id)
+    Cookies.set('meetnav_camera_id', id)
   },
   setMicrophone (state, id) {
     state.micId = id
-    Cookies.set('microphone_id', id)
+    Cookies.set('meetnav_microphone_id', id)
   },
   resetLastMessage (state) {
     state.lastMessageSeen = new Date()
@@ -217,6 +219,11 @@ export const actions = actionTree(
         room = await api.joinRoom(roomId, template)
       }
       if (room) {
+        try {
+          room.createdAt = moment(new Date(Date.parse(room.createdAt)))
+          room.expiresAt = moment(new Date(Date.parse(room.expiresAt)))
+          room.openedAt = moment(new Date(Date.parse(room.openedAt)))
+        } catch {}
         const { roomId } = room
         await storex.room.connectRTC({ roomId })
         await storex.room.connect(room)
@@ -344,6 +351,9 @@ export const actions = actionTree(
       })
     },
     reconnect ({ state }) {
+      if (storex.room.expired) {
+        return
+      }
       if (state.nekoConnected && !neko.video.playing) {
         try {
           storex.room.connect(state.room)

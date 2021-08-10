@@ -132,6 +132,7 @@
     <q-dialog
       v-model="showPopup"
       @hide="mode = ''"
+      :persitent="popUpPersistent"
     >
       <ChatPopup v-if="showChat"/>
       <OnlineUsers v-if="showUsers"/>
@@ -158,6 +159,7 @@ export default {
     RoomSettings,
     ChatPopup
   },
+  props: ['timeLeft'],
   data () {
     return {
       mode: '',
@@ -165,7 +167,8 @@ export default {
       showPopup: false,
       tout: null,
       toutMs: 1000,
-      clock: null
+      clock: null,
+      popUpPersistent: false
     }
   },
   computed: {
@@ -224,6 +227,22 @@ export default {
     newChatCount () {
       const { chatMessages, lastMessageSeen } = this.room
       return chatMessages.filter(m => m.type === 'text' && m.created > lastMessageSeen).length
+    },
+    chatMessages () {
+      return this.$storex.room.neko.chat.history
+    },
+    expired () {
+      return this.$storex.room.expired
+    }
+  },
+  watch: {
+    chatMessages (messages) {
+    },
+    timeLeft (timeLeft) {
+      if (timeLeft <= 0 && !this.showLeaveRoom) {
+        this.toggleMode('leave')
+        this.popUpPersistent = true
+      }
     }
   },
   methods: {
@@ -243,6 +262,7 @@ export default {
     if (expiresAt) {
       this.tout = setInterval(this.onTout.bind(this), this.toutMs)
     }
+    this.room.toggleVideoChat()
   },
   destroyed () {
     clearInterval(this.tout)

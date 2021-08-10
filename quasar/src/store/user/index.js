@@ -36,8 +36,8 @@ export const mutations = mutationTree(state, {
       user = null
       jwt = null
     }
-    Cookies.set('session_jwt', jwt, { path: '/' })
-    Cookies.set('session_user', user, { path: '/' })
+    Cookies.set('meetnav_session_jwt', jwt, { path: '/' })
+    Cookies.set('meetnav_session_user', user, { path: '/' })
     try {
       if (user) {
         storex.live.connect()
@@ -52,7 +52,7 @@ export const mutations = mutationTree(state, {
   async changeLanguage (state, lang) {
     if (state.user) {
       state.user = await api.changeLanguage(lang)
-      Cookies.set('session_user', state.user)
+      Cookies.set('meetnav_session_user', state.user)
     }
   }
 })
@@ -62,8 +62,8 @@ export const actions = actionTree(
   { state, getters, mutations },
   {
     init () {
-      api.jwt = Cookies.get('session_jwt')
-      api.user = Cookies.get('session_user')
+      api.jwt = Cookies.get('meetnav_session_jwt')
+      api.user = Cookies.get('meetnav_session_user')
       storex.user.setUser({ jwt: api.jwt, user: api.user })
     },
     async login ({ state }, { username, password, displayName, email, guestEmail }) {
@@ -99,6 +99,9 @@ export const actions = actionTree(
       const { user, jwt } = state
       const userData = await api.updateProfile(user)
       storex.user.setUser({ user: userData.data, jwt })
+    },
+    async confirm ({ state }, code) {
+      await api.confirm(code)
     }
   }
 )

@@ -75,7 +75,7 @@ export default {
       this.$root.$emit('user-reset-password')
     }
   },
-  created () {
+  async created () {
     this.$root.$on('login', user => {
       if (user) {
         this.user = user
@@ -84,6 +84,17 @@ export default {
         this.openLoginDialog = true
       }
     })
+    const { confirmation } = this.$route.query
+    if (confirmation) {
+      try {
+        await this.$storex.user.confirm(confirmation)
+        this.$router.replace({ query: null })
+        this.openLoginDialog = true
+      } catch (ex) {
+        console.log(ex)
+        // window.location = 'https://web.meetnav.com/error'
+      }
+    }
   }
 }
 </script>

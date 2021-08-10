@@ -1,5 +1,6 @@
 <template>
   <q-page class="home-page full-width flex adjusted-height overflow-hidden">
+    <AnalyticsCookies />
     <div class="parent-sections q-px-xl">
       <!-- text section -->
       <div class="col wrap  full-height column justify-center items-center">
@@ -121,7 +122,11 @@
 </template>
 
 <script>
+import AnalyticsCookies from '../components/AnalyticsCookies'
 export default {
+  components: {
+    AnalyticsCookies
+  },
   name: 'Home',
   data () {
     return {

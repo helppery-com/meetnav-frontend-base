@@ -1,8 +1,12 @@
 <template>
   <div :class="['neko-video', '', hashControlClass]" ref="pointerLayer">
     <neko-video ref="nekoVideo" class="rounded-borders" />
-    <div class="me-pointer" :style="customCursor">
-      <q-chip dense :icon="hasControl ? 'mouse' : 'visibility'"
+    <div
+      class="me-pointer"
+      :style="customCursor"
+      @click="requestControls"
+    >
+      <q-chip dense icon="fas fa-mouse-pointer"
         :color="hasControl ? 'primary' : 'dark'"
         class="text-white"
         v-if="me && !hasControl"
@@ -262,7 +266,7 @@ export default {
       })
     },
     onOverlayMousedown (e) {
-      this.$storex.room.requestControls()
+      this.requestControls()
     },
     onWheel (e) {
       const { w, h } = neko.video.resolution
@@ -350,6 +354,9 @@ export default {
       } else {
         this.mapTouchEventToMouseEvent(e)
       }
+    },
+    requestControls () {
+      this.$storex.room.requestControls()
     }
   },
   beforeDestroy () {

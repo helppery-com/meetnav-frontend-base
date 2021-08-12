@@ -1,6 +1,5 @@
 <template>
   <q-page class="navroom-page column bg-black q-pa-md">
-    <GuestLogin v-if="isRoomAlreadyEstablished && !user" />
     <div class="col row" v-if="termsAccepted">
       <div
         :class="['users relative-position column', `col-${chatCol}`]"
@@ -91,7 +90,6 @@
 import NekoVideo from '../components/neko/NekoVideo'
 import Commercial from '../components/Commercial'
 import NekoChat from '../components/neko/NekoChat'
-import GuestLogin from '../components/GuestLogin.vue'
 import NavroomUsers from '../components/NavroomUsers.vue'
 
 import '../assets/styles/vendor/_emote.scss'
@@ -101,7 +99,6 @@ export default {
     NekoVideo,
     Commercial,
     NekoChat,
-    GuestLogin,
     NavroomUsers
   },
   data () {

@@ -79,5 +79,22 @@ export default {
   'Quick session': 'Quick session',
   'Watching together': 'Watching together',
   'Shopping together': 'Shopping together',
-  'Playing together': 'Playing together'
+  'Playing together': 'Playing together',
+  'Room is begin created': 'Room is begin created',
+  'By joining this room you accept terms and conditions.': 'By joining this room you accept terms and conditions.',
+  'Connecting...': 'Connecting...',
+  Leave: 'Leave',
+  'Leave room': 'Leave room',
+  'How was your experience': 'How was your experience ?',
+  'Exit room': 'Exit room',
+  Back: 'Back',
+  Offline: 'Offline',
+  'Send message to room': 'Send message to room',
+  'Write your message for': 'Write your message for',
+  'Send message to room\'s chat as well': 'Send message to room\'s chat as well',
+  Send: 'Send',
+  Welcome: 'Welcome',
+  Email: 'Email',
+  Guest: 'Guest',
+  'Login with my account': 'Login with my account'
 }

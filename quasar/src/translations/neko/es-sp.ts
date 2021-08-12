@@ -1,97 +1,97 @@
-export const logout = 'logout'
-export const unsupported = 'this browser does not support webrtc'
-export const admin_loggedin = 'You are logged in as an admin'
-export const you = 'You'
-export const send_a_message = 'Send a message'
+export const logout = 'cerrar sesión'
+export const unsupported = 'este navegador no es compatible con webrtc'
+export const admin_loggedin = 'Estás conectado como administrador'
+export const you = 'Tú'
+export const send_a_message = 'Enviar un mensaje'
 
 export const side = {
-  chat: 'Chat',
-  settings: 'Settings',
+  chat: 'Charlar',
+  settings: 'Configuración'
 }
 
 export const connect = {
-  login_title: 'Please Login',
-  invitation_title: 'You have been invited to this room',
-  displayname: 'Enter your display name',
-  password: 'Password',
-  connect: 'Connect',
-  error: 'Login error',
+  login_title: 'Por favor, inicie sesión',
+  invitation_title: 'Usted ha sido invitado a esta sala',
+  displayname: 'Escriba su nombre para mostrar',
+  password: 'Contraseña',
+  connect: 'Conectar',
+  error: 'Error de inicio de sesión'
 }
 
 export const context = {
-  ignore: 'Ignore',
+  ignore: 'Ignorar',
   unignore: 'Unignore',
-  mute: 'Mute',
-  unmute: 'Unmute',
-  release: 'Force Release Controls',
-  take: 'Force Take Controls',
-  give: 'Give Controls',
-  kick: 'Kick',
-  ban: 'Ban IP',
+  mute: 'Mudo',
+  unmute: 'Reactivar el reactivar el mínimo',
+  release: 'Forzar controles de liberación',
+  take: 'Forzar controles de toma',
+  give: 'Dar controles',
+  kick: 'Patear',
+  ban: 'Prohibir IP',
   confirm: {
-    kick_title: 'Kick {name}?',
-    kick_text: 'Are you sure you want to kick {name}?',
-    ban_title: 'Ban {name}?',
-    ban_text: 'Are you sure you want to ban {name}? You will need to restart the server to undo this.',
-    mute_title: 'Mute {name}?',
-    mute_text: 'Are you sure you want to mute {name}?',
-    unmute_title: 'Unmute {name}?',
-    unmute_text: 'Are you sure you want to unmute {name}?',
-    button_yes: 'Yes',
-    button_cancel: 'Cancel',
+    kick_title: 'retirar {name}?',
+    kick_text: 'Estás seguro de que desea eliminar {name}?',
+    ban_title: 'prohibición {name}?',
+    ban_text: '¿Estás seguro de que quieres prohibir a {name}? Deberá reiniciar el servidor para deshacer esto.',
+    mute_title: 'silencio {name}?',
+    mute_text: 'Estas seguro que quieres silenciar {name}?',
+    unmute_title: 'Ruidosa {name}?',
+    unmute_text: '¿Estás seguro de que quieres activar el sonido? {name}?',
+    button_yes: 'sí',
+    button_cancel: 'Cancelar',
   },
 }
 
 export const controls = {
-  release: 'Release Controls',
-  request: 'Request Controls',
-  lock: 'Lock Controls',
-  unlock: 'Unlock Controls',
+  release: 'Controles de liberación',
+  request: 'Controles de solicitud',
+  lock: 'Controles de bloqueo',
+  unlock: 'Desbloquear controles'
 }
 
 export const room = {
-  lock: 'Lock Room (for users)',
-  unlock: 'Unlock Room (for users)',
-  locked: 'Room Locked (for users)',
-  unlocked: 'Room Unlocked (for users)',
+  lock: 'Bloquear sala (para usuarios)',
+  unlock: 'Desbloquear sala (para usuarios)',
+  locked: 'Sala bloqueada (para usuarios)',
+  unlocked: 'Sala desbloqueada (para usuarios)'
 }
 
 export const setting = {
-  scroll: 'Scroll Sensitivity',
-  scroll_invert: 'Invert Scroll',
-  autoplay: 'Autoplay Video',
-  ignore_emotes: 'Ignore Emotes',
-  chat_sound: 'Play Chat Sound',
-  keyboard_layout: 'Keyboard Layout',
-  broadcast_is_active: 'Broadcast Enabled',
-  broadcast_url: 'RTMP url',
+  scroll: 'Sensibilidad de desplazamiento',
+  scroll_invert: 'Invertir desplazamiento',
+  autoplay: 'Reproducción automática de vídeo',
+  ignore_emotes: 'Ignorar Emotes',
+  chat_sound: 'Reproducir sonido de chat',
+  keyboard_layout: 'Distribución del teclado',
+  broadcast_is_active: 'Transmisión habilitada',
+  broadcast_url: 'URL de RTMP',
 }
 
 export const connection = {
-  logged_out: 'You have been logged out!',
-  connected: 'Successfully connected',
-  disconnected: 'You have been disconnected',
-  button_confirm: 'Ok',
+  logged_out: '¡Se ha desesgado!',
+  connected: 'Conectado correctamente',
+  disconnected: 'Se le ha desconectado',
+  button_confirm: 'De acuerdo'
 }
 
 export const notifications = {
-  connected: '{name} connected',
-  disconnected: '{name} disconnected',
-  controls_taken: '{name} took the controls',
-  controls_taken_force: 'force took the controls',
-  controls_taken_steal: 'took the controls from {name}',
-  controls_released: '{name} released the controls',
-  controls_released_force: 'force released the controls',
-  controls_released_steal: 'released the controls from {name}',
-  controls_given: 'gave the controls to {name}',
-  controls_has: '{name} has the controls',
-  controls_has_alt: 'But I let them know you wanted it',
-  controls_requesting: '{name} is requesting the controls',
-  resolution: 'changed the resolution to {width}x{height}@{rate}',
+  connected: '{name} conectado',
+  disconnected: '{name} desconectado',
+  controls_taken: '{name} tomó los controles',
+  controls_taken_force: 'la fuerza tomó los controles',
+  controls_taken_steal: 'tomó los controles de {name}',
+  controls_released: '{name} soltó los controles',
+  controls_released_force: 'fuerza soltó los controles',
+  controls_released_steal: 'liberó los controles de {name}',
+  controls_given: 'le dio los controles a {name}',
+  controls_has: '{name} tiene los controles',
+  controls_has_alt: 'Pero les dejé saber que lo querías',
+  controls_requesting: '{name} está solicitando los controles',
+  resolution: 'cambió la resolución a {width}x{height}@{rate}',
   banned: 'banned {name}',
-  kicked: 'kicked {name}',
-  muted: 'muted {name}',
-  unmuted: 'unmuted {name}',
-  room_locked: 'locked the room',
-  room_unlocked: 'unlocked the room',
+  kicked: 'golpeado {name}',
+  muted: 'apagado {name}',
+  unmuted: 'sin silenciar {name}',
+  room_locked: 'cerró la habitación',
+  room_unlocked: 'desbloqueó la habitación',
 }

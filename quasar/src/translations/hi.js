@@ -1,4 +1,6 @@
+import * as nekoHI from './neko/hi.ts'
 export default {
+  ...nekoHI,
   name: 'हिन्दी',
   searchPlaceholder: 'साथ में इंटरनेट सर्च करना शुरू करें',
   welcomePage:
@@ -68,5 +70,26 @@ export default {
     join: 'में शामिल होने के',
     cancel: 'रद्द करना',
     waiting: 'शामिल होने का इंतजार है।'
-  }
+  },
+  'Quick session': 'त्वरित सत्र',
+  'Watching together': 'एक साथ देखना',
+  'Shopping together': 'Shopping together',
+  'Playing together': 'Playing together',
+  'Room is begin created': 'Room is begin created',
+  'By joining this room you accept terms and conditions.': 'इस कमरे में शामिल होकर आप नियम और शर्तें स्वीकार करते हैं।',
+  'Connecting...': 'कनेक्ट हो रहा है...',
+  Leave: 'छोड़',
+  'Leave room': 'कमरा छोड़ दो',
+  'How was your experience': 'आपका अनुभव कैसा था?',
+  'Exit room': 'निकास कक्ष',
+  Back: 'वापस',
+  Offline: 'ऑफलाइन',
+  'Send message to room': 'कमरे में संदेश भेजें',
+  'Write your message for': 'के लिए अपना संदेश लिखें',
+  'Send message to room\'s chat as well': 'कमरे की चैट पर भी संदेश भेजें',
+  Send: 'भेजना',
+  Welcome: 'स्वागत',
+  Email: 'ईमेल',
+  Guest: 'अतिथि',
+  'Login with my account': 'मेरे खाते से लॉगिन करें'
 }

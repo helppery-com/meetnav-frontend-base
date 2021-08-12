@@ -22,7 +22,7 @@
         </q-card-section>
         <q-card-section class="message__panel">
           <div class="error">{{ message }}</div>
-          <q-btn flat @click="resetPassword" :label="$t('welcomePage.moreLogin.forgotPassword')" v-close-popup />
+          <q-btn flat @click="setResetPassword" :label="$t('welcomePage.moreLogin.forgotPassword')" v-close-popup />
         </q-card-section>
         <q-card-actions align="right" v-if="$isGuest">
           <q-btn :label="$t('Ok')"/>
@@ -41,17 +41,32 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog
+      v-model="resetPassword"
+      persistent
+      @hide="onResetPwdHide"
+    >
+      <ResetPassword
+        @ok="closeResetPassword"
+        :code="resetCode" />
+    </q-dialog>
   </q-btn>
 </template>
 
 <script>
+import ResetPassword from './ResetPassword'
 export default {
+  components: {
+    ResetPassword
+  },
+  props: ['resetCode', 'isResetPassword', 'isLogin'],
   data () {
     return {
       user: { username: '', password: '', displayName: '' },
-      openLoginDialog: !!this.$route.query.login,
+      openLoginDialog: this.$props.isLogin,
       loading: false,
-      message: ''
+      message: '',
+      resetPassword: this.$props.isResetPassword
     }
   },
   methods: {
@@ -59,7 +74,6 @@ export default {
       this.loading = true
       try {
         await this.$storex.user.login(this.user)
-        this.$i18n.locale = this.$storex.user.lang
         this.openLoginDialog = false
         this.$root.$emit('user-logged')
       } catch (error) {
@@ -71,8 +85,13 @@ export default {
     cancel () {
       this.$root.$emit('user-login-cancel')
     },
-    resetPassword () {
-      this.$root.$emit('user-reset-password')
+    setResetPassword () {
+      this.resetPassword = true
+      this.openLoginDialog = false
+    },
+    closeResetPassword () {
+      this.resetPassword = false
+      this.openLoginDialog = true
     }
   },
   async created () {

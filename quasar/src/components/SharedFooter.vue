@@ -1,7 +1,7 @@
 <template>
   <q-footer class="footer bg-grey-8 ">
     <div class="footer-area">
-      <div class="language-section ">
+      <div class="language-section " v-if="false">
         <p class="q-ml-md">{{ $t('Language') }}</p>
         <q-btn-dropdown  size="20" ref="special" text-color="black" auto-close flat v-bind:label="selectedLanguage">
           <q-item

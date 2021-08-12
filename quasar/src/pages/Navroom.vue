@@ -1,7 +1,7 @@
 <template>
   <q-page class="navroom-page column">
     <analytics-cookies v-if="analyticsEnabled" />
-    <GuestLogin v-if="isRoomAlreadyEstablished && !user" />
+    <GuestLogin v-if="isRoomAlreadyEstablished && !user" :loginOnly="loginOnly" />
     <div class="col row">
       <div class="col column q-py-md q-pl-md q-pr-xs" ref="videoContainer">
         <NekoVideo :class="['col rounded-borders', fullScreen  ? '' : '']"
@@ -198,6 +198,10 @@ export default {
     },
     expired () {
       return this.timeLeft <= 0
+    },
+    loginOnly () {
+      const { roomId } = this.$route.params
+      return !roomId
     }
   },
   watch: {
@@ -289,9 +293,8 @@ export default {
       }
     },
     redirectToError () {
-      /* const errorUrl = 'https://web.meetnav.com/error'
+      const errorUrl = 'https://web.meetnav.com/error'
       window.location.href = this.$route.query.errorUrl || errorUrl
-      */
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')

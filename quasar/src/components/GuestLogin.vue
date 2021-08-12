@@ -40,6 +40,7 @@
 <script>
 import Login from '../components/Login'
 export default {
+  props: ['loginOnly'],
   components: {
     Login
   },
@@ -52,6 +53,11 @@ export default {
   },
   created () {
     this.$root.$once('user-logged', () => this.close())
+  },
+  mounted () {
+    if (this.$props.loginOnly) {
+      this.onLogin()
+    }
   },
   methods: {
     onGuest () {

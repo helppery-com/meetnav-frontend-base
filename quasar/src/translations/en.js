@@ -79,5 +79,19 @@ export default {
   'Quick session': 'Quick session',
   'Watching together': 'Watching together',
   'Shopping together': 'Shopping together',
-  'Playing together': 'Playing together'
+  'Playing together': 'Playing together',
+  meetnav: 'meetnav',
+  'Meet and navigate internet together!': 'Meet and navigate internet together!',
+  Shopping: 'Shopping',
+  'Call your fiends and go online shopping together!': 'Call your fiends and go online shopping together!',
+  Socializing: 'Socializing',
+  'Enjoy meeting and going social. Comment, share, discover.': 'Enjoy meeting and going social. Comment, share, discover.',
+  Learning: 'Learning',
+  'he best way for the new internet users to navigate internet in safe and funny way.': 'he best way for the new internet users to navigate internet in safe and funny way.',
+  Login: 'Login',
+  Register: 'Register',
+  'User name': 'User name',
+  'We use this information to manage your account': 'We use this information to manage your account',
+  'Terms of Use and Privacy': 'Terms of Use and Privacy',
+  Language: 'Language'
 }

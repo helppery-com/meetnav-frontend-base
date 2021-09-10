@@ -39,7 +39,7 @@
         </q-tooltip>
       </q-btn>
     </div>
-    <div class="main-profile column q-pa-xs fit">
+    <div class="main-profile column fit shadow-6">
       <UserVideo
         class="col-6"
         :stream="room.userStream"
@@ -96,7 +96,7 @@
         />
         <div class="ad-text fit">
           <a
-            class="fit"
+            class="fit q-pa-md"
             href="https://web.meetnav.com/advertising"
             target="blank"
           >
@@ -106,7 +106,7 @@
         </div>
       </div>
       <div class="col-ato q-pa-xs">
-        <div class="col-auto row justify-between full-width q-px-xs">
+        <div class="col-auto row justify-between full-width q-pa-xs">
           <q-btn
             flat round
             icon="fas fa-credit-card"
@@ -272,7 +272,7 @@ export default {
 <style lang="sass">
   .navroom-users
     .main-profile
-      border-radius: 5px
+      border-radius: 10px
       background-image: linear-gradient(transparent, #2c3e5054, #3a5169)
     .top-left
       position: absolute

@@ -7,6 +7,7 @@
     /><!-- Disabled -->
     <div
       class="video-container fit"
+      ref="videoContainer"
     >
       <video ref="video" autoplay :muted="isLocal" />
       <div class="user-info row">
@@ -111,7 +112,12 @@ export default {
       this.connecting = false
       requestAnimationFrame(() => {
         const { video } = this.$refs
-        video.srcObject = this.srcObject
+        if ('srcObject' in video) {
+          video.srcObject = this.srcObject
+        } else {
+          // @ts-ignore
+          video.src = window.URL.createObjectURL(this.srcObject) // for older browsers
+        }
         if (this.muted || this.isLocal) {
           video.volumen = 0
         }
@@ -139,6 +145,7 @@ export default {
       transform: rotateY(180deg)
       -webkit-transform:rotateY(180deg) /* Safari and Chrome */
       -moz-transform:rotateY(180deg) /* Firefox */
+      border-radius: 10px
     &.paused
       background-image: url('/incognito-mode.png')
       background-size: cover

@@ -138,6 +138,7 @@ export default class RTCNavroom {
       ...this.extra,
       ...this.user,
       camera,
+      audio,
       dataOnly
     }
     connection.extra = this.encodeExtra()
@@ -149,12 +150,14 @@ export default class RTCNavroom {
 
   getCameraById (id) {
     const { videoInputDevices } = this.connection.DetectRTC
-    return videoInputDevices.filter(i => i.id === id)[0]
+    const sel = videoInputDevices.filter(i => i.id === id)[0]
+    return sel || videoInputDevices[0]
   }
 
   getMicrophoneById (id) {
     const { audioInputDevices } = this.connection.DetectRTC
-    return audioInputDevices.filter(i => i.id === id)[0]
+    const sel = audioInputDevices.filter(i => i.id === id)[0]
+    return sel || audioInputDevices[0]
   }
 
   async onSocketDisconnect (event) {

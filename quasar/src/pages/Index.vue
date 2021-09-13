@@ -1,5 +1,6 @@
 <template>
   <q-page :style-fn="myTweaks" class="index flex items-center column justify-start" style="flex-wrap: nowrap">
+    <AnalyticsCookies />
     <div class="q-px-md top-end">
       <div class="full-width">
         <h3 class="text-h3 main-heading">meetnav</h3>
@@ -58,7 +59,11 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import AnalyticsCookies from '../components/AnalyticsCookies'
 export default {
+  components: {
+    AnalyticsCookies
+  },
   name: 'PageIndex',
   data () {
     return {

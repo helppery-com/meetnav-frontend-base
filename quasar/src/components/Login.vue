@@ -4,18 +4,10 @@
       <q-card class="q-gutter-y-sm q-pa-md" style="width: 450px">
         <q-card-section>
           <div class="text-h3 text-blue-grey-8">
-            {{ isForgotPwd ? $t('Reset password') : $t('Login') }}
+            {{ $t('Login') }}
           </div>
         </q-card-section>
-        <q-card-section v-if="isForgotPwd">
-          {{ $t('We\'ll send you a reset password link to your email.') }}
-        </q-card-section>
-        <q-card-section v-if="isForgotPwd">
-          <q-input name="email" type="email" color="blue-grey-6" v-model="user.email" :label="$t('welcomePage.moreSignup.email')" required>
-            <template v-slot:prepend><q-icon name="mail" /></template>
-          </q-input>
-        </q-card-section>
-        <q-card-section v-else>
+        <q-card-section>
           <q-input color="blue-grey-6" name='username' v-model="user.username"
             :label="$t('welcomePage.moreLogin.username')" required class="ref-login-username"
             @keypress.enter="login"
@@ -30,19 +22,17 @@
         </q-card-section>
         <q-card-section class="message__panel">
           <div class="error">{{ message }}</div>
-          <a class="btn" @click="isForgotPwd = true" v-if="!isForgotPwd">
-            {{ $t('welcomePage.moreLogin.forgotPassword') }}
-          </a>
+          <q-btn flat @click="setResetPassword" :label="$t('welcomePage.moreLogin.forgotPassword')" v-close-popup />
         </q-card-section>
         <q-card-actions align="right" v-if="$isGuest">
           <q-btn :label="$t('Ok')"/>
         </q-card-actions>
         <q-card-actions align="right" v-else>
           <q-btn :loading="loading"
-            :label="isForgotPwd ? $t('Reset password') : $t('welcomePage.login')"
+            :label="$t('welcomePage.login')"
             class="q-mt-md nav-button ref-login-submit"
             color="blue-grey-6"
-            @click="isForgotPwd ? resetPassword() : login()"/>
+            @click="login()"/>
           <q-btn v-bind:label="$t('welcomePage.moreLogin.cancel')"
             class="q-mt-md nav-button"
             color="red"
@@ -51,18 +41,32 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog
+      v-model="resetPassword"
+      persistent
+      @hide="onResetPwdHide"
+    >
+      <ResetPassword
+        @ok="closeResetPassword"
+        :code="resetCode" />
+    </q-dialog>
   </q-btn>
 </template>
 
 <script>
+import ResetPassword from './ResetPassword'
 export default {
+  components: {
+    ResetPassword
+  },
+  props: ['resetCode', 'isResetPassword', 'isLogin'],
   data () {
     return {
       user: { username: '', password: '', displayName: '' },
-      openLoginDialog: !!this.$route.query.login,
+      openLoginDialog: this.$props.isLogin,
       loading: false,
       message: '',
-      isForgotPwd: false
+      resetPassword: this.$props.isResetPassword
     }
   },
   methods: {
@@ -70,7 +74,6 @@ export default {
       this.loading = true
       try {
         await this.$storex.user.login(this.user)
-        this.$i18n.locale = this.$storex.user.lang
         this.openLoginDialog = false
         this.$root.$emit('user-logged')
       } catch (error) {
@@ -79,23 +82,19 @@ export default {
         this.loading = false
       }
     },
-    async resetPassword () {
-      if (this.user.email) {
-        await this.$storex.user.resetPassword(this.user)
-        this.message = 'We have sent you an email with instructions to reset your password.'
-      } else {
-        this.message = 'Invalid email'
-      }
-    },
     cancel () {
-      if (this.isForgotPwd) {
-        this.isForgotPwd = false
-      } else {
-        this.$root.$emit('user-login-cancel')
-      }
+      this.$root.$emit('user-login-cancel')
+    },
+    setResetPassword () {
+      this.resetPassword = true
+      this.openLoginDialog = false
+    },
+    closeResetPassword () {
+      this.resetPassword = false
+      this.openLoginDialog = true
     }
   },
-  created () {
+  async created () {
     this.$root.$on('login', user => {
       if (user) {
         this.user = user
@@ -104,6 +103,17 @@ export default {
         this.openLoginDialog = true
       }
     })
+    const { confirmation } = this.$route.query
+    if (confirmation) {
+      try {
+        await this.$storex.user.confirm(confirmation)
+        this.$router.replace({ query: null })
+        this.openLoginDialog = true
+      } catch (ex) {
+        console.log(ex)
+        // window.location = 'https://web.meetnav.com/error'
+      }
+    }
   }
 }
 </script>

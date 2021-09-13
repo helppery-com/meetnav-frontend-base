@@ -27,7 +27,7 @@
               <q-item-section>Logout</q-item-section>
             </q-item>
             <router-link to="/account">
-            <q-item class="text-black" clickable v-ripple>
+            <q-item class="text-black" clickable v-ripple v-if="false">
               <q-item-section avatar>
                 <q-icon name="settings" />
               </q-item-section>
@@ -44,6 +44,15 @@
         <!-- Registration button -->
         <Registration />
       </div>
+      <q-dialog
+        v-model="resetPassword"
+        persistent
+        @hide="onResetPwdHide"
+      >
+        <ResetPassword
+          @ok="resetPassword = false"
+          :code="resetCode" />
+      </q-dialog>
     </q-header>
 
     <q-page-container>
@@ -58,17 +67,23 @@
 import SharedFooter from 'components/SharedFooter'
 import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
+import ResetPassword from '../components/ResetPassword'
 
 export default {
   components: {
     Login,
     Registration,
-    SharedFooter
+    SharedFooter,
+    ResetPassword
   },
   data () {
     return {
-      selectedLanguage: 'English'
+      selectedLanguage: 'English',
+      resetPassword: !!this.$route.query.resetcode || !!this.$route.query.resetPassword
     }
+  },
+  mounted () {
+    this.$root.$on('user-reset-password', () => { this.resetPassword = true })
   },
   methods: {
     changeLanguage (lang) {
@@ -83,6 +98,12 @@ export default {
       if (this.$route.path !== '/') {
         this.$router.push('/')
       }
+    },
+    onResetPwdHide () {
+      const { query } = this.$route
+      query.resetPassword = undefined
+      query.resetcode = undefined
+      this.$router.replace({ query })
     }
   },
   computed: {
@@ -91,6 +112,9 @@ export default {
     },
     avatar () {
       return this.$storex.user.user.avatar
+    },
+    resetCode () {
+      return this.$route.query.resetcode
     }
   }
 }

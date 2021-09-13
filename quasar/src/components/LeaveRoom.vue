@@ -22,7 +22,7 @@
 
     <q-card-actions align="right" class="bg-white text-teal">
       <q-btn outline color="accent" :label="$t('Exit room')" v-close-popup @click="closeRoom"/>
-      <q-btn outline color="red" :label="$t('Close room')" v-close-popup @click="closeRoom(true)" v-if="isRoomAdmin" />
+      <q-btn outline color="red" :label="$t('Close room')" v-close-popup @click="closeRoom(true)" v-if="false" />
       <q-btn outline :label="$t('Back')" v-close-popup />
     </q-card-actions>
   </q-card>

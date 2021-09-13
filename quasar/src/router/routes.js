@@ -16,6 +16,19 @@ const beforeEnter = (to, from, next) => {
 }
 const routes = [
   {
+    path: '/auth/email-confirmation',
+    redirect: '/'
+  },
+  {
+    path: '/consent',
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/Consent.vue')
+      }
+    ]
+  },
+  {
     path: '/widget',
     component: () => import('layouts/EmptyLayout.vue'),
     children: [

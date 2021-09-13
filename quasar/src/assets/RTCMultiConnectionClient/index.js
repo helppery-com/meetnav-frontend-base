@@ -179,6 +179,7 @@ export default class RTCNavroom {
   async openOrJoin () {
     const { isRoomExist, roomId } = await this.checkPresence()
     return new Promise((resolve, reject) => {
+      console.log('opening RTC with ', this.extra, this.connection.mediaConstraints)
       this.connection[isRoomExist ? 'join' : 'open'](this.roomId, (isRoomExist, roomid, error) => {
         error ? reject(error) : resolve({ isRoomExist, roomid })
       })

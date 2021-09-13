@@ -3,10 +3,13 @@
     class="video-settings q-pa-md"
     style="width:400px"
   >
-    <q-card-section class="text-h6">
-      {{ $t('Video settings') }}
+    <q-card-section class="text-h3">
+      {{ $t('Room settings') }}
     </q-card-section>
-    <q-card-section>
+    <q-card-section class="p-pl-md">
+       <div class="text-h6">
+        {{ $t('Video settings') }}
+      </div>
       <q-select v-model="cameraId" :options="cameraLabels" :label="$t('Camera')">
         <template v-slot:prepend>
           <q-icon name="fas fa-camera" />
@@ -15,6 +18,16 @@
       <q-select v-model="micId" :options="micLabels" :label="$t('Mic')">
         <template v-slot:prepend>
           <q-icon name="fas fa-microphone-alt" />
+        </template>
+      </q-select>
+    </q-card-section>
+    <q-card-section class="p-pl-md" v-if="isAdmin">
+       <div class="text-h6">
+        {{ $t('Browser settings') }}
+      </div>
+      <q-select v-model="resId" :options="resolutionLabel" :label="$t('Resolution')">
+        <template v-slot:prepend>
+          <q-icon name="tv" />
         </template>
       </q-select>
     </q-card-section>
@@ -31,7 +44,8 @@ export default {
       cameras: [],
       cameraId: null,
       microphones: [],
-      micId: null
+      micId: null,
+      resId: null
     }
   },
   computed: {
@@ -40,6 +54,17 @@ export default {
     },
     micLabels () {
       return this.microphones.map(c => c.label)
+    },
+    resolutionLabel () {
+      const confs = this.$storex.room.configurations
+      return confs.map(c => `${c.width}x${c.height}`)
+    },
+    currentResId () {
+      const { w, h } = this.$storex.room.neko.video.resolution
+      return `${w}x${h}`
+    },
+    isAdmin () {
+      return this.$storex.room.room.isAdmin
     }
   },
   async created () {
@@ -48,6 +73,7 @@ export default {
     const { cameraId, micId } = this.$storex.room
     this.cameraId = this.cameras.filter(c => c.id === cameraId)[0].label
     this.micId = this.microphones.filter(c => c.id === micId)[0].label
+    this.resId = this.currentResId
   },
   methods: {
     setCamera (camera) {
@@ -64,6 +90,14 @@ export default {
       room.setMicrophone(micId)
       if (room.cameraConnected) {
         room.connectVideoChat()
+      }
+      if (this.resId !== this.currentResId) {
+        const parts = this.resId.split('x')
+        this.$storex.room.neko.video.screenSet({
+          width: parseInt(parts[0]),
+          height: parseInt(parts[1]),
+          rate: 60
+        })
       }
     }
   }

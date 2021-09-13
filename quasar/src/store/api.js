@@ -127,6 +127,10 @@ class Api {
     const res = await axios.put(this.url(`/user/${user.id}`), { user }, { headers })
     return res.data
   }
+
+  async confirm (code) {
+    await fetch(this.url('/auth/email-confirmation') + `?confirmation=${code}`, { redirect: 'manual' })
+  }
 }
 const api = new Api()
 export default api

@@ -48,11 +48,15 @@ class Logging {
   }
 
   getSource () {
-    const stack = new Error().stack
-    return stack.split('\n').filter(l => {
-      return !l.startsWith('Error') &&
-        l.indexOf('/src/logging/') === -1
-    }).join('\n')
+    try {
+      const stack = new Error().stack
+      return stack.split('\n').filter(l => {
+        return !l.startsWith('Error') &&
+          l.indexOf('/src/logging/') === -1
+      }).join('\n')
+    } catch (ex) {
+      return `Error getting message stack ${ex.message}`
+    }
   }
 
   attachToConsole () {

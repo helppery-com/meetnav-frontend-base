@@ -12,15 +12,6 @@
           ]"
         @click="room.toggleVideoChat()"
       >
-        <q-badge color="green"
-          class="shadow-2"
-          floating
-          v-if="room.liveVideoChat && !room.cameraConnected">
-          <q-spinner-radio
-            color="white"
-            size="10px"
-          />
-        </q-badge>
         <q-tooltip>
           <div v-if="room.liveVideoChat && !room.cameraConnected">{{ $t('Live video chat session is going on, click to join!') }}</div>
           <div v-else>{{ $t(room.cameraConnected ? 'Leave video chat' : 'Start video chat') }}</div>
@@ -39,7 +30,10 @@
           <div v-else>{{ $t('You don\'t the control. Click here to take it.')}}</div>
         </q-tooltip>
       </q-btn>
-      <q-btn flat round color="accent" class="bg-white shadow-2" icon="fas fa-question-circle" @click="toggleMode('support')">
+      <q-btn flat round color="accent" class="bg-white shadow-2"
+        icon="fas fa-question-circle" @click="toggleMode('support')"
+        v-if="false"
+      >
         <q-tooltip>
           {{ $t('Click for help, suggestions or contact support.') }}
         </q-tooltip>
@@ -77,6 +71,12 @@
                 <q-badge floating v-if="member.extra.hasControl">
                   <q-icon name="fas fa-mouse-pointer" />
                 </q-badge>
+                <q-badge floating
+                  class="bounce"
+                  color="accent" text-color="white"
+                  v-if="member.extra.camera && member.extra.camera.id">
+                  <q-icon name="duo" />
+                </q-badge>
               </q-avatar>
             </div>
           </div>
@@ -97,7 +97,7 @@
         <div class="ad-text fit">
           <a
             class="fit"
-            href="/contact"
+            href="https://web.meetnav.com/advertising"
             target="blank"
           >
             <div class="text-h4">{{ $t('Space available for your advertising.') }}</div>
@@ -132,12 +132,13 @@
     <q-dialog
       v-model="showPopup"
       @hide="mode = ''"
+      :persitent="popUpPersistent"
     >
       <ChatPopup v-if="showChat"/>
       <OnlineUsers v-if="showUsers"/>
       <Wallet v-if="showWallet" />
       <LeaveRoom v-if="showLeaveRoom" />
-      <VideoSettings v-if="showSettings" />
+      <RoomSettings v-if="showSettings" />
     </q-dialog>
   </div>
 </template>
@@ -146,7 +147,7 @@ import UserVideo from '../components/UserVideo.vue'
 import OnlineUsers from '../components/OnlineUsers'
 import Wallet from '../components/Wallet'
 import LeaveRoom from './LeaveRoom'
-import VideoSettings from './VideoSettings'
+import RoomSettings from './RoomSettings'
 import ChatPopup from './ChatPopup'
 
 export default {
@@ -155,9 +156,10 @@ export default {
     OnlineUsers,
     Wallet,
     LeaveRoom,
-    VideoSettings,
+    RoomSettings,
     ChatPopup
   },
+  props: ['timeLeft'],
   data () {
     return {
       mode: '',
@@ -165,7 +167,8 @@ export default {
       showPopup: false,
       tout: null,
       toutMs: 1000,
-      clock: null
+      clock: null,
+      popUpPersistent: false
     }
   },
   computed: {
@@ -224,6 +227,22 @@ export default {
     newChatCount () {
       const { chatMessages, lastMessageSeen } = this.room
       return chatMessages.filter(m => m.type === 'text' && m.created > lastMessageSeen).length
+    },
+    chatMessages () {
+      return this.$storex.room.neko.chat.history
+    },
+    expired () {
+      return this.$storex.room.expired
+    }
+  },
+  watch: {
+    chatMessages (messages) {
+    },
+    timeLeft (timeLeft) {
+      if (timeLeft <= 0 && !this.showLeaveRoom) {
+        this.toggleMode('leave')
+        this.popUpPersistent = true
+      }
     }
   },
   methods: {
@@ -243,6 +262,7 @@ export default {
     if (expiresAt) {
       this.tout = setInterval(this.onTout.bind(this), this.toutMs)
     }
+    this.room.toggleVideoChat()
   },
   destroyed () {
     clearInterval(this.tout)
@@ -253,7 +273,7 @@ export default {
   .navroom-users
     .main-profile
       border-radius: 5px
-      background-image: linear-gradient(#5b7e96, #2a455d, #151c23)
+      background-image: linear-gradient(transparent, #2c3e5054, #3a5169)
     .top-left
       position: absolute
       left: 12px

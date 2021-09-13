@@ -287,13 +287,11 @@ export const actions = actionTree(
       rtc.onMessage = storex.room.onRoomMessage.bind(storex)
       const settings = { withCamera, withMic }
       await rtc.connect(roomId, settings)
-      if (!state.cameraId) {
-        const cameras = await rtc.cameras
-        storex.room.setCamera(cameras[0].id)
+      if (withCamera) {
+        storex.room.setCamera(rtc.extra.camera.id)
       }
-      if (!state.micId) {
-        const microphones = await rtc.microphones
-        storex.room.setMicrophone(microphones[0].id)
+      if (withMic) {
+        storex.room.setMicrophone(rtc.extra.audio.id)
       }
       storex.room.setRTC(rtc)
     },

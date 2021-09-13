@@ -92,6 +92,9 @@ export default {
     closeResetPassword () {
       this.resetPassword = false
       this.openLoginDialog = true
+    },
+    onResetPwdHide () {
+      this.resetPassword = false
     }
   },
   async created () {

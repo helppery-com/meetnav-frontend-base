@@ -4,10 +4,10 @@
     <GuestLogin v-if="isRoomAlreadyEstablished && !user" :loginOnly="loginOnly" />
     <div class="col row">
       <div class="col column q-py-md q-pl-md q-pr-xs" ref="videoContainer">
-        <NekoVideo :class="['col rounded-borders', fullScreen  ? '' : '']"
+        <NekoVideo :class="['col rounded-borders shadows-6', fullScreen  ? '' : '']"
           @connected="ref => nekoVideoRef = ref" v-if="connected && termsAccepted && !expired" />
         <img src="/images/expired_room.png" v-if="connected && expired" />
-        <div class="col-auto row" v-if="connected && termsAccepted">
+        <div class="col-auto row q-mt-xs" v-if="connected && termsAccepted">
           <q-linear-progress
             :value="timeout"
             rounded
@@ -16,7 +16,7 @@
             :color="timeLeft > 10 ? 'primary' : 'negative'"
             class="col q-mx-md q-mt-sm"
             />
-          <span :class="['col-auto', timeLeft > 10 ? 'text-white' : 'text-red']">
+          <span :class="['col-auto', timeLeft > 10 ? 'text-dark' : 'text-red']">
             {{ $t(`${timeLeft} mins left`) }}
           </span>
         </div>
@@ -255,22 +255,29 @@ export default {
     // main method for checking user permission
     async checkUserPermissions () {
       await this.askForPermission()
-      const micPermission = navigator.permissions.query({ name: 'microphone' })
-        .then(permission => {
-          this.updatingPermissionStates(permission.state, 'micPermission')
-          permission.onchange = (perm) => {
-            this.updatingPermissionStates(perm.srcElement.state, 'micPermission')
-          }
-        })
-      const cameraPermission = navigator.permissions.query({ name: 'camera' })
-        .then(permission => {
-          this.updatingPermissionStates(permission.state, 'cameraPermission')
-          permission.onchange = (perm) => {
-            this.updatingPermissionStates(perm.srcElement.state, 'cameraPermission')
-          }
-        })
-      await Promise.all([micPermission, cameraPermission])
-      this.requestPermissionDlg = !this.micPermission || !this.cameraPermission
+      try {
+        const micPermission = navigator.permissions.query({ name: 'microphone' })
+          .then(permission => {
+            this.updatingPermissionStates(permission.state, 'micPermission')
+            permission.onchange = (perm) => {
+              this.updatingPermissionStates(perm.srcElement.state, 'micPermission')
+            }
+          })
+        const cameraPermission = navigator.permissions.query({ name: 'camera' })
+          .then(permission => {
+            this.updatingPermissionStates(permission.state, 'cameraPermission')
+            permission.onchange = (perm) => {
+              this.updatingPermissionStates(perm.srcElement.state, 'cameraPermission')
+            }
+          })
+        await Promise.all([micPermission, cameraPermission])
+        this.requestPermissionDlg = !this.micPermission || !this.cameraPermission
+      } catch (ex) {
+        console.error(ex)
+        this.updatingPermissionStates('granted', 'micPermission')
+        this.updatingPermissionStates('granted', 'cameraPermission')
+        this.requestPermissionDlg = false
+      }
     },
     async openRoom () {
       try {
@@ -293,8 +300,10 @@ export default {
       }
     },
     redirectToError () {
-      const errorUrl = 'https://web.meetnav.com/error'
-      window.location.href = this.$route.query.errorUrl || errorUrl
+      if (window.href.host.split('.')[0] !== 'dev') {
+        const errorUrl = 'https://web.meetnav.com/error'
+        window.location.href = this.$route.query.errorUrl || errorUrl
+      }
     },
     openCommercial () {
       window.open(this.commercialLink, '_blank')
@@ -341,7 +350,7 @@ export default {
     overflow: hidden
   .navroom-page
     background-color: #000000
-    background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%)
+    background-image: linear-gradient(135deg, rebeccapurple 0%, black 100%)
     .footer
       height: 45px
     ul.video-menu.bottom,

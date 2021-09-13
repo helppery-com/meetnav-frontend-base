@@ -180,17 +180,9 @@ export default {
       return this.getVideo().videoWidth
     }
   },
-  watch: {
-    connected (newVal) {
-      if (newVal) {
-        this.$emit('connected', this)
-      }
-    }
-  },
-  created () {
-  },
   mounted () {
     this.listenOverlayEvents()
+    this.getVideo().classList.add('shadow-6')
     // this.bgContext = this.$refs.bgCanvas.getContext('2d')
     // this.updateBgCanvas()
   },
@@ -391,7 +383,7 @@ export default {
           display: none
         .player-container
           video
-            border-radius: 5px
+            border-radius: 10px
           .overlay
 
             &:focus
